@@ -23,6 +23,7 @@
                         <strong>DESPACHO DE MATERIA PRIMA</strong>
                     </h2>
                 </div>
+                
                 <div class="cat__pages__login__block__inner">
                     <div class="cat__pages__login__block__form">
                         <h4 class="text-uppercase">
@@ -96,6 +97,7 @@
                                     <option value="0"@if(Request::old('is_admin')==0){{'selected'}}@endif>Administrador </option>
                                     <option value="1"@if(Request::old('is_admin')==1){{'selected'}}@endif>Despacho De Capa </option>
                                     <option value="2"@if(Request::old('is_admin')==2){{'selected'}}@endif>Despacho De Banda Y Tripa </option>
+                                    <option value="3"@if(Request::old('is_admin')==3){{'selected'}}@endif>Reacondicionamiento de Materia Prima</option>
 
                                 </select>
                                 <!---- Boton para crear un nuevo tipo de categoria- -->

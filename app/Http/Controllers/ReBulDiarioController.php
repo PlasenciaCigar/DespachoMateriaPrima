@@ -509,6 +509,18 @@ class ReBulDiarioController extends Controller
        return back();
     }
 
+    public function limpiarnulos(Request $request){
+        $fechita = $request->input('fecha');
+        $limpiar = DB::table('re_bul_diarios')->select('re_bul_diarios.id')
+        ->where('re_bul_diarios.created_at', '=', $fechita)
+        ->where('re_bul_diarios.totalinicial', '=', 0)
+        ->whereNull('re_bul_diarios.totalentrada')
+        ->whereNull('re_bul_diarios.totalconsumo')
+        ->where('re_bul_diarios.totalfinal', '=', 0)->delete();
+
+        return back();
+    }
+
     public function destroyall(Request $request)
     {
         $fechita = $request->input('fecha');

@@ -32,6 +32,7 @@
                     </div>
                 </form>
             </ol>
+            <div class="row">
             <div>
                 <?php $hoy=date("Y-m-d"); $o=date("Y-m-d",strtotime($hoy."-1 days"));?>
                 @if ($fecha == $hoy || @Auth::user()->is_admin==1)
@@ -40,8 +41,20 @@
                 data-toggle="modal"
                 data-target="#deleteall"
                 data-id="{{$fecha}}">
-                ACTUALIZAR INVENTARIO</button>
+                A.Inventario</button>
                 @endif
+        </div>
+
+        <div>
+            <button class="btn btn-danger"
+                title="Borrar"
+                data-toggle="modal"
+                data-target="#cleaner"
+                data-id="{{$fecha}}">
+                Limpiar
+            </button>
+        </div>
+
         </div>
 
 
@@ -70,6 +83,41 @@
                                 value="{{$fecha}}"
                             @endisset type="hidden">
                             <button type="submit" class="btn btn-danger">Actualizar</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <div class="modal fade" id="cleaner" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <form method="post" action="{{route("InventarioDiariolimpiarall")}}" >
+                        @method("DELETE")
+                        @csrf
+                        <div class="modal-header" style="background: #2a2a35">
+                            <h5 class="modal-title" style="color: white"><span class="fas fa-trash"></span> Borrar
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span style="color: white" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro que deseas eliminar todas las marcas con valores nulos? del <label
+                                    id="nada">@isset($fecha)
+                                        {{$fecha}}
+                                    @endisset</label>?</p>
+
+                        </div>
+                        <div class="modal-footer">
+                            <input id="id_capa_entrega" name="fecha" @isset($fecha)
+                                value="{{$fecha}}"
+                            @endisset type="hidden">
+                            <button type="submit" class="btn btn-danger">Limpiar</button>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
@@ -502,7 +550,7 @@
                         <div class="form-group">
                             <label for="totalinicialdiario">Inventario Inicial</label>
                             <input  class=" form-control @error('name') is-invalid @enderror"
-                                    name="totalinicial" id="totalinicialdiario" maxlength="100" value="{{old('totalinicial')}}">
+                                    name="totalinicial" id="totalinicialdiario" maxlength="100" value="{{old('totalinicial')}}" readonly>
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

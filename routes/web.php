@@ -21,7 +21,7 @@ Route::group(["middleware" => "auth"], function () {
         return view('index');
 
 
-    });
+    })->name("index");
 
     Route::get('/SinAcceso', function () {
         return view('Alerts.SinAcceso');
@@ -218,6 +218,7 @@ Route::group(["middleware" => "auth"], function () {
         Route::put("/InventarioDiario/editar", "ReBulDiarioController@edit")->name("InventarioDiarioeditar");
         Route::delete("/InventarioDiario/borrar", "ReBulDiarioController@destroy")->name("InventarioDiarioborrar");
         Route::delete("/InventarioDiario/borrarall", "ReBulDiarioController@destroyall")->name("InventarioDiarioborrarall");
+        Route::delete("/InventarioDiario/limpiarall", "ReBulDiarioController@limpiarnulos")->name("InventarioDiariolimpiarall");
         Route::post("/InventarioDiario/recalcularinventario", "ReBulDiarioController@calcular")->name("calcularinventario");
 
         //--------------------------------------------Registro Diario Bultos Exportar ROUTES-------------------------------------------------------->
@@ -299,6 +300,12 @@ Route::group(["middleware" => "auth"], function () {
 
 
     });
+
+    Route::get("/rmp/ligas", 'Ligas@index')->name('ligas');
+    Route::post("/rmp/ligasstore", 'Ligas@store')->name('ligastore');
+    Route::put("/rmp/ligasupdate", 'Ligas@update')->name('ligasupdate');
+    Route::delete("/rmp/ligasdelete", 'Ligas@delete')->name('ligasdelete');
+
 //--------------------------------------------mildaware Admin------------------------------------------------------
     //--------------------------------------------mildaware Admin------------------------------------------------------
 

@@ -13,6 +13,7 @@ class Usuario extends Controller
         $admin  =false;
      $capa = false;
      $banda = false;
+     $rmp = false;
 
         if ( $request->get('is_admin') == '0'){
             $admin = true;
@@ -22,6 +23,9 @@ class Usuario extends Controller
         }
         if ($request->get('is_admin') == '2'){
             $banda = true;
+        }
+        if ($request->get('is_admin') == '3'){
+            $rmp = true;
         }
         try {
             $this->validate($request, [
@@ -39,13 +43,13 @@ class Usuario extends Controller
             $usuario->is_admin= $admin;
             $usuario->is_capa= $capa;
             $usuario->is_banda=$banda;
-
+            $usuario->is_rmp=$rmp;
             $usuario->save();
 
 
-            return redirect()->route("registro")->with("Usuario Agrregado correctamente");
+            return redirect()->route("index")->with("Usuario Agrregado correctamente");
         } catch (ValidationException $exception){
-            return redirect()->route("registro")->with('errors','errors')->with('id_producto',$request->input("id"))->withErrors($exception->errors());
+            return redirect()->route("index")->with('errors','errors')->with('id_producto',$request->input("id"))->withErrors($exception->errors());
         }
 
 
