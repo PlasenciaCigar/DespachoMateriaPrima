@@ -550,7 +550,7 @@
                         <div class="form-group">
                             <label for="totalinicialdiario">Inventario Inicial</label>
                             <input  class=" form-control @error('name') is-invalid @enderror"
-                                    name="totalinicial" id="totalinicialdiario" maxlength="100" value="{{old('totalinicial')}}" readonly>
+                                    name="totalinicial" id="totalinicialdiario" maxlength="100" value="{{old('totalinicial')}}">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

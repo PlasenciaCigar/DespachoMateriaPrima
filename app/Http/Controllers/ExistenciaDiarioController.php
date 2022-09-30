@@ -538,15 +538,15 @@ return redirect()->route("ExistenciaDiario")->with('errores','errores')->with('i
             $nuevoConsumo->id_tamano = $inventario->id_tamano;
             $nuevoConsumo->totalinicial = $inventario->totalinicial;
             $nuevoConsumo->pesoinicial = $inventario->pesoinicial;
-            $nuevoConsumo->onzasI = $inventario->onzasI;
+            $nuevoConsumo->onzasI = $inventario->onzasI; 
 
             $nuevoConsumo->created_at = $fechita;
             $nuevoConsumo->save();
            }else{
-            $actualizariniciar=ExistenciaDiario::findOrFail($consulta->id);
+            /*$actualizariniciar=ExistenciaDiario::findOrFail($consulta->id);
 
             $actualizariniciar->totalinicial = $inventario->totalinicial;
-            $actualizariniciar->save();
+            $actualizariniciar->save();*/
            }
 
         }
