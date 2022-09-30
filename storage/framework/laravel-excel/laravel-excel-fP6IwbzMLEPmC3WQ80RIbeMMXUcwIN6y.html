@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Despacho de Capa</title>
+
+    <link href="http://despachomateriaprima.test/css/menu/styles.css" rel="stylesheet"/>
+    <link href="http://despachomateriaprima.test/css/menu/file-input.css" media="all" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="http://despachomateriaprima.test/css/menu/main.css">
+    <link href="http://despachomateriaprima.test/css/menu/bd-wizard.css" rel="stylesheet">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css" type="text/css"/>
+
+</head>
+<body id="body" class="sb-nav-fixed">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <button class="btn btn-link order-1 order-lg-0 ml-4" id="sidebarToggle" href="#"><i class="fas fa-bars"></i>
+    </button>
+    <a class="navbar-brand" href="/">Despacho de Capa</a>
+    <!-- Navbar Search-->
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+
+    </form>
+    <!-- Navbar-->
+    <ul class="navbar-nav ml-auto ml-md-0">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <!--  <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="#">Activity Log</a>     -->
+
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="http://despachomateriaprima.test/logout"
+                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                        Cerrar Sesión
+                    </a>
+
+                    <form id="logout-form" action="http://despachomateriaprima.test/logout" method="POST" class="d-none">
+                        <input type="hidden" name="_token" value="d2gGog0fejaOvCfDj9QmPPiyUHMK1dZJMDaCStJl">                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts"
+                       aria-expanded="false" aria-controls="collapseLayouts">
+                        <div class="sb-nav-link-icon"><i class="fas fa-building"></i></div>
+                        General
+                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    </a>
+                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
+                         data-parent="#sidenavAccordion">
+                        <nav class="sb-sidenav-menu-nested nav">
+                            <a class="nav-link" href="http://despachomateriaprima.test/CapaEntrega">Despacho De Capa</a>
+                            <a class="nav-link" href="http://despachomateriaprima.test/RecepcionCapa">Recepcion De Capa</a>
+                            <a class="nav-link" href="http://despachomateriaprima.test/empleados">Empleados</a>
+                            <a class="nav-link" href="http://despachomateriaprima.test/marcas">Marcas</a>
+                            <a class="nav-link" href="http://despachomateriaprima.test/semillas">Semillas</a>
+                            <a class="nav-link" href="http://despachomateriaprima.test/peso">Pesos</a>
+
+
+
+
+
+
+                        </nav>
+                    </div>
+
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logeado con:</div>
+                admin2 
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+
+                <div class="container-fluid">
+        <h1 class="mt-4">Recepcion de Capa
+            <div class="btn-group" role="group">
+
+                <button class="btn btn-sm btn-success"
+                        id="botonAbrirModalNuevoRecepcionCapa"
+                        data-toggle="modal" data-target="#modalNuevoRecepcionCapa">
+                    <span class="fas fa-plus"></span> Nueva
+                </button>
+            </div>
+
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page" ><a href="/">Inicio</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Recepcion De Capa</li>
+
+                <form  class="d-none d-md-inline-block form-inline
+                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
+                    <div class="input-group" style="width: 300px">
+                        <input class="form-control" name="fecha" type="date" placeholder="fecha"
+                               aria-label="Search">
+                        <div class="input-group-append">
+                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
+                               href="http://despachomateriaprima.test/RecepcionCapa">&times;</a>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </ol>
+            <div class="pagination pagination-sm">
+                <a class="btn btn-dark hideClearSearch" style="color: white"
+                   href="http://despachomateriaprima.test/RecepcionCapa/exportCVS">CVS</a>
+                <a class="btn btn-success hideClearSearch" style="color: white"
+                   href="http://despachomateriaprima.test/RecepcionCapa/export">Excel</a>
+                <a class="btn btn-danger hideClearSearch" style="color: white"
+                   href="http://despachomateriaprima.test/RecepcionCapa/exportPDF">PDF</a>
+
+
+
+                <form  class="d-none d-md-inline-block form-inline
+                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
+                    <div class="input-group" style="width: 300px">
+                        <input class="form-control" name="search" type="search" placeholder="Search"
+                               aria-label="Search">
+                        <div class="input-group-append">
+                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
+                               href="http://despachomateriaprima.test/RecepcionCapa">&times;</a>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+         </nav>
+
+                
+                
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Semilla</th>
+                <th>Tamaño</th>
+                <th>Calidad</th>
+                <th>total</th>
+                <th><span class="fas fa-info-circle">Agregar</span></th>
+
+
+
+                <th><span class="fas fa-info-circle"></span></th>
+
+            </tr>
+            </thead>
+            <tbody>
+                                        <tr>
+                    <td>1</td>
+                    <td>Conerico </td>
+                    <td>Mediano </td>
+                    <td>segunda </td>
+
+                    <td>25</td>
+                    <td>
+
+                        <button class="btn btn-sm btn-info"
+                                title="200">
+                            200
+                        </button>
+                        <button class="btn btn-sm btn-info"
+                                title="100">
+                       100 </button>
+                        <button class="btn btn-sm btn-info"
+                                title="50">
+                       50 </button>
+                    </td>
+                    <td>
+
+                        <button class="btn btn-sm btn-info"
+                                title="Ver"
+                                data-toggle="modal"
+                                data-target="#modalVerCapaCapaRecibida"
+
+                                data-id_semillas="Conerico "
+                                data-id_calidad="segunda "
+                                data-id_tamano="Mediano "
+
+                                data-total="25">
+                            <span class="fas fa-eye"></span>
+                        </button>
+                        <button class="btn btn-sm btn-success"
+                                id="editarCapaEntrega9"
+                                data-toggle="modal"
+                                data-target="#modalEditarCapaRecibida"
+                                data-id="9"
+                                data-id_semillas="2"
+                                data-id_calidad="2"
+                                data-id_tamano="2"
+                                data-total="25"
+                                title="Editar">
+                            <span class="fas fa-pencil-alt"></span>
+                        </button>
+                        <button class="btn btn-sm btn-danger"
+                                title="Borrar"
+                                data-toggle="modal"
+                                data-target="#modalBorrarCapaEntrega"
+                                data-id="9">
+                            <span class="fas fa-trash"></span>
+                        </button>
+                    </td>
+                </tr>
+            
+            </tbody>
+        </table>
+
+    </div>
+    <!-----vista previa imagen------->
+<!----------------------------------------------------MODAL NUEVO PRODUCTO------------------------------------------------------->
+    <div class="modal fade" id="modalNuevoRecepcionCapa" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Agregar Salida De Capa
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                <form id="nuevoP" method="POST" action="http://despachomateriaprima.test/RecepcionCapa/nuevo" enctype="multipart/form-data">
+
+                    <input type="hidden" name="_token" value="d2gGog0fejaOvCfDj9QmPPiyUHMK1dZJMDaCStJl">                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="nombreNuevoProducto">Total</label>
+                            <input class="form-control " name="total" id="nombreNuevoProducto" maxlength="100"
+                                   value="" required="required">
+                                                    </div>
+
+
+                        <div class="form-group">
+                            <label for="id_tamano">Seleccione el tamaño</label>
+                            <br>
+                            <select name="id_tamano"
+                                    style="width: 85%" required="required"
+                                    class="marca form-control " id="id_tamano">
+                                <option disabled selected value="s">Seleccione</option>
+                                                                    <option value="1"                                     >Grande 
+                                    </option>
+                                                                    <option value="2"                                     >Mediano 
+                                    </option>
+                                                                    <option value="3"                                     >Pequeño 
+                                    </option>
+                                                            </select>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="id_semillas">Seleccione la Semilla</label>
+                            <br>
+                            <select name="id_semillas"
+                                    style="width: 85%" required="required"
+                                    class="marca form-control " id="id_semillas">
+                                <option disabled selected value="s">Seleccione</option>
+                                                                    <option value="1"                                     >Habano 
+                                    </option>
+                                                                    <option value="2"                                     >Conerico 
+                                    </option>
+                                                                    <option value="3"                                     >Maduro 
+                                    </option>
+                                                                    <option value="4"                                     >Candela 
+                                    </option>
+                                                                    <option value="5"                                     >admin
+                                    </option>
+                                                            </select>
+                        </div>
+                        <div class="form-group">
+
+                            <label for="id_calidad">Seleccione la Semilla</label>
+                            <br>
+                            <select name="id_calidad"
+                                    style="width: 85%" required="required"
+                                    class="marca form-control " id="id_calidad">
+                                <option disabled selected value="s">Seleccione</option>
+                                                                    <option value="1"                                     >Primera 
+                                    </option>
+                                                                    <option value="2"                                     >segunda 
+                                    </option>
+                                                                    <option value="3"                                     >Tercera 
+                                    </option>
+                                                                    <option value="4"                                     >cuarta 
+                                    </option>
+                                                            </select>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="nuevoP" class="btn btn-success">Crear</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-----------------------------MODAL EDITAR PRODUCTO------------------------------->
+    <div class="modal fade" id="modalEditarCapaRecibida" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-pencil-alt"></span> Editar Capar Recibida
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span style="color: white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="http://despachomateriaprima.test/RecepcionCapa/editar">
+                    <input type="hidden" name="_method" value="PUT">;
+                    <input type="hidden" name="_token" value="d2gGog0fejaOvCfDj9QmPPiyUHMK1dZJMDaCStJl">                    <div class="modal-body" style="object-fit: fill">
+
+
+                        <div class="form-group">
+                            <label for="totalcaparecibida">Total</label>
+                            <input  class="form-control "
+                                    name="total" id="totalcaparecibida" maxlength="100" value="">
+                                                    </div>
+                        <div class="form-group">
+                            <label for="semillacaparecibida">Seleccione la semilla</label>
+                            <br>
+                            <select name="id_semillas"
+                                    required
+                                    style="width: 85%"
+                                    class="TipoCategoria form-control "
+                                    id="semillacaparecibida" required="required">
+                                <option disabled selected value="">Seleccione</option>
+                                                                    <option value="1">Habano 
+                                    </option>
+                                                                    <option value="2">Conerico 
+                                    </option>
+                                                                    <option value="3">Maduro 
+                                    </option>
+                                                                    <option value="4">Candela 
+                                    </option>
+                                                                    <option value="5">admin
+                                    </option>
+                                                            </select>
+                                                    </div>
+                        <div class="form-group">
+                            <label for="calidadcaparecibida">Seleccione la calidad</label>
+                            <br>
+                            <select name="id_calidad"
+                                    style="width: 85%"
+                                    class=" TipoCategoria form-control "
+                                    id="calidadcaparecibida" required="required">
+                                <option disabled selected value="">Seleccione</option>
+                                                                    <option value="1">Primera 
+                                    </option>
+                                                                    <option value="2">segunda 
+                                    </option>
+                                                                    <option value="3">Tercera 
+                                    </option>
+                                                                    <option value="4">cuarta 
+                                    </option>
+                                                            </select>
+                                                    </div>
+                        <div class="form-group">
+                            <label for="tamanocaparecibida">Seleccione el Tamaño</label>
+                            <br>
+                            <select name="id_tamano"
+                                    style="width: 85%"
+                                    class=" TipoCategoria form-control "
+                                    id="tamanocaparecibida" required="required">
+                                <option disabled selected value="">Seleccione</option>
+                                                                    <option value="1">Grande 
+                                    </option>
+                                                                    <option value="2">Mediano 
+                                    </option>
+                                                                    <option value="3">Pequeño 
+                                    </option>
+                                                            </select>
+                                                    </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="id" id="id_producto">
+                        <button type="submit" class="btn btn-success" >Editar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!------------------MODAL VER PRODUCTO-------------------------------->
+    <div class="modal fade" id="modalVerCapaCapaRecibida" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Detalle del Producto
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                    
+                    <input type="hidden" name="_token" value="d2gGog0fejaOvCfDj9QmPPiyUHMK1dZJMDaCStJl">                    <div class="modal-body row" >
+
+
+                        <div class="col-sm-10 card">
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="tamanocaparecibida"><strong>Tamaño:</strong></label></div>
+                                <div class="col-sm-2"><label for="tamanocaparecibida" id="tamanocaparecibida"></label></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="semillacaparecibida"><strong>Semilla:</strong></label></div>
+                                <div class="col-sm-2"><label for="semillacaparecibida" id="semillacaparecibida"></label></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="calidadcaparecibida"><strong>Calidad:</strong></label></div>
+                                <div class="col-sm-4"><label for="empresa" id="calidadcaparecibida"></label></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="totalcaparecibida"><strong>Total Recibido:</strong></label></div>
+                                <div class="col-sm-2"><label for="disponible" id="totalcaparecibida"></label></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn btn-success">Aceptar</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!------------------MODAL BORRAR PRODUCTO---------------------------->
+    <div class="modal fade" id="modalBorrarCapaRecibida" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form method="post" action="http://despachomateriaprima.test/RecepcionCapa/borrar" >
+                    <input type="hidden" name="_method" value="DELETE">                    <input type="hidden" name="_token" value="d2gGog0fejaOvCfDj9QmPPiyUHMK1dZJMDaCStJl">                    <div class="modal-header" style="background: #2a2a35">
+                        <h5 class="modal-title" style="color: white"><span class="fas fa-trash"></span> Borrar Salida
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="color: white" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro que deseas borrar esta entrads <label
+                                id="nombreProducto"></label>?</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input id="id_capa_entrega" name="id" type="hidden" value="">
+                        <button type="submit" class="btn btn-danger">Borrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+    <!-------------------MODAL NUEVO CATEGORIA------------------------------>
+
+    
+
+
+     <style>
+
+         .image-preview-input {
+             position: relative;
+             overflow: hidden;
+             margin: 0px;
+             color: #333;
+             background-color: #fff;
+             border-color: #ccc;
+         }
+         .image-preview-input input[type=file] {
+             position: absolute;
+             top: 0;
+             right: 0;
+             margin: 0;
+             padding: 0;
+             font-size: 20px;
+             cursor: pointer;
+             opacity: 0;
+             filter: alpha(opacity=0);
+         }
+         .image-preview-input-title {
+             margin-left: 2px;
+         }
+         .image-border{
+             border: black 1px solid;
+             padding: 3px;
+             justify-content: center;
+             align-items: center;
+         }
+         .transparent-input{
+             background-color:rgba(0,0,0,0) !important;
+             border:none !important;
+             padding-left: 5px;
+         }
+         .modal-lg {
+             max-width: 45% !important;
+         }
+
+     </style>
+
+
+
+             <div class="modal fade" tabindex="-1" id="cerrarSesionModal" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Advertencia</h5>
+
+                        </div>
+                        <div class="modal-body">
+                            <p>¿Estás seguro que deseas cerrar sesión?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary"   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">Si</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="js/jsmenu/scripts.js"></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/bootstrap-fileinput.js" type="text/javascript"></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/bootstrap-fileinput-theme.js" type="text/javascript"></script>
+
+<script src="http://despachomateriaprima.test/js/jsmenu/jquery.steps.min.js"></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/bd-wizard.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/chart-area-demo.js"></script>
+<script src="assets/demo/chart-bar-demo.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+<script src="assets/demo/datatables-demo.js"></script>
+
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v1.11.1/mapbox-gl.js'></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/mapbox-scripts.js"></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/categorias.js"></script>
+<script src="http://despachomateriaprima.test/js/jsmenu/font-awesome.js" crossorigin="anonymous"></script>
+<script src="http://despachomateriaprima.test/js/marca.js"></script>
+<script src="http://despachomateriaprima.test/js/empleado.js"></script>
+<script src="http://despachomateriaprima.test/js/CapaEntrega.js"></script>
+<script src="http://despachomateriaprima.test/js/CapaRecibida.js"></script>
+<script src="http://despachomateriaprima.test/js/Peso.js"></script>
+<script src="http://despachomateriaprima.test/js/semilla.js"></script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".empresa2").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+
+        $(".disponible2").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".tipoCategoria").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+        $(".empleado").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+        $(".vitola").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+        $(".semilla").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+        $(".calidad").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+
+        $(".marca").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+        });
+    });
+</script>
+
+</body>
+</html>
