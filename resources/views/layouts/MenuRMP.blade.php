@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title>Despacho de Banda y Tripa</title>
+    <title>Reacondicionamiento de Materia Prima.</title>
 
     <link href="{{asset("css/menu/styles.css")}}" rel="stylesheet"/>
     <link href="{{asset("css/menu/file-input.css")}}" media="all" rel="stylesheet" type="text/css"/>
@@ -164,7 +164,7 @@ tfoot th:first-child {
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <button class="btn btn-link order-1 order-lg-0 ml-4" id="sidebarToggle" href="#"><i class="fas fa-bars"></i>
     </button>
-    <a class="navbar-brand" href="/">Despacho de Banda y Tripa</a>
+    <a class="navbar-brand" href="/">Reacondicionamiento de Materia Prima</a>
     <!-- Navbar Search-->
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
 
@@ -209,16 +209,11 @@ tfoot th:first-child {
                     <div class="collapse" id="collapseinicio" aria-labelledby="headingOne"
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{url('EntradaBultos')}}">Entrada de Bultos</a>
-                            <a class="nav-link" href="{{url('BultoSalida')}}">Despacho De Bulto</a>
-                            <a class="nav-link" href="{{url('EntradaBanda')}}">Entrada Banda</a>
-                            <a class="nav-link" href="{{url('ConsumoBanda')}}">Salida De Banda</a>
-
-
-
+                            <a class="nav-link" href="{{url('EntradaBultos')}}">Salida de Bultos</a>
+                            <a class="nav-link" href="{{url('BultoSalida')}}">Entrada Materia Prima</a>
                         </nav>
                     </div>
-                    <div class="sb-sidenav-menu-heading">Registros</div>
+                    <div class="sb-sidenav-menu-heading">Inventarios</div>
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseinicio2"
                        aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-pager"></i></div>
@@ -229,7 +224,7 @@ tfoot th:first-child {
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
 
-                            <a class="nav-link" href="{{url('InventarioDiario')}}"> Inventario De Bultos</a>
+                            <a class="nav-link" href="{{url('InventarioDiario')}}"> Inventario De Materia Prima</a>
                             <a class="nav-link" href="{{url('BultoDevuelto')}}">Bultos Devueltos</a>
                             <a class="nav-link" href="{{url('InventarioBanda')}}"> Inventario De Banda</a>
 

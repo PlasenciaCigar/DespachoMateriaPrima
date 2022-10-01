@@ -1,7 +1,7 @@
 @extends("layouts.Menu")
 @section("content")
     <div class="container-fluid">
-        <h1 class="mt-4">Inventario Diario Capa
+        <h1 class="mt-4">Inventario Diario de Capas
             <div class="btn-group" role="group">
 
                 <button class="btn btn-sm btn-success"
@@ -38,6 +38,8 @@
                     </div>
                 </form>
             </ol>
+
+            <div class='row'>
             <div>
                 @if ($fecha >= date("Y-m-d") || @Auth::user()->is_admin==1)
                 <button class="btn btn-danger"
@@ -45,8 +47,22 @@
                 data-toggle="modal"
                 data-target="#deleteall"
                 data-id="{{$fecha}}">
-                ACTUALIZAR INVENTARIO</button>
+                A.INVENTARIO</button>
                 @endif
+        </div>
+
+        <div>
+                @if ($fecha >= date("Y-m-d") || @Auth::user()->is_admin==1)
+                <button class="btn btn-danger"
+                title="Borrar"
+                data-toggle="modal"
+                data-target="#cleaner"
+                data-id="{{$fecha}}">
+                Limpiar</button>
+                @endif
+        </div>
+
+
         </div>
             <br>
             <div class="pagination pagination-sm">
@@ -682,6 +698,43 @@
                             value="{{$fecha}}"
                         @endisset type="hidden">
                         <button type="submit" class="btn btn-danger">Actualizar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="cleaner" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form method="post" action="{{route("ExistenciaDiariolimpiar")}}" >
+                    @method("DELETE")
+                    @csrf
+                    <div class="modal-header" style="background: #2a2a35">
+                        <h5 class="modal-title" style="color: white"><span class="fas fa-trash"></span> Limpiar
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="color: white" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro que desea limpiar valores nulos del <label
+                                id="nada">@isset($fecha)
+                                    {{$fecha}} ?
+                                @endisset <br>
+                            </label>?</p>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <input id="id_capa_entrega" name="fecha" @isset($fecha)
+                            value="{{$fecha}}"
+                        @endisset type="hidden">
+                        <button type="submit" class="btn btn-danger">Limpiar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>

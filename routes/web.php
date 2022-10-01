@@ -112,6 +112,7 @@ Route::group(["middleware" => "auth"], function () {
         Route::put("/ExistenciaDiario/editar","ExistenciaDiarioController@edit")->name("ExistenciaDiarioeditar");
         Route::delete("/ExistenciaDiario/borrar","ExistenciaDiarioController@destroy")->name("ExistenciaDiarioborrar");
         Route::delete("/ExistenciaDiarioa/borrarall","ExistenciaDiarioController@destroyall")->name("ExistenciaDiarioborrarall");
+        Route::delete("/ExistenciaDiarioa/limpiar","ExistenciaDiarioController@limpiar")->name("ExistenciaDiariolimpiar");
 
         //--------------------------------------------Existencia Diario xportar ROUTES-------------------------------------------------------->
         Route::post('/ExistenciaDiario/export', 'ExistenciaDiarioController@export')->name("exportarExistenciaDiario");

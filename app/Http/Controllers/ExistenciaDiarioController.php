@@ -554,6 +554,19 @@ return redirect()->route("ExistenciaDiario")->with('errores','errores')->with('i
     }
     }
 
+    public function limpiar(Request $request){
+        $fechita = $request->get('fecha');
+
+        $limpiar = DB::table('existencia_diarios')->
+        select('existencia_diarios.id')->where('existencia_diarios.totalinicial', '=', 0)
+        ->where('existencia_diarios.created_at', '=', $fechita)
+        ->whereNull('existencia_diarios.totalentrada')
+        ->where('existencia_diarios.totalconsumo', '=',0)
+        ->where('existencia_diarios.totalfinal', '=',0)->delete();
+        return back();
+
+    }
+
     public function export(Request $request)
     {
 

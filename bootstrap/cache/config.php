@@ -137,12 +137,12 @@
         array (
           'include' => 
           array (
-            0 => 'C:\\wamp64\\www\\DespachoMateriaPrima',
+            0 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima',
           ),
           'exclude' => 
           array (
-            0 => 'C:\\wamp64\\www\\DespachoMateriaPrima\\vendor',
-            1 => 'C:\\wamp64\\www\\DespachoMateriaPrima\\node_modules',
+            0 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\vendor',
+            1 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\node_modules',
           ),
           'follow_links' => false,
           'ignore_unreadable_directories' => false,
@@ -160,10 +160,10 @@
         'filename_prefix' => '',
         'disks' => 
         array (
-          0 => 'C:\\wamp64\\www\\DespachoMateriaPrima\\public\\/Copia',
+          0 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\public\\/Copia',
         ),
       ),
-      'temporary_directory' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\app/backup-temp',
+      'temporary_directory' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\app/backup-temp',
       'password' => NULL,
       'encryption' => 'default',
     ),
@@ -299,7 +299,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\framework/cache/data',
+        'path' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -465,12 +465,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\app',
+        'root' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\app/public',
+        'root' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\app/public',
         'url' => 'http://localhost/storage',
         'visibility' => 'public',
       ),
@@ -487,7 +487,7 @@
     ),
     'links' => 
     array (
-      'C:\\wamp64\\www\\DespachoMateriaPrima\\public\\storage' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\app/public',
+      'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\public\\storage' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\app/public',
     ),
   ),
   'hashing' => 
@@ -521,13 +521,13 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\logs/laravel.log',
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
@@ -577,7 +577,7 @@
       ),
       'emergency' => 
       array (
-        'path' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\logs/laravel.log',
+        'path' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\logs/laravel.log',
       ),
     ),
   ),
@@ -634,7 +634,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => 'C:\\wamp64\\www\\DespachoMateriaPrima\\resources\\views/vendor/mail',
+        0 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\resources\\views/vendor/mail',
       ),
     ),
   ),
@@ -713,7 +713,7 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\framework/sessions',
+    'files' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -733,9 +733,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\wamp64\\www\\DespachoMateriaPrima\\resources\\views',
+      0 => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\resources\\views',
     ),
-    'compiled' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\framework\\views',
+    'compiled' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\framework\\views',
   ),
   'flare' => 
   array (
@@ -877,7 +877,7 @@
     ),
     'temporary_files' => 
     array (
-      'local_path' => 'C:\\wamp64\\www\\DespachoMateriaPrima\\storage\\framework/laravel-excel',
+      'local_path' => 'C:\\Users\\Conrado-Plasencia\\OneDrive - Clasificadora y Exportadora de Tabaco S.A de C.V\\Documentos\\DespachoMateriaPrima\\storage\\framework/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
