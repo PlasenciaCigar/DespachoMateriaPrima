@@ -141,15 +141,11 @@
             @foreach($recibirCapa as $productos)
                 <tr>
                     <td>{{$noPagina++}}</td>
-
-
-
                     <td>{{$productos->marcam}}</td>
                     <td>{{$productos->vitolam}}</td>
                     <td>{{$productos->bultos}}</td>
                     <td>{{$productos->peso}}</td>
                     <td>{{$productos->libras}}</td>
-
                     <td>
 
                         <button class="btn btn-sm btn-info"

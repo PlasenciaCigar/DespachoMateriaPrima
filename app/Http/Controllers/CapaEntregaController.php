@@ -56,6 +56,7 @@ class CapaEntregaController extends Controller
                     "empleados.codigo AS codigo_empleado",
                     "vitolas.name as nombre_vitolas","semillas.name as nombre_semillas",
                     "calidads.name as nombre_calidads",
+                    "capa_entregas.peso",
                     "capa_entregas.id_empleado",
                     "capa_entregas.id_vitolas",
                     "capa_entregas.id_semilla",
@@ -65,7 +66,8 @@ class CapaEntregaController extends Controller
                     "capa_entregas.rota",
                     "capa_entregas.picada",
                     "capa_entregas.pequenas",
-                    "capa_entregas.id_marca","marcas.name as nombre_marca"
+                    "capa_entregas.id_marca"
+                    ,"marcas.name as nombre_marca"
                     ,"capa_entregas.total")
                // ->where("empleados.codigo","Like","%".$query."%")
                 //->whereDate("capa_entregas.created_at","=", Carbon::parse($fechasearch)->format('Y-m-d'))
@@ -77,7 +79,7 @@ class CapaEntregaController extends Controller
                // return $entregaCapa;
             $empleados = Empleado::all();
             $semilla = Semilla::all();
-            $calidad = Calidad::all();
+            $calidads = Calidad::all();
             $vitola = Vitola::all();
             $marca = Marca::all();
 
@@ -96,16 +98,14 @@ class CapaEntregaController extends Controller
             return view("EntregaDeCapa.CapaEntrega")
             ->with('fecha', $fecha)
                 ->withNoPagina(1)
+                ->withCalidads($calidads)
                 ->withEntregaCapa($entregaCapa)
                 ->withTotal($entregaCapass)
                 ->withEmpleados($empleados)
                 ->withSemillas($semilla)
-                ->withCalidad($calidad)
                 ->withVitola($vitola)
                 ->withMarca($marca);
         }
-
-        //
     }
 
     /**
@@ -188,19 +188,6 @@ class CapaEntregaController extends Controller
                  'id_semilla'=>'required',
 
             ]);
-                 /**,$messages = [
-                'id_empleado.required' => 'El nombre del producto es requerido.',
-
-                'description.max:192' => 'La descripción  no debe de tener más de 192 caracteres.',
-                'unit_price.numeric' => 'El precio debe ser un valor numérico.',
-                'unit_price.max:9999' =>'El precio unitario no debe de exceder de 9 caracteres',
-                'lote_price.max:99999' =>'El precio de lote no debe de exceder de 9 caracteres',
-                'lote_price.numeric' =>'El precio lote debe ser un valor numericos',
-                'id_empresa.required' => 'Se requiere una empresa para este producto.',
-                'id_categoria.required' => 'Se requiere una categoria para este producto.',
-                'id_marca.required'=>'Se requiere una marca para este producto'
-
-            ]);  */
             $editarCapaEntrega=CapaEntrega::findOrFail($request->id);
 
             $editarCapaEntrega->id_empleado=$request->input('id_empleado');

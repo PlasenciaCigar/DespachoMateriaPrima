@@ -302,10 +302,35 @@ Route::group(["middleware" => "auth"], function () {
 
     });
 
-    Route::get("/rmp/ligas", 'Ligas@index')->name('ligas');
-    Route::post("/rmp/ligasstore", 'Ligas@store')->name('ligastore');
-    Route::put("/rmp/ligasupdate", 'Ligas@update')->name('ligasupdate');
-    Route::delete("/rmp/ligasdelete", 'Ligas@delete')->name('ligasdelete');
+    //INVENTARIO MATERIA PRIMA.
+    Route::get("/rmp/ligas", 'MateriaPrimaController@index')->name('ligas');
+    Route::post("/rmp/ligasstore", 'MateriaPrimaController@store')->name('ligastore');
+    Route::put("/rmp/ligasupdate", 'MateriaPrimaController@update')->name('ligasupdate');
+    Route::delete("/rmp/ligasdelete", 'MateriaPrimaController@destroy')->name('ligasdelete');
+    Route::post("/rmp/exportarligas", 'MateriaPrimaController@export')->name('ligasexport');
+
+    //ENTRADA DE MATERIA PRIMA RMP.
+    Route::get("/rmp/entrada", 'EntradaMateriaPrimaController@index')->name('entradarmp');
+    Route::post("/rmp/entradastore", 'EntradaMateriaPrimaController@store')->name('storeentradarmp');
+    Route::put("/rmp/entradaupdate", 'EntradaMateriaPrimaController@update')->name('updateentradarmp');
+    Route::delete("/rmp/entradadelete", 'EntradaMateriaPrimaController@destroy')->name('deleteentradarmp');
+    Route::post("/rmp/excelligas", 'EntradaMateriaPrimaController@export')->name('exportentradarmp');
+    Route::post("/rmp/procesarentrada", 'EntradaMateriaPrimaController@procesar')->name('procesarentrada');
+    Route::post("/rmp/desaplicarentrada", 'EntradaMateriaPrimaController@desaplicar')->name('desaplicarentrada');
+
+    //KARDEX    
+    Route::get("/rmp/kardex/{codigo}", 'Kardex@index')->name('kardexparametro');
+
+    //Combinaciones Materia Prima.
+    Route::get("/rmp/combinaciones", 'CombinacionesController@index')->name('combinaciones');
+    Route::get("/rmp/combinaciones/nuevo", 'CombinacionesController@create')->name('combinacionuevo');
+    Route::post("/rmp/combinaciones/store", 'CombinacionesController@store')->name('combinacionestore');
+    Route::get("/rmp/combinaciones/store", 'CombinacionesController@store')->name('combinacionestore');
+    Route::post("/detallecombinacion", 'CombinacionesController@storedetalle')->name('combinacionestoredetalle');
+    Route::get("/detallecombinacion", 'CombinacionesController@storedetalle')->name('combinacionestoredetalle');
+    Route::post("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
+    Route::get("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
+    Route::delete("/detalledelete", 'CombinacionesController@deletedetalle')->name('daletecombinaciones');
 
 //--------------------------------------------mildaware Admin------------------------------------------------------
     //--------------------------------------------mildaware Admin------------------------------------------------------

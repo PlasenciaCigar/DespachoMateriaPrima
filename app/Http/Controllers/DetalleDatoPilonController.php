@@ -46,15 +46,6 @@ class DetalleDatoPilonController extends Controller
         $arre=[];
         foreach ($vir as $key => $value) {
             $arre[]= [$value->virado==1 ? "$value->temperatura":"null"];
-            /*if ($value->virado==0) {
-                $value->virado=null;
-                $arre[]=[$value->virado];
-            }else{
-                $arre[]= [$value->temperatura];
-
-            }*/
-             
-            # code...
         }
   
         $data = $this->get($myCollectionObj);

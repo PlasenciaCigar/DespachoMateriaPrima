@@ -182,7 +182,7 @@ tfoot th:first-child {
                 <div class="dropdown-item" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ route('logout') }}"
                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                        document.getElementById('logout-form').submit();">
                         {{ __('Cerrar Sesión') }}
                     </a>
 
@@ -210,7 +210,8 @@ tfoot th:first-child {
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{url('EntradaBultos')}}">Salida de Bultos</a>
-                            <a class="nav-link" href="{{url('BultoSalida')}}">Entrada Materia Prima</a>
+                            <a class="nav-link" href="{{url('rmp/entrada')}}">Entrada Materia Prima</a>
+                            <a class="nav-link" href="{{url('BultoSalida')}}">Entrada de Bultos</a>
                         </nav>
                     </div>
                     <div class="sb-sidenav-menu-heading">Inventarios</div>
@@ -224,16 +225,12 @@ tfoot th:first-child {
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
 
-                            <a class="nav-link" href="{{url('InventarioDiario')}}"> Inventario De Materia Prima</a>
-                            <a class="nav-link" href="{{url('BultoDevuelto')}}">Bultos Devueltos</a>
-                            <a class="nav-link" href="{{url('InventarioBanda')}}"> Inventario De Banda</a>
-
-
-
+                            <a class="nav-link" href="{{url('rmp/ligas')}}">Inventario Materia Prima</a>
+                            <a class="nav-link" href="{{url('BultoDevuelto')}}">Bultos Entrantes</a>
 
                         </nav>
                     </div>
-                    <div class="sb-sidenav-menu-heading"> Administracion General</div>
+                    <div class="sb-sidenav-menu-heading"> Reportes Generales</div>
 
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLayouts"
                        aria-expanded="false" aria-controls="collapseLayouts">
@@ -244,17 +241,8 @@ tfoot th:first-child {
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{url('empleadosBanda')}}">Empleados</a>
-                            <a class="nav-link" href="{{url('marcasBanda')}}">Marcas</a>
-                            <a class="nav-link" href="{{url('semillasBanda')}}">Semilla</a>
-                            <a class="nav-link" href="{{url('vitolaBanda')}}">Vitolas</a>
-                            <a class="nav-link" href="{{url('Procedencia')}}">Procedencia</a>
-                            <a class="nav-link" href="{{url('variedad')}}">Variedad</a>
-                            <a class="nav-link" href="{{url('InventarioInicial')}}">Inventario Diario</a>
-
-
-
-
+                            <a class="nav-link" href="{{url('rmp/combinaciones')}}">Combinaciones</a>
+                            <a class="nav-link" href="{{url('marcasBanda')}}">Kardex</a>
                         </nav>
                     </div>
 
@@ -275,7 +263,6 @@ tfoot th:first-child {
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Advertencia</h5>
-
                         </div>
                         <div class="modal-body">
                             <p>¿Estás seguro que deseas cerrar sesión?</p>
@@ -332,6 +319,13 @@ tfoot th:first-child {
             theme: "classic",
             placeholder: "Seleccione una opción"
         });
+
+        $(".prueba").select2({
+            theme: "classic",
+            placeholder: "Seleccione una opción"
+    //maximumSelectionLength: 2
+        });
+
         $(".empresa").select2({
             theme: "classic",
             placeholder: "Seleccione una opción"

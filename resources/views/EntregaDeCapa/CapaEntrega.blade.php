@@ -103,7 +103,9 @@
                 <th>Marca</th>
                 <th>Vitola</th>
                 <th>Semilla</th>
-                <th>total</th>
+                <th>Calidad</th>
+                <th>Total</th>
+                <th>Peso</th>
 
                 <th><span>Agregar</span></th>
 
@@ -128,10 +130,9 @@
                     <td>{{$productos->nombre_marca}}</td>
                     <td>{{$productos->nombre_vitolas}}</td>
                     <td>{{$productos->nombre_semillas}}</td>
-
+                    <td>{{$productos->nombre_calidads}}</td>
                     <td>{{$productos->total}}</td>
-
-
+                    <td>{{$productos->peso}}</td>
                     <td>
 
 
@@ -187,7 +188,7 @@
                                 data-picada="{{$productos->picada}}"
                                 data-total="{{$productos->total}}"
                                 data-botada="{{$productos->botada}}"
-                                title="Editar" onclick="enviar({{$pequen = $productos->pequenas}})">
+                                title="Editar" onclick="enviar('{{$pequen = $productos->pequenas}}', '{{$productos->id_calidad}}')">
                             <span class="fas fa-pencil-alt"></span>
 
                         </button>
@@ -222,13 +223,14 @@
             </tbody>
         </table>
         <script>
-            function enviar(pequen){
+            function enviar(pequen, calidad){
                 $('#peque').val(pequen);
+                $('#calidad_id').val(calidad);
+                $('#calidad_id').trigger('change');
             }
         </script>
 
     </div>
-    <!-----vista previa imagen------->
 <!----------------------------------------------------MODAL NUEVO PRODUCTO------------------------------------------------------->
     <div class="modal fade" id="modalNuevoCapaEntrega" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -344,6 +346,26 @@
                             </select>
                         </div>
 
+                        <div class="form-group">
+                            <label for="id_semillas">Seleccione la Calidad</label>
+                            <br>
+
+                            <select name="id_calidad"
+                                    required
+                                    style="width: 100%"
+                                    class="marca form-control @error('id_calidad') is-invalid @enderror" id="id_calidads">
+                                <option disabled selected value="">Seleccione</option>
+                                @foreach($calidads as $calidad)
+                                    <option value="{{$calidad->id}}" @if(Request::old('id_semilla')==$semilla->id){{'selected'}}@endif
+                                    @if(session("idMarca"))
+                                        {{session("id_semilla")==$calidad->id ? 'selected="selected"':''}}
+                                            @endif>{{$calidad->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
                     </div>
                     <div class="modal-footer">
                         <button type="submit" id="nuevoP" class="btn btn-success">Crear</button>
@@ -398,6 +420,29 @@
                             </select>
                             <!---- Boton para crear un nuevo tipo de categoria- -->
                         </div>
+
+                        <div class="form-group">
+                            <label for="marcacapaentrega">Seleccione la marca</label>
+                            <br>
+                            <select name="id_marca"
+                                    required="required"
+                                    style="width: 100%"
+                                    class="mar form-control @error('id_marca') is-invalid @enderror"
+                                    id="marcacapaentrega" required="required">
+                                <option disabled selected value="">Seleccione</option>
+                                @foreach($marca as $marca)
+                                    <option value="{{$marca->id}}">{{$marca->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('id_marca')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
+                        </div>
+
+
                         <div class="form-group">
                             <label for="vitolacapaentrega">Seleccione la vitola</label>
                             <br>
@@ -439,28 +484,26 @@
                             @enderror
                         </div>
 
-
-
                         <div class="form-group">
-                            <label for="marcacapaentrega">Seleccione la marca</label>
+                            <label for="id_semillas">Seleccione la Calidad</label>
                             <br>
-                            <select name="id_marca"
-                                    required="required"
+
+                            <select name="id_calidad"
+                                    required
                                     style="width: 100%"
-                                    class="mar form-control @error('id_marca') is-invalid @enderror"
-                                    id="marcacapaentrega" required="required">
+                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="calidad_id">
                                 <option disabled selected value="">Seleccione</option>
-                                @foreach($marca as $marca)
-                                    <option value="{{$marca->id}}">{{$marca->name}}
+                                @foreach($calidads as $calidad)
+                                    <option value="{{$calidad->id}}" @if(Request::old('id_semilla')==$semilla->id){{'selected'}}@endif
+                                    @if(session("idMarca"))
+                                        {{session("id_semilla")==$semilla->id ? 'selected="selected"':''}}
+                                            @endif>{{$calidad->name}}
                                     </option>
                                 @endforeach
                             </select>
-                            @error('id_marca')
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
                         </div>
+
+
                         <div class="form-group">
                             <label for="botada">botada</label>
                             <input  class="form-control @error('name') is-invalid @enderror"
