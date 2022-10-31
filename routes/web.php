@@ -57,6 +57,8 @@ Route::group(["middleware" => "auth"], function () {
         //--------------------------------------------CapaEntregaExportar ROUTES-------------------------------------------------------->
         Route::post('/CapaEntrega/export', 'CapaEntregaController@export')->name("exportarcapaentrega");
         Route::get('/CapaEntrega/export', 'CapaEntregaController@export')->name("exportarcapaentrega");
+        Route::post('/CapaEntregamarca/export', 'CapaEntregaController@CalcularPeso')->name("exportarcapaentregamarca");
+        Route::get('/CapaEntregamarca/export', 'CapaEntregaController@CalcularPeso')->name("exportarcapaentregamarca");
         Route::post('/CapaEntrega/exportPDF', 'CapaEntregaController@exportpdf')->name("exportarcapaentregapdf");
         Route::get('/CapaEntrega/exportPDF', 'CapaEntregaController@exportpdf')->name("exportarcapaentregapdf");
         Route::post('/CapaEntrega/exportCVS', 'CapaEntregaController@exportcvs')->name("exportarcapaentregaacvs");

@@ -34,39 +34,7 @@ class InventarioBandaController extends Controller
 
             if ($fecha == null) {
                 $fecha = Carbon::now()->format('l');
-                /*
-                if ($fecha == 'Monday') {
-                    $fecha = Carbon::now()->subDays(2)->format('Y-m-d');
-                    $entregaCapa1=DB::table("capa_entregas")
-                        ->leftJoin("empleados","capa_entregas.id_empleado","=","empleados.id")
-                        ->leftJoin("vitolas","capa_entregas.id_vitolas","=","vitolas.id")
-                        ->leftJoin("semillas","capa_entregas.id_semilla","=","semillas.id")
-                        ->leftJoin("marcas","capa_entregas.id_marca","=","marcas.id")
-                        ->leftJoin("calidads","capa_entregas.id_calidad","=","calidads.id")
-
-
-                        ->select("capa_entregas.id","empleados.nombre AS nombre_empleado",
-                            "vitolas.name as nombre_vitolas","semillas.name as nombre_semillas",
-                            "calidads.name as nombre_calidads",
-                            "capa_entregas.id_empleado",
-                            "capa_entregas.id_vitolas",
-                            "capa_entregas.id_semilla",
-                            "capa_entregas.id_calidad",
-                            "capa_entregas.id_marca","marcas.name as nombre_marca"
-                            ,"capa_entregas.total")
-                        ->whereDate("capa_entregas.created_at","=" ,$fecha)
-                        ->get();
-                    if ($entregaCapa1->count()>0){
-
-                    }
-                    else{
-                        $fecha = Carbon::now()->subDays(3)->format('Y-m-d');
-                    }
-
-                } else {
-                    $fecha = Carbon::now()->subDay()->format('Y-m-d');*/
                    $fecha = Carbon::now()->format('Y-m-d');
-                //}
             } else{
 
                 $fecha = $request->get("fecha");
@@ -91,7 +59,6 @@ class InventarioBandaController extends Controller
                 ->where("semillas.name","Like","%".$query."%")
                 ->whereDate("inventario_bandas.created_at","=" ,$fecha)
                 ->orderBy("nombre_semillas")
-                //  ->whereDate("capa_entregas.created_at","=" ,Carbon::now()->format('Y-m-d'))
                 ->paginate(1000);
             $semilla = Semilla::all();
             $tamano = Tamano::all();
@@ -157,7 +124,6 @@ class InventarioBandaController extends Controller
                 ->where("semillas.name","Like","%".$query."%")
                 ->whereDate("inventario_bandas.created_at","=" ,$fecha)
                 ->orderBy("nombre_semillas")
-                //  ->whereDate("capa_entregas.created_at","=" ,Carbon::now()->format('Y-m-d'))
                 ->paginate(1000);
 
             foreach ($entregaCapa as $entrega){
@@ -167,23 +133,12 @@ class InventarioBandaController extends Controller
                     ->leftJoin("variedads", "entrada_bandas.id_variedad", "=", "variedads.id")
                     ->leftJoin("procedencias", "entrada_bandas.id_procedencia", "=", "procedencias.id")
                     ->selectRaw(
-                        /*"entrada_bandas.id", "tamanos.name AS nombre_tamano",
-                    "entrada_bandas.peso",*/
                     "SUM(entrada_bandas.total) as total")->selectRaw("SUM(entrada_bandas.libras) as libras")
-                    /*
-                        "entrada_bandas.id_tamano",
-                        "entrada_bandas.origen",
-                        "entrada_bandas.id_semilla", "semillas.name as nombre_semillas",
-                        "entrada_bandas.id_variedad", "variedads.name as nombre_variedad",
-                        "entrada_bandas.id_procedencia", "procedencias.name as nombre_procedencia"
-                        , "entrada_bandas.total" )*/
                     ->where("entrada_bandas.id_semilla","=",$entrega->id_semillas)
                     ->where("entrada_bandas.id_variedad","=",$entrega->id_variedad)
                     ->where("entrada_bandas.id_procedencia","=",$entrega->id_procedencia)
                     ->where("entrada_bandas.id_tamano","=",$entrega->id_tamano)
                     ->whereDate("entrada_bandas.created_at","=" ,$fecha)->get();
-                    //return $recibirCapa;
-
                 foreach ($recibirCapa as $reci){
                     if($reci->total!=0){
                     $pesoprom = ($reci->libras/$reci->total)*16*100;
@@ -215,7 +170,6 @@ class InventarioBandaController extends Controller
                 ->where("semillas.name","Like","%".$query."%")
                 ->whereDate("inventario_bandas.created_at","=" ,$fecha)
                 ->orderBy("nombre_semillas")
-                //  ->whereDate("capa_entregas.created_at","=" ,Carbon::now()->format('Y-m-d'))
                 ->paginate(1000);
 
             //PARA REGISTRAR EL CONSUMO EN EL INVENTARIO DE BANDA DE FORMA AUTOMATICA

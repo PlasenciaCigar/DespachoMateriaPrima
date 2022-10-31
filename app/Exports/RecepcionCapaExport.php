@@ -66,14 +66,11 @@ class RecepcionCapaExport implements  FromCollection , ShouldAutoSize , WithHead
                 'Planta : TAOSA'
             ],
             [
-                'Tamaño',
+            'Tamaño',
             'Semilla',
             'Calidad',
             'Total Recibida',
         ]];
     }
-        //
-
-
 
 }

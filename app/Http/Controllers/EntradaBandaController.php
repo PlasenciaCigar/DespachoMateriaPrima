@@ -98,8 +98,6 @@ class EntradaBandaController extends Controller
 
     public function store(Request $request)
     {
-        /*if($this->validar($request->input('id_semilla'), $request->input('id_tamano'), $request->input('id_variedad'),
-        $request->input('id_procedencia'), $request->input('fecha'), $request->input('origen'))){*/
         $inve  =  DB::table('banda_inv_inicials')
             ->leftJoin("semillas","banda_inv_inicials.id_semilla","=","semillas.id")
             ->leftJoin("tamanos","banda_inv_inicials.id_tamano","=","tamanos.id")
@@ -112,7 +110,6 @@ class EntradaBandaController extends Controller
             ->where("banda_inv_inicials.id_variedad","=",$request->input("id_variedad"))
             ->where("banda_inv_inicials.id_procedencia","=",$request->input("id_procedencia"))
             ->where("banda_inv_inicials.id_tamano","=",$request->input("id_tamano"))->get();
-           // return $inve;
         if($inve->count()>0){
         }else{
             $nuevoConsumo = new BandaInvInicial();
@@ -140,27 +137,15 @@ class EntradaBandaController extends Controller
         $nuevoCapaEntra->total=$request->input('total');
         $nuevoCapaEntra->libras=$request->input("peso");
         $nuevoCapaEntra->peso= $request->input("peso") / ($request->input('total')/100)*16;
-        //$nuevoCapaEntra->libras= ($request->input('total')/100 * $request->input("peso")/16);
         $nuevoCapaEntra->origen=$request->input('origen');
         $nuevoCapaEntra->created_at=$fechaa;
-
         $nuevoCapaEntra->save();
-
-        //return redirect()->route("EntradaBanda")->withExito("Se creó la entrada Correctamente ");
         return back()->withExito("Se creó la entrega Correctamente ");
-    /*} else{
-        Session::flash('flash_message', 'YA EXISTE UN PRODUCTO CON ESTAS ESPECIFICACIONES');
-        return back();
-    }*/
-
-        //
     }
 
 
     public function edit(Request $request)
     { try{
-
-
         $inve  =  DB::table('banda_inv_inicials')
             ->leftJoin("semillas","banda_inv_inicials.id_semilla","=","semillas.id")
             ->leftJoin("tamanos","banda_inv_inicials.id_tamano","=","tamanos.id")
@@ -172,7 +157,6 @@ class EntradaBandaController extends Controller
             ->where("banda_inv_inicials.id_variedad","=",$request->input("id_variedad"))
             ->where("banda_inv_inicials.id_procedencia","=",$request->input("id_procedencia"))
             ->where("banda_inv_inicials.id_tamano","=",$request->input("id_tamano"))->get();
-            //return $inve;
         if($inve->count()>0){
         }else{
             $nuevoConsumo = new BandaInvInicial();
@@ -190,11 +174,9 @@ class EntradaBandaController extends Controller
         $editarBandaRecibida->id_procedencia=$request->input('id_procedencia');
         $editarBandaRecibida->total=$request->input('total');
         $editarBandaRecibida->libras= $request->input('peso');
-        //$editarBandaRecibida->libras= $request->input('total')/100 * $editarBandaRecibida->peso/16;
         $editarBandaRecibida->peso= $request->input("peso") / ($request->input('total')/100)*16;
         $editarBandaRecibida->origen=$request->input('origen');
         $editarBandaRecibida->save();
-        //return redirect()->route("EntradaBanda")->withExito("Se editó Correctamente");
         return back()->withExito("Se edito la entrega Correctamente ");
 
     }catch (ValidationException $exception){
@@ -208,7 +190,6 @@ class EntradaBandaController extends Controller
         $capaentrega = $request->input('id');
         $borrar = EntradaBanda::findOrFail($capaentrega);
         $borrar->delete();
-        //return redirect()->route("EntradaBanda")->withExito("Se borró la entrega satisfactoriamente");
         return back()->withExito("Se elimino la entrega Correctamente ");
     }
     public function export(Request $request)

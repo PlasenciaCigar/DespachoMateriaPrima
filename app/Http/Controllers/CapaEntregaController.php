@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Exports\MarcaPeso;
 use App\BInvInicial;
 use App\Calidad;
 use App\CapaEntrega;
@@ -28,8 +28,8 @@ class CapaEntregaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
-
+ {
+    
         if ($request){
             $query = trim($request->get("search"));
             $fechasearch = trim($request->get("fechasearch"));
@@ -50,8 +50,6 @@ class CapaEntregaController extends Controller
                 ->leftJoin("semillas","capa_entregas.id_semilla","=","semillas.id")
                 ->leftJoin("marcas","capa_entregas.id_marca","=","marcas.id")
                 ->leftJoin("calidads","capa_entregas.id_calidad","=","calidads.id")
-
-
                 ->select("capa_entregas.id","empleados.nombre AS nombre_empleado",
                     "empleados.codigo AS codigo_empleado",
                     "vitolas.name as nombre_vitolas","semillas.name as nombre_semillas",
@@ -69,14 +67,10 @@ class CapaEntregaController extends Controller
                     "capa_entregas.id_marca"
                     ,"marcas.name as nombre_marca"
                     ,"capa_entregas.total")
-               // ->where("empleados.codigo","Like","%".$query."%")
-                //->whereDate("capa_entregas.created_at","=", Carbon::parse($fechasearch)->format('Y-m-d'))
                 ->whereDate("capa_entregas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
                 ->where('empleados.codigo', 'like', '%'. $codigoemp. '%')
                 ->orderBy("empleados.codigo")
-              //  ->whereDate("capa_entregas.created_at","=" ,Carbon::now()->format('Y-m-d'))
                 ->paginate(1000);
-               // return $entregaCapa;
             $empleados = Empleado::all();
             $semilla = Semilla::all();
             $calidads = Calidad::all();
@@ -91,7 +85,6 @@ class CapaEntregaController extends Controller
                 ->leftJoin("calidads","capa_entregas.id_calidad","=","calidads.id")
                 ->selectRaw("SUM(total) as total_capa")
                 ->where("empleados.codigo","Like","%".$query."%")
-                //->whereDate("capa_entregas.created_at","=", Carbon::parse($fechasearch)->format('Y-m-d'))
                 ->whereDate("capa_entregas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
                 ->get();
 
@@ -107,6 +100,12 @@ class CapaEntregaController extends Controller
                 ->withMarca($marca);
         }
     }
+
+    function CalcularPeso(Request $request){
+        $fecha = Carbon::parse(  $request->fecha1)->format('Y-m-d');      
+
+        return (new MarcaPeso($fecha))->download('Listado Consumo De Banda '.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+                }
 
     /**
      * Show the form for creating a new resource.

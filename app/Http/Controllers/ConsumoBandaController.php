@@ -173,13 +173,10 @@ class ConsumoBandaController extends Controller
             $nuevoConsumoBanda->procedencia=$request->input('id_procedencia');
 
             $nuevoConsumoBanda->save();
-
-        //return redirect()->route("ConsumoBanda")->withExito("Se creó la entraga Correctamente ");
         return back()->withExito("Se creó la entrega Correctamente ");
         }catch (ValidationException $exception){
             return redirect()->route("ConsumoBanda")->with('errores','errores')->with('id_capa_entregas',$request->input("id"))->withErrors($exception->errors());
         }
-        //
     }
 
     /**
@@ -233,23 +230,7 @@ class ConsumoBandaController extends Controller
                 'onzas'=>'required',
                 'total'=>'required'
             ]);
-            /**,$messages = [
-            'id_empleado.required' => 'El nombre del producto es requerido.',
-
-            'description.max:192' => 'La descripción  no debe de tener más de 192 caracteres.',
-            'unit_price.numeric' => 'El precio debe ser un valor numérico.',
-            'unit_price.max:9999' =>'El precio unitario no debe de exceder de 9 caracteres',
-            'lote_price.max:99999' =>'El precio de lote no debe de exceder de 9 caracteres',
-            'lote_price.numeric' =>'El precio lote debe ser un valor numericos',
-            'id_empresa.required' => 'Se requiere una empresa para este producto.',
-            'id_categoria.required' => 'Se requiere una categoria para este producto.',
-            'id_marca.required'=>'Se requiere una marca para este producto'
-
-            ]);  */
-
-
             $editarConsumoBanda=ConsumoBanda::findOrFail($request->id);
-
             $editarConsumoBanda->id_vitolas=$request->input('id_vitolas');
             $editarConsumoBanda->id_semillas=$request->input('id_semillas');
             $editarConsumoBanda->id_marca=$request->input("id_marca");
@@ -262,13 +243,11 @@ class ConsumoBandaController extends Controller
             $editarConsumoBanda->procedencia=$request->input('id_procedencia');
 
             $editarConsumoBanda->save();
-            //return redirect()->route("ConsumoBanda")->withExito("Se editó Correctamente");
             return back()->withExito("Se edito Correctamente ");
 
         }catch (ValidationException $exception){
             return redirect()->route("ConsumoBanda")->with('errores','errores')->with('id_capa_entregas',$request->input("id"))->withErrors($exception->errors());
         }
-        //
     }
 
     /**
@@ -294,11 +273,8 @@ class ConsumoBandaController extends Controller
 
         $capaentrega = $request->input('id');
         $borrar = ConsumoBanda::findOrFail($capaentrega);
-
         $borrar->delete();
-        //return redirect()->route("ConsumoBanda")->withExito("Se borró la entrega satisfactoriamente");
         return back()->withExito("Se elimino Correctamente ");
-        //
     }
     public function export(Request $request)
     {
@@ -349,7 +325,6 @@ class ConsumoBandaController extends Controller
         DB::table('consumo_bandas')->where("consumo_bandas.id","=",$capaentrega)->increment('total', 100);
 
         return back()->withExito("Se incremento Correctamente ");
-        //redirect()->route("ConsumoBanda")->withExito("Se editó Correctamente");
 
     }
     public function Sumas(Request $request){
@@ -360,9 +335,6 @@ class ConsumoBandaController extends Controller
         DB::table('consumo_bandas')->where("consumo_bandas.id","=",$capaentrega)
             ->increment('total', $incremeto);
             return back()->withExito("Se aumento Correctamente ");
-        //return redirect()->route("ConsumoBanda")->withExito("Se editó Correctamente");
-
-
     }
 
     public function calcular(Request $request){
@@ -399,8 +371,6 @@ class ConsumoBandaController extends Controller
             $editarConsumoBanda=ConsumoBanda::findOrFail($dddd->other);
             $prom=  $inventario->pes/($totalbanda/100);
             $editarConsumoBanda->libras=  ($dddd->total/100)*$prom;
-
-
             $editarConsumoBanda->save();
             }
 
