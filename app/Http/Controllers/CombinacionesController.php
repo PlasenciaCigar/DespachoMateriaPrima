@@ -48,8 +48,6 @@ class CombinacionesController extends Controller
         ->select('detalle_combinaciones.codigo_materia_prima', 'detalle_combinaciones.peso', 'detalle_combinaciones.id_combinaciones')
         ->where('detalle_combinaciones.id_combinaciones', '=', $comb)
         ->get();
-        //$response['data'] = $combinaciones;
-
         return response()->json($combinaciones); 
     }
 
@@ -149,8 +147,17 @@ class CombinacionesController extends Controller
      * @param  \App\combinaciones  $combinaciones
      * @return \Illuminate\Http\Response
      */
-    public function destroy(combinaciones $combinaciones)
+    public function destroy($id)
     {
-        //
+        $delete = combinaciones::FindOrFail($id);
+        $delete->delete();
+        return back();
+    }
+
+    public function destroydetalle($codigo)
+    {
+        $delete = DB::table('detalle_combinaciones')->where('codigo_materia_prima', '=', $codigo)
+        ->delete();
+        return response()->json($codigo);
     }
 }

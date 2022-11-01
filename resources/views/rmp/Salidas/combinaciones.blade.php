@@ -68,7 +68,7 @@
                     <button onclick="ver('{{$combinacion->id}}', '{{$combinacion->id_marca}}','{{$combinacion->id_vitolas}}')" class="btn btn-sm btn-info">
                     <span class="fas fa-eye"></span>
                     </button>
-                        <button class='delete-modal btn btn-danger'>
+                        <button onclick="deletecombinacion('{{$combinacion->id}}')" class='delete-modal btn btn-danger'>
                     <span class='fas fa-trash'></span>
                     </button>                
                 </td>
@@ -78,6 +78,7 @@
         </table>
 
     </div>
+    
     <style>
 table, th, td {
   border: 1px solid black;
@@ -303,10 +304,10 @@ function ver(id_combinaciones, marca, vitola){
   }
 }
 
-    function deletedetalle(evt){
-        evt.preventDefault();
+    function deletedetalle(codigo){
+        alert('codigo');
         $.ajax({
-    url: '/detalledelete',
+    url: '/detalledelete/',
     type: "DELETE",
     data: {id_combinaciones: id_impor,
       codigo_materia_prima: codigo_materia_prima,
@@ -322,11 +323,28 @@ function ver(id_combinaciones, marca, vitola){
   })
     }
 
-function agregartabledetalle(response){
+    function deletecombinacion(id){
+        let _token= "{{ csrf_token() }}";
+        $.ajax({
+    url: '/detallecombinacion/'+id,
+    type: "POST",
+    data: {id_combinaciones: id,
+      _token: _token},
+      success: function(data) {
+            if ((data.errors)) {
+                alert('No existe ese bulto')
+            } else {
+               alert('Codigo borrado con exito');
+            }
+        },
+  })
+    }
+
+        function agregartabledetalle(response){
             for (let i = 0; i < response.length; i++) {
             $('#table').append("<tr class='item" + response[i].codigo_materia_prima 
-            + "'><td>" + response[i].codigo_materia_prima + "</td><td>" 
-            + response[i].peso + "</td><td> <button class='delete-modal btn btn-danger' data-id='" + 
+            + "'> <td>" + response[i].codigo_materia_prima + "</td><td>" 
+            + response[i].peso + "</td><td> <button id='deletedetalle("+response[i].codigo_materia_prima+")' class='delete-modal btn btn-danger' data-id='" + 
             response[i].peso + "' data-name='" + response[i].peso 
              + "'><span class='fas fa-trash'></span></button></td></tr>"); 
             }
@@ -334,7 +352,7 @@ function agregartabledetalle(response){
 
         function agregartable(codigo_materia_prima, peso){
             $('#table').append("<tr class='item" + codigo_materia_prima + "'><td>" + codigo_materia_prima + "</td><td>" 
-            + peso + "</td><td> <button class='delete-modal btn btn-danger' data-id='" + 
+            + peso + "</td><td> <button onclick='deletedetalle("+codigo_materia_prima+")' class='delete-modal btn btn-danger' data-id='" + 
              peso + "' data-name='" + peso 
              + "'><span class='fas fa-trash'></span></button></td></tr>");
         }
