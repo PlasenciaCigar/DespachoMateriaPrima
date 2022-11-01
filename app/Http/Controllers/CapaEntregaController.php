@@ -104,7 +104,7 @@ class CapaEntregaController extends Controller
     function CalcularPeso(Request $request){
         $fecha = Carbon::parse(  $request->fecha1)->format('Y-m-d');      
 
-        return (new MarcaPeso($fecha))->download('Listado Consumo De Banda '.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        return (new MarcaPeso($fecha))->download('Consumo Capa '.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
                 }
 
     /**

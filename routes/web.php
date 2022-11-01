@@ -63,7 +63,7 @@ Route::group(["middleware" => "auth"], function () {
         Route::get('/CapaEntrega/exportPDF', 'CapaEntregaController@exportpdf')->name("exportarcapaentregapdf");
         Route::post('/CapaEntrega/exportCVS', 'CapaEntregaController@exportcvs')->name("exportarcapaentregaacvs");
         Route::get('/CapaEntrega/exportCVS', 'CapaEntregaController@exportcvs')->name("exportarcapaentregacvs");
-        //--------------------------------------------CapaEntrega ROUTES------------------------------------------------------
+        //--------------------------------------------CapaEntrega ROUTES------------------------------------------------------>
         Route::put("/CapaEntrega/25","CapaEntregaController@Suma25")->name("Suma25CapaEntrega");
         Route::put("/CapaEntrega/50","CapaEntregaController@Suma50")->name("Suma50CapaEntrega");
         Route::put("/CapaEntrega/suma","CapaEntregaController@Sumas")->name("SumasCapaEntrega");
@@ -332,7 +332,9 @@ Route::group(["middleware" => "auth"], function () {
     Route::get("/detallecombinacion", 'CombinacionesController@storedetalle')->name('combinacionestoredetalle');
     Route::post("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
     Route::get("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
-    Route::delete("/detalledelete", 'CombinacionesController@deletedetalle')->name('daletecombinaciones');
+    Route::delete("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
+    Route::POST("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
+    Route::get("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
 
 //--------------------------------------------mildaware Admin------------------------------------------------------
     //--------------------------------------------mildaware Admin------------------------------------------------------
