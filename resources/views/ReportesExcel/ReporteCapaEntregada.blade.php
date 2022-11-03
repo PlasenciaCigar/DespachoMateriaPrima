@@ -14,6 +14,7 @@
         $acum = $first->marca;
         $cant = 0;
         $peso = 0;
+        $else = 0;
         ?>
     @foreach($dato as $datos)
     @if($acum==$datos['Marca'])
@@ -43,8 +44,8 @@
             <td>{{ $datos['Cantidad']}}</td>
             <td>{{ $datos['Peso']}}</td>
             <?php
-            $cant=0;
-            $peso=0;
+                $cant=0;$peso=0;
+                $cant+=$datos['Cantidad'];$peso+=$datos['Peso'];
             ?>
         </tr>
         @endif
@@ -52,5 +53,10 @@
         $acum = $datos['Marca'];
         ?>
     @endforeach
+    <tr>
+            <td style="text-align:center;" colspan="4">Total de: {{$acum}}</td>
+            <td>{{$cant}}</td>
+            <td>{{$peso}}</td>
+        </tr>
     </tbody>
 </table>
