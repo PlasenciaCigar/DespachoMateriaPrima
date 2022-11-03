@@ -65,8 +65,7 @@ class ExistenciaDiarioExports implements FromCollection,ShouldAutoSize ,WithHead
                 "pesofinal"=>'',
                 "totalconsumos"=>'',
                 "pesoconsumo"=>'',
-                ]
-                ;
+                ];
                 }
                 $saltos[] = ["name"=>$val->nombre_semillas,
                 "nombre_calidads"=>$val->nombre_calidads,

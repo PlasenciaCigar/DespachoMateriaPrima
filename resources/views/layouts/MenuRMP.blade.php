@@ -284,7 +284,7 @@ tfoot th:first-child {
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
-<script src="js/jsmenu/scripts.js"></script>
+        <script src="{{asset("js/jsmenu/scripts.js")}}"></script>
 <script src="{{asset("js/jsmenu/bootstrap-fileinput.js")}}" type="text/javascript"></script>
 <script src="{{asset("js/jsmenu/bootstrap-fileinput-theme.js")}}" type="text/javascript"></script>
 

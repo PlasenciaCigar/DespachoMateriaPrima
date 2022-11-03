@@ -333,10 +333,10 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
     Route::get("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
     Route::delete("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
-    Route::POST("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
+    Route::post("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
     Route::get("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
 
-//--------------------------------------------mildaware Admin------------------------------------------------------
+    //--------------------------------------------mildaware Admin------------------------------------------------------
     //--------------------------------------------mildaware Admin------------------------------------------------------
 
     Route::group(['middleware' => 'admin'], function () {

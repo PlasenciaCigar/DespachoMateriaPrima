@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Exports;
-
+use App\Exports\Sheets\MarcaExport;
+use App\Exports\Sheets\MarcaOrder;
 use App\CapaEntrega;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\Calidad;
@@ -21,75 +22,28 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class MarcaPeso implements FromCollection, ShouldAutoSize , WithHeadings
+class MarcaPeso implements WithMultipleSheets
 {
     use Exportable;
 
     protected $fecha;
     public function __construct(String $fecha )
     {
-
         $this->fecha = $fecha;
     }
     /**
     * @return \Illuminate\Support\Collection
     */
-    public function collection()
+
+    public function sheets(): array
     {
-        $entregaCapa=DB::table("capa_entregas")
-        ->join("vitolas","capa_entregas.id_vitolas","=","vitolas.id")
-        ->join("semillas","capa_entregas.id_semilla","=","semillas.id")
-        ->join("marcas","capa_entregas.id_marca","=","marcas.id")
-        ->join("calidads", "capa_entregas.id_calidad", "calidads.id")
-        
-        ->select(
-            "capa_entregas.id_vitolas",
-            "capa_entregas.id_marca",
-            "capa_entregas.id_semilla",
-            "capa_entregas.id_calidad",
-            "semillas.name as semilla",
-            "marcas.name as marca",
-            "vitolas.name as vitola",
-            DB::raw('SUM(capa_entregas.total) as Totale'))
-        ->whereDate("capa_entregas.created_at","=" ,$this->fecha)
-        ->groupByRaw('capa_entregas.id_marca, capa_entregas.id_vitolas, capa_entregas.id_semilla, capa_entregas.id_calidad')
-        ->get();
-        $MarcaP = [];
-        foreach ($entregaCapa as $capa) {
-            $pso= DB::table('existencia_diarios')->where('id_semillas', '=', $capa->id_semilla)
-            ->where('id_calidad','=', $capa->id_calidad)
-            ->whereDate('created_at', '=', $this->fecha)->sum('pesoconsumo');
+        $sheets = [];
 
-            $cant= DB::table('capa_entregas')->where('id_semilla', '=', $capa->id_semilla)
-            ->where('id_calidad','=', $capa->id_calidad)
-            ->whereDate('created_at', '=', $this->fecha)->sum('total');
-            $prm= $pso/$cant;
-            $ttl= round($prm*$capa->Totale, 2);
+            $sheets[] = new MarcaExport($this->fecha);
+            $sheets[] = new MarcaOrder($this->fecha);
 
-            $MarcaP[] = ['Marca'=>$capa->marca,'Vitola'=>$capa->vitola,'Semilla'=>$capa->semilla,
-             'Calidad'=>$capa->id_calidad, 'Cantidad'=>$capa->Totale, 'Peso'=> $ttl];
-        }
-        return collect($MarcaP);
-    }
-
-    public function headings(): array
-    {
-        return [
-            [
-                'Informe de Capa Entregada',
-            ],
-            [
-                'Fecha : '.$this->fecha,
-                'Planta : TAOSA'
-            ],
-            [
-                'Marca',
-                'Vitola',
-            'Semilla',
-            'Calidad',
-            'Cantidad',
-            'Peso'
-        ]];
+        return $sheets;
     }
 }

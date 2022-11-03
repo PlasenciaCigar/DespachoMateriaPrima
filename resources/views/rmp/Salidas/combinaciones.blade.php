@@ -220,8 +220,24 @@ table, th, td {
             </div>
         </div>
     </div>
-
     <script>
+
+        function ignorancia(cod){ 
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'post',
+            url: '/deleteItem',
+            data: {
+                _token: _token,
+                codigo: cod
+            },
+            success: function(data) {
+                $('.item'+e).remove(); 
+            }
+        });          
+        }
+
+
         function detalle(marca, vitola,id){
             $('#marca').val(marca);
             $('#marca').trigger('change');
@@ -246,7 +262,7 @@ function ver(id_combinaciones, marca, vitola){
                 $('#modalNuevoConsumo').modal();
                 agregartabledetalle(response);
                 detalle(marca, vitola, id_combinaciones);
-                desactivar();              
+                desactivar();             
             }
         },
     });
@@ -342,17 +358,19 @@ function ver(id_combinaciones, marca, vitola){
 
         function agregartabledetalle(response){
             for (let i = 0; i < response.length; i++) {
-            $('#table').append("<tr class='item" + response[i].codigo_materia_prima 
+                let msj = response[i].codigo_materia_prima.split('-');
+                let codigoMP = parseInt(msj[1].toString(8), 10);
+            $('#table').append("<tr class='item" + codigoMP
             + "'> <td>" + response[i].codigo_materia_prima + "</td><td>" 
-            + response[i].peso + "</td><td> <button id='deletedetalle("+response[i].codigo_materia_prima+")' class='delete-modal btn btn-danger' data-id='" + 
+            + response[i].peso + "</td><td> <button id='xd' class='delete-modal btn btn-danger' data-id='" + 
             response[i].peso + "' data-name='" + response[i].peso 
-             + "'><span class='fas fa-trash'></span></button></td></tr>"); 
+             + "' onclick='ignorancia("+codigoMP+")' ><span class='fas fa-trash'></span></button></td></tr>"); 
             }
         }
 
         function agregartable(codigo_materia_prima, peso){
             $('#table').append("<tr class='item" + codigo_materia_prima + "'><td>" + codigo_materia_prima + "</td><td>" 
-            + peso + "</td><td> <button onclick='deletedetalle("+codigo_materia_prima+")' class='delete-modal btn btn-danger' data-id='" + 
+            + peso + "</td><td> <button id='xd' class='delete-modal btn btn-danger' data-id='" + 
              peso + "' data-name='" + peso 
              + "'><span class='fas fa-trash'></span></button></td></tr>");
         }
@@ -372,8 +390,6 @@ function ver(id_combinaciones, marca, vitola){
     }
 });
     </script>
-
-
 
      <style>
 
