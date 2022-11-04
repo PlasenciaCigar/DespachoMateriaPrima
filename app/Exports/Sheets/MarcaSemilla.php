@@ -41,12 +41,13 @@ class MarcaSemilla implements FromView, ShouldAutoSize
             "capa_entregas.id_marca",
             "capa_entregas.id_semilla",
             "capa_entregas.id_calidad",
+            "calidads.name as calidad",
             "semillas.name as semilla",
             "marcas.name as marca",
             "vitolas.name as vitola",
             DB::raw('SUM(capa_entregas.total) as Totale'))
         ->whereDate("capa_entregas.created_at","=" ,$this->fecha)
-        ->orderByRaw('semilla, marca')
+        ->orderByRaw('semilla,calidad, marca')
         ->groupByRaw('capa_entregas.id_marca, capa_entregas.id_vitolas, capa_entregas.id_semilla, capa_entregas.id_calidad')
         ->get();
         $MarcaP = [];

@@ -12,12 +12,13 @@
     <tbody>
         <?php 
         $acum = $first->semilla;
+        $acum2 = $first->id_calidad;
         $cant = 0;
         $peso = 0;
         $else = 0;
         ?>
     @foreach($dato as $datos)
-    @if($acum==$datos['Semilla'])
+    @if($acum==$datos['Semilla'] && $acum2==$datos['Calidad'])
         <tr>
             <td>{{ $datos['Marca']}}</td>
             <td>{{ $datos['Vitola']}}</td>
@@ -32,7 +33,7 @@
         </tr>
         @else
         <tr>
-            <td style="text-align:center;" colspan="4"> <b>Total de: {{$acum}} </b></td>
+            <td style="text-align:center;" colspan="4"> <b>Total de {{$acum}} de {{$acum2}}</b></td>
             <td><b>{{$cant}}</b></td>
             <td><b>{{$peso}}</b></td>
         </tr>
@@ -51,10 +52,11 @@
         @endif
         <?php 
         $acum = $datos['Semilla'];
+        $acum2 = $datos['Calidad'];
         ?>
     @endforeach
     <tr>
-            <td style="text-align:center;" colspan="4"><b>Total de: {{$acum}}</b></td>
+            <td style="text-align:center;" colspan="4"><b>Total de {{$acum}} de {{$acum2}}</b></td>
             <td><b>{{$cant}}</b></td>
             <td><b>{{$peso}}</b></td>
         </tr>
