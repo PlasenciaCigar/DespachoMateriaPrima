@@ -332,7 +332,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::get("/detallecombinacion", 'CombinacionesController@storedetalle')->name('combinacionestoredetalle');
     Route::post("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
     Route::get("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
-    Route::delete("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
+    Route::get("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
+    Route::post("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
     Route::post("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
     Route::get("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
 

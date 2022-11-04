@@ -11,13 +11,13 @@
     </thead>
     <tbody>
         <?php 
-        $acum = $first->marca;
+        $acum = $first->semilla;
         $cant = 0;
         $peso = 0;
         $else = 0;
         ?>
     @foreach($dato as $datos)
-    @if($acum==$datos['Marca'])
+    @if($acum==$datos['Semilla'])
         <tr>
             <td>{{ $datos['Marca']}}</td>
             <td>{{ $datos['Vitola']}}</td>
@@ -50,7 +50,7 @@
         </tr>
         @endif
         <?php 
-        $acum = $datos['Marca'];
+        $acum = $datos['Semilla'];
         ?>
     @endforeach
     <tr>

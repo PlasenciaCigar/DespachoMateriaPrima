@@ -226,13 +226,14 @@ table, th, td {
             let _token= "{{ csrf_token() }}";
             $.ajax({
             type: 'post',
-            url: '/deleteItem',
+            url: '/detalledelete/'+cod,
             data: {
                 _token: _token,
                 codigo: cod
             },
             success: function(data) {
-                $('.item'+e).remove(); 
+                alert('xd');
+                $('.item'+cod).remove(); 
             }
         });          
         }

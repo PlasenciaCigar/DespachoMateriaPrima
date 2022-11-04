@@ -3,6 +3,7 @@
 namespace App\Exports;
 use App\Exports\Sheets\MarcaExport;
 use App\Exports\Sheets\MarcaOrder;
+use App\Exports\Sheets\MarcaSemilla;
 use App\CapaEntrega;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use App\Calidad;
@@ -42,6 +43,7 @@ class MarcaPeso implements WithMultipleSheets
         $sheets = [];
 
             $sheets[] = new MarcaExport($this->fecha);
+            $sheets[] = new MarcaSemilla($this->fecha);
             $sheets[] = new MarcaOrder($this->fecha);
 
         return $sheets;
