@@ -54,9 +54,9 @@
         ?>
     @endforeach
     <tr>
-            <td style="text-align:center;" colspan="4">Total de: {{$acum}}</td>
-            <td>{{$cant}}</td>
-            <td>{{$peso}}</td>
+            <td style="text-align:center;" colspan="4"><b>Total de: {{$acum}}</b></td>
+            <td><b>{{$cant}}</b></td>
+            <td><b>{{$peso}}</b></td>
         </tr>
     </tbody>
 </table>
