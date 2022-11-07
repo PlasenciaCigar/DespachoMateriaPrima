@@ -120,10 +120,9 @@ table, th, td {
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="post" action="" enctype="multipart/form-data">
-
                     @csrf
                     <div class="modal-body">
+                    <form id="nuevoP" method="post" action="" enctype="multipart/form-data">
 
                         <div class="form-group">
                             <label for="procedencia">Marca</label>
@@ -168,6 +167,7 @@ table, th, td {
                                 @endforeach
                             </select>
                         </div>
+                        </form>
 
                         <div class="row">
                         <div class="form-group col-md-50">
@@ -215,7 +215,6 @@ table, th, td {
                     <div class="modal-footer">
                         <button type="button" onclick="cerrar()" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                     </div>
-                </form>
 
             </div>
         </div>
@@ -232,7 +231,6 @@ table, th, td {
                 codigo: cod
             },
             success: function(data) {
-                alert('xd');
                 $('.item'+cod).remove(); 
             }
         });          
@@ -370,10 +368,12 @@ function ver(id_combinaciones, marca, vitola){
         }
 
         function agregartable(codigo_materia_prima, peso){
-            $('#table').append("<tr class='item" + codigo_materia_prima + "'><td>" + codigo_materia_prima + "</td><td>" 
+            let msj = codigo_materia_prima.split('-');
+            let codigoMP = parseInt(msj[1].toString(8), 10);
+            $('#table').append("<tr class='item" + codigoMP + "'><td>" + codigo_materia_prima + "</td><td>" 
             + peso + "</td><td> <button id='xd' class='delete-modal btn btn-danger' data-id='" + 
              peso + "' data-name='" + peso 
-             + "'><span class='fas fa-trash'></span></button></td></tr>");
+             + "' onclick='ignorancia("+codigoMP+")' ><span class='fas fa-trash'></span></button></td></tr>");
         }
 
         function desactivar(){

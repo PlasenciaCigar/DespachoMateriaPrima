@@ -67,9 +67,10 @@ class MarcaExport implements FromView, ShouldAutoSize
         }
         $dato= collect($MarcaP)->all();
         $first = $entregaCapa->first();
+        $fec = $this->fecha;
 
         return view('ReportesExcel.ReporteCapaEntregada', [
-            'dato' => $dato, 'first'=>$first
+            'dato' => $dato, 'first'=>$first, 'fecha'=>$fec
         ]);
     }
 }

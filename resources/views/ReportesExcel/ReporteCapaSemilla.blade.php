@@ -1,5 +1,12 @@
 <table>
     <thead>
+        <tr>
+            <th colspan="6" style="text-align:center;"><b>Informe de capa Entregada</b></th>
+        </tr>
+        <tr>
+        <th><b>Fecha: {{$fecha}}</b></th>
+        <th><b>Planta: TAOSA</b></th>
+        </tr>
     <tr style="font-weight: bold;">
         <th><b>Marca</b></th>
         <th><b>Vitola</b></th>

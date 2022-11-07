@@ -156,8 +156,15 @@ class CombinacionesController extends Controller
 
     public function destroydetalle($codigo)
     {
-        $delete = DB::table('detalle_combinaciones')->where('codigo_materia_prima', '=', $codigo)
+        $var = $codigo;
+        $par = strlen($var);
+        if ($par<5) {
+            $var ='0'.$var;
+        }
+        $cod = 'MP-'.$var;
+        $delete = DB::table('detalle_combinaciones')
+        ->where('codigo_materia_prima', '=', $cod)
         ->delete();
-        return response()->json($codigo);
+        return response()->json($cod);
     }
 }
