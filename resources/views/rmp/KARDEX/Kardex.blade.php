@@ -113,27 +113,25 @@
             </tr>
             </thead>
             <tbody>
-            @if($entrada->count()<= 0)
-                <tr>
-                    <td colspan="4" style="align-items: center">No hay productos</td>
-                </tr>
-            @endif
+            
             @foreach($entrada as $productos)
             @php
-            $saldo+=$productos->Libras;
+            $saldo+=$productos['Libras'];
+            $saldo-=$productos['salida'];
             @endphp
+            @if($productos['created_at'] >= $fecha && $productos['created_at'] <= $fecha1)
                 <tr>
-                @if($productos->created_at >= $fecha && $productos->created_at <= $fecha1)
+                
                     <td>{{$noPagina++}}</td>
-                    <td>{{$productos->codigo_materia_prima}}</td>
-                    <td>{{$productos->nombre}}</td>
-                    <td>{{$productos->Libras}}</td>
-                    <td></td>
+                    <td>{{$productos['codigo_materia_prima']}}</td>
+                    <td>{{$productos['nombre']}}</td>
+                    <td>{{$productos['Libras']}}</td>
+                    <td>{{$productos['salida']}}</td>
                     <td>{{$saldo}}</td>                   
-                    <td>{{$productos->observacion}}</td>
-                    <td>{{$productos->created_at}}</td>
-                    @endif
+                    <td>{{$productos['observacion']}}</td>
+                    <td>{{$productos['created_at']}}</td>
                 </tr>
+                @endif
             @endforeach
 
             </tbody>

@@ -586,7 +586,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="suma">Tota a Sumar</label>
+                            <label for="suma">Total a Sumar</label>
                             <input class="form-control @error('name') is-invalid @enderror" name="suma" id="suma" maxlength="100"
                                    value="{{ old('suma')}}" required="required">
                             @error('name')

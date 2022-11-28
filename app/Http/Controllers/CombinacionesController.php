@@ -14,11 +14,8 @@ use Session;
 
 class CombinacionesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index(Request $request)
     {
         $materiaprima = MateriaPrima::all();
@@ -40,22 +37,25 @@ class CombinacionesController extends Controller
         ->with('materiaprima',$materiaprima)->with('marca',$marca)->with('vitola',$vitola);
     }
 
-    public function verdetalle(Request $request, $comb)
-    {
-        $codigo = $request->id_combinacion;
+
+    function consultaCombinaciones($comb){
         $combinaciones= DB::table('detalle_combinaciones')
         ->join('combinaciones', 'combinaciones.id', '=', 'detalle_combinaciones.id_combinaciones')
-        ->select('detalle_combinaciones.codigo_materia_prima', 'detalle_combinaciones.peso', 'detalle_combinaciones.id_combinaciones')
+        ->join('materia_primas','materia_primas.Codigo', 
+        'detalle_combinaciones.codigo_materia_prima')
+        ->select('detalle_combinaciones.codigo_materia_prima',
+         'detalle_combinaciones.peso', 'detalle_combinaciones.id_combinaciones'
+         ,'materia_primas.Descripcion', 'detalle_combinaciones.id as com')
         ->where('detalle_combinaciones.id_combinaciones', '=', $comb)
         ->get();
-        return response()->json($combinaciones); 
+        return $combinaciones;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function verdetalle(Request $request, $comb)
+    {
+        $combinaciones = $this->consultaCombinaciones($comb);
+        return response()->json($combinaciones); 
+    }
     public function create()
     {
         $combinacion = DB::table('combinaciones')->get();
@@ -66,22 +66,25 @@ class CombinacionesController extends Controller
         ->with('marca',$marca)->with('vitola',$vitola);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $bulto = DB::table('b_inv_inicials')->select('id')
-        ->where('id_vitolas', '=',$request->vitola)->where('id_marca','=',$request->marca)->first();
-        $combinaciones= new combinaciones();
-        $combinaciones->bulto= $bulto->id;
-        $combinaciones->save();
-        $id= $combinaciones->id;
-        $this->firstdetalle($id, $request->codigo_materia_prima, $request->peso);
-        return response()->json($combinaciones);
+        ->where('id_vitolas', '=',$request->vitola)
+        ->where('id_marca','=',$request->marca)->first();
+        if ($bulto!=null) {
+            $combinaciones= new combinaciones();
+            $combinaciones->bulto= $bulto->id;
+            $combinaciones->save();
+            $id= $combinaciones->id;
+    
+            $this->firstdetalle($id, $request->codigo_materia_prima, 
+            $request->peso);
+            
+            $consulta = $this->consultaCombinaciones($combinaciones->id);
+            return response()->json([$combinaciones, $consulta]);
+        }else{
+            return response()->json(['errors'=>true]);
+        }
     }
 
     public function firstdetalle($id, $materiaprima, $peso)
@@ -97,6 +100,7 @@ class CombinacionesController extends Controller
 
     public function storedetalle(Request $request)
     {
+        $id = $request->id_combinaciones;
         DB::table('detalle_combinaciones')->insert(
             array(
                    'id_combinaciones'     =>   $request->id_combinaciones, 
@@ -104,51 +108,15 @@ class CombinacionesController extends Controller
                    'peso'   =>   $request->peso
             )
        );
-        return response()->json($request->id_combinaciones);
+       $consulta = $this->consultaCombinaciones($id);
+        return response()->json([$id, $consulta]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\combinaciones  $combinaciones
-     * @return \Illuminate\Http\Response
-     */
-    public function show(combinaciones $combinaciones)
+    public function destroy(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\combinaciones  $combinaciones
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(combinaciones $combinaciones)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\combinaciones  $combinaciones
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, combinaciones $combinaciones)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\combinaciones  $combinaciones
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
+        $id = $request->id_com_bo;
+        $deletedetalle = DB::table('detalle_combinaciones')
+        ->where('id_combinaciones', '=', $id)->delete();
         $delete = combinaciones::FindOrFail($id);
         $delete->delete();
         return back();
@@ -156,15 +124,9 @@ class CombinacionesController extends Controller
 
     public function destroydetalle($codigo)
     {
-        $var = $codigo;
-        $par = strlen($var);
-        if ($par<5) {
-            $var ='0'.$var;
-        }
-        $cod = 'MP-'.$var;
         $delete = DB::table('detalle_combinaciones')
-        ->where('codigo_materia_prima', '=', $cod)
-        ->delete();
-        return response()->json($cod);
+        ->where('id', '=', $codigo)->delete();
+        return response()->json($codigo);
+
     }
 }

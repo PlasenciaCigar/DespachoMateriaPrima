@@ -146,6 +146,8 @@
                 <th>Peso</th>
                 <th>Consumo</th>
                 <th>Peso</th>
+                <th>Otra salida</th>
+                <th>Peso</th>
 
 
                 <th><span class="fas fa-info-circle"></span></th>
@@ -173,6 +175,8 @@
                     <td>{{$productos->pesofinal}}</td>
                     <td>{{$productos->totalconsumo}}</td>
                     <td>{{$productos->pesoconsumo}}</td>
+                    <td>{{$productos->otras}}</td>
+                    <td>{{$productos->pesootras}}</td>
                     <td>
                         @php
                             $hoy=date("Y-m-d"); $oo=date("Y-m-d",strtotime($hoy."-1 days"));
@@ -203,8 +207,9 @@
                                 data-totalinicial="{{$productos->totalinicial}}"
                                 data-totalentrada="{{$productos->totalentrada}}"
                                 data-totalfinal="{{$productos->totalfinal}}"
-                                data-totalconsumo="{{$productos->totalconsumo}}"
-                                title="Editar">
+                                data-totalconsumo="{{$productos->totalconsumo}}"                                
+                                title="Editar"
+                                onclick="send('{{$productos->otras}}', '{{$productos->onzasO}}')">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                         <button class="btn btn-sm btn-danger"
@@ -319,6 +324,13 @@
         </table>
 
     </div>
+
+    <script>
+        function send(total, peso){
+            $('#totalotro').val(total);
+            $('#pesootros').val(peso);
+        }
+    </script>
     <!-----vista previa imagen------->
     <!----------------------------------------------------MODAL NUEVO PRODUCTO------------------------------------------------------->
     <div class="modal fade" id="modalNuevoI" tabindex="-1" role="dialog">
@@ -433,7 +445,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="onzasentradacapaentrega">Peso Por Unida (onzas)</label>
+                            <label for="onzasentradacapaentrega">Peso Por Unidad (onzas)</label>
                             <input  class="form-control @error('name') is-invalid @enderror"
                                     name="onzasE" id="onzasentradacapaentrega" maxlength="100" value="{{old('onzasE')}}">
                             @error('name')
@@ -455,7 +467,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="onzasfinalcapaentrega">Peso Por Unida (onzas)</label>
+                            <label for="onzasfinalcapaentrega">Peso Por Unidad (onzas)</label>
                             <input  class="form-control @error('name') is-invalid @enderror"
                                     name="onzasF" id="onzasfinalcapaentrega" maxlength="100" value="{{old('onzasF')}}">
                             @error('name')
@@ -623,6 +635,34 @@
                                 @enderror
                             </div>
                         </div>
+
+
+
+                        <div class="form-row">
+                         <div class="form-group col-md-6">
+                            <label for="totalfinal">Otras Salidas</label>
+                            <input class="form-control @error('name') is-invalid @enderror" 
+                            name="otra" id="totalotro" maxlength="100"
+                                   value="{{ old('totalfinal')}}" >
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Peso Por Unidad (onzas)</label>
+                            <input  class="form-control @error('name') is-invalid @enderror"
+                                    name="pesootros" id="pesootros" maxlength="100" value="{{old('onzasF')}}">
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
+                        </div>
+                    </div>
+
+                    
 
 
 

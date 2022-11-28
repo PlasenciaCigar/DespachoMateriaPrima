@@ -42,7 +42,6 @@ class MarcaOrder implements FromCollection, ShouldAutoSize , WithHeadings
         ->join("semillas","capa_entregas.id_semilla","=","semillas.id")
         ->join("marcas","capa_entregas.id_marca","=","marcas.id")
         ->join("calidads", "capa_entregas.id_calidad", "calidads.id")
-        
         ->select(
             "capa_entregas.id_vitolas",
             "capa_entregas.id_marca",

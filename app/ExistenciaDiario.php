@@ -8,6 +8,6 @@ class ExistenciaDiario extends Model
 {
 
     protected $fillable = ["id_semillas","id_tamano","id_calidad","totalinicial","pesoinicial","totalentrada","pesoentrada"
-        ,"totalfinal","pesofinal","totalconsumo","pesoconsumo", "created_at"];
+        ,"totalfinal","pesofinal","totalconsumo","pesoconsumo", "created_at", "otras", "pesootras", "onzasO"];
     //
 }

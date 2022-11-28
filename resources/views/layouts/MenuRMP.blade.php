@@ -209,9 +209,9 @@ tfoot th:first-child {
                     <div class="collapse" id="collapseinicio" aria-labelledby="headingOne"
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="{{url('EntradaBultos')}}">Salida de Bultos</a>
+                            <a class="nav-link" href="{{url('rmp/salida')}}">Salida de Bultos</a>
                             <a class="nav-link" href="{{url('rmp/entrada')}}">Entrada Materia Prima</a>
-                            <a class="nav-link" href="{{url('BultoSalida')}}">Entrada de Bultos</a>
+                            <a class="nav-link" href="{{url('rmp/salidamanual')}}">Salida de Materia Prima</a>
                         </nav>
                     </div>
                     <div class="sb-sidenav-menu-heading">Inventarios</div>
@@ -226,8 +226,6 @@ tfoot th:first-child {
                         <nav class="sb-sidenav-menu-nested nav">
 
                             <a class="nav-link" href="{{url('rmp/ligas')}}">Inventario Materia Prima</a>
-                            <a class="nav-link" href="{{url('BultoDevuelto')}}">Bultos Entrantes</a>
-
                         </nav>
                     </div>
                     <div class="sb-sidenav-menu-heading"> Reportes Generales</div>
@@ -242,7 +240,6 @@ tfoot th:first-child {
                          data-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{url('rmp/combinaciones')}}">Combinaciones</a>
-                            <a class="nav-link" href="{{url('marcasBanda')}}">Kardex</a>
                         </nav>
                     </div>
 

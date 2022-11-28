@@ -28,15 +28,14 @@ class EntradaMateriaPrimaController extends Controller
         }
         $procesado= DB::table('entradasprocesadas')->where('created_at','=',$fecha)->first();
         $validacionproceso= $procesado != null? true: false;
-
         $materiaprima = MateriaPrima::all();
-        $entrada = DB::table('entrada_materia_primas')->join('materia_primas', 'materia_primas.codigo', '='
-        , 'entrada_materia_primas.codigo_materia_prima')->select('entrada_materia_primas.*', 'materia_primas.Descripcion as nombre')
+        $entrada = DB::table('entrada_materia_primas')
+        ->join('materia_primas', 'materia_primas.codigo', '=', 'entrada_materia_primas.codigo_materia_prima')
+        ->select('entrada_materia_primas.*', 'materia_primas.Descripcion as nombre')
         ->where('entrada_materia_primas.created_at', 'LIKE', '%'.$fecha.'%')
         ->get();
 
         $total = EntradaMateriaPrima::where('created_at','LIKE', '%'.$fecha.'%')->sum('Libras');
-        
         return view('rmp.entradas.entradamateriaprima')->with('entrada',$entrada)->with('total',$total)
         ->with('fecha',$fecha)->with('materiaprima',$materiaprima)->with('validacionproceso',$validacionproceso)->withNoPagina(1);
     }
@@ -52,16 +51,12 @@ class EntradaMateriaPrimaController extends Controller
     }
 
     public function validarfecha($fecha){
-        $procesado= DB::table('entradasprocesadas')->where('created_at', '=', $fecha)->first();
+        $procesado= DB::table('entradasprocesadas')
+        ->where('created_at', '=', $fecha)->first();
         return $procesado!=null?false:true;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         if ($this->validarfecha($request->fecha)) {

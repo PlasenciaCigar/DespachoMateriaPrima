@@ -65,10 +65,12 @@
                     <td rowspan="">{{$combinacion->marca}}</td>
                     <td rowspan="">{{$combinacion->name}}</td>
                     <td> 
-                    <button onclick="ver('{{$combinacion->id}}', '{{$combinacion->id_marca}}','{{$combinacion->id_vitolas}}')" class="btn btn-sm btn-info">
+                    <button onclick="ver('{{$combinacion->id}}', '{{$combinacion->id_marca}}',
+                    '{{$combinacion->id_vitolas}}')" class="btn btn-sm btn-info">
                     <span class="fas fa-eye"></span>
                     </button>
-                        <button onclick="deletecombinacion('{{$combinacion->id}}')" class='delete-modal btn btn-danger'>
+                    <button onclick="modalborrar('{{$combinacion->id}}')" 
+                    class='delete-modal btn btn-danger'>
                     <span class='fas fa-trash'></span>
                     </button>                
                 </td>
@@ -108,10 +110,38 @@ table, th, td {
             $('#codigo1').trigger('change');
         }
     </script>
-    <!-----vista previa imagen------->
+    <!--                    MODAL BORRAR                    -->
+    <div class="modal fade" id="modalBorrarCombinacion" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form method="post" action="{{route("daletecombinaciones")}}" >
+                    @method("DELETE")
+                    @csrf
+                    <div class="modal-header" style="background: #2a2a35">
+                        <h5 class="modal-title" style="color: white"><span class="fas fa-trash"></span> Borrar
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="color: white" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>¿Estás seguro que deseas borrar esta salida de materia prima<label
+                                id="nombreProducto"></label>?</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input id="id_com_bo" name="id_com_bo" type="hidden" value="">
+                        <button type="submit" class="btn btn-danger">Borrar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
 <!----------------------------------------------------MODAL NUEVO PRODUCTO------------------------------------------------------->
-    <div data-backdrop="static" data-keyboard="false" class="modal fade" id="modalNuevoConsumo" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div data-backdrop="static" data-keyboard="false" class="modal fade bd-example-modal-lg" id="modalNuevoConsumo" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
                     <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Agregar Combinacion
@@ -182,7 +212,7 @@ table, th, td {
                         </div>
 
                         <div class="form-group col-md-50">
-                            <label for="nombreNuevoProducto">Peso</label>
+                            <label for="nombreNuevoProducto">Onzas</label>
                             <input class="col-md-5 form-control @error('name') is-invalid @enderror" name="libras" id="peso" maxlength="50"
                                    value="{{ old('total')}}" required="required" type="number">
                             @error('name')
@@ -195,7 +225,7 @@ table, th, td {
 
                         <div class="form-group col-md-50">
                             <br>
-                            <button onclick="guardar(event)" id="add" class="btn btn-success">Add</button>
+                            <button onclick="guardar(event)" id="add" class="btn btn-success">Agregar</button>
                         </div>
 
             <table id="table" class="table table-striped">
@@ -203,10 +233,13 @@ table, th, td {
             <tr class="table-primary">
                 <thead class="thead-dark">
                 <th>Codigo</th>
+                <th>Descripcion</th>
                 <th>Peso</th>
                 <th>Remove</th>
                 </thead>
             </tr>
+            <tbody id="tablaadd">
+            </tbody>
             
         </table>
 
@@ -221,7 +254,12 @@ table, th, td {
     </div>
     <script>
 
+        function modalborrar(id){
+            $('#modalBorrarCombinacion').modal();
+            $('#id_com_bo').val(id);
+        }
         function ignorancia(cod){ 
+            //let val = cod.toString().padStart(5, '0');
             let _token= "{{ csrf_token() }}";
             $.ajax({
             type: 'post',
@@ -245,7 +283,7 @@ table, th, td {
             $('#combinacion').val(id);
         }
 
-function ver(id_combinaciones, marca, vitola){
+    function ver(id_combinaciones, marca, vitola){
     let id_combinacion = id_combinaciones;
     let _token= "{{ csrf_token() }}";
     $.ajax({
@@ -289,15 +327,13 @@ function ver(id_combinaciones, marca, vitola){
             if ((data.errors)) {
                 alert('Este bulto no esta registrado')
             } else {
-               $("#combinacion").val(data.id);
-               agregartable(codigo_materia_prima, peso);
+                clean();
+               $("#combinacion").val(data[0].id);
+               agregartabledetalle(data[1]);
                desactivar();
             }
         },
     });
-
-
-
   }else{
     $.ajax({
     url: '/detallecombinacion',
@@ -308,11 +344,11 @@ function ver(id_combinaciones, marca, vitola){
       _token: _token},
       success: function(data) {
             if ((data.errors)) {
-                alert('No existe ese bulto')
+                alert('No existe historial de bulto.')
             } else {
-               alert('Materia Prima agregada con exito');
-               $("#combinacion").val(data);
-               agregartable(codigo_materia_prima, peso);
+                clean();
+                $("#combinacion").val(data[0].id);
+                agregartabledetalle(data[1]);
             }
         },
   })
@@ -359,18 +395,24 @@ function ver(id_combinaciones, marca, vitola){
             for (let i = 0; i < response.length; i++) {
                 let msj = response[i].codigo_materia_prima.split('-');
                 let codigoMP = parseInt(msj[1].toString(8), 10);
-            $('#table').append("<tr class='item" + codigoMP
-            + "'> <td>" + response[i].codigo_materia_prima + "</td><td>" 
+            $('#tablaadd').append("<tr class='item" + response[i].com
+            + "'> <td>" + response[i].codigo_materia_prima + "</td> <td>" 
+            + response[i].Descripcion + "</td> <td>" 
             + response[i].peso + "</td><td> <button id='xd' class='delete-modal btn btn-danger' data-id='" + 
             response[i].peso + "' data-name='" + response[i].peso 
-             + "' onclick='ignorancia("+codigoMP+")' ><span class='fas fa-trash'></span></button></td></tr>"); 
+             + "' onclick='ignorancia("+response[i].com+")' ><span class='fas fa-trash'></span></button></td></tr>"); 
             }
+        }
+
+        function clean(){
+            $('#tablaadd').empty();
         }
 
         function agregartable(codigo_materia_prima, peso){
             let msj = codigo_materia_prima.split('-');
             let codigoMP = parseInt(msj[1].toString(8), 10);
-            $('#table').append("<tr class='item" + codigoMP + "'><td>" + codigo_materia_prima + "</td><td>" 
+            $('#table').append("<tr class='item" + codigoMP + "'><td>" 
+            + codigo_materia_prima + "</td> <td>" + response[i].Descripcion + "</td> <td>" 
             + peso + "</td><td> <button id='xd' class='delete-modal btn btn-danger' data-id='" + 
              peso + "' data-name='" + peso 
              + "' onclick='ignorancia("+codigoMP+")' ><span class='fas fa-trash'></span></button></td></tr>");

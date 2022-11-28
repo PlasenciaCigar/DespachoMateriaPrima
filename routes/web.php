@@ -320,6 +320,32 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/rmp/procesarentrada", 'EntradaMateriaPrimaController@procesar')->name('procesarentrada');
     Route::post("/rmp/desaplicarentrada", 'EntradaMateriaPrimaController@desaplicar')->name('desaplicarentrada');
 
+    //SALIDA DE MATERIA PRIMA RMP.
+    Route::get("/rmp/salida", 'SalidaMateriaPrimaController@index')->name('salidarmp');
+    Route::post("/rmp/salidastore", 'SalidaMateriaPrimaController@store')->name('storesalidarmp');
+    Route::put("/rmp/salidaupdate", 'SalidaMateriaPrimaController@update')->name('updatesalidarmp');
+    Route::delete("/rmp/salidadelete", 'SalidaMateriaPrimaController@destroy')->name('deletesalidarmp');
+    Route::post("/rmp/excelsalida", 'SalidaMateriaPrimaController@export')->name('exportsalidarmp');
+    Route::post("/rmp/procesarsalida", 'SalidaMateriaPrimaController@procesar')->name('procesarsalida');
+    Route::post("/rmp/desaplicarsalida", 'SalidaMateriaPrimaController@desaplicar')->name('desaplicarsalida');
+    Route::post("/rmp/peticion", 'SalidaMateriaPrimaController@Peticion')->name('peticion');
+    Route::get("/rmp/peticion", 'SalidaMateriaPrimaController@Peticion')->name('peticion');
+    Route::put("/rmp/salida/sumar", 'SalidaMateriaPrimaController@sumar')->name('sumarsalidaMP');
+    Route::get("/rmp/vercombinacion/{id}", 'SalidaMateriaPrimaController@ver')->name('vercombinacion');
+    Route::post("/rmp/vercombinacion/{id}", 'SalidaMateriaPrimaController@ver')->name('vercombinacion');
+    Route::post("/rmp/versalida/{fecha}", 'SalidaMateriaPrimaController@versalida')->name('versalidas');
+    Route::get("/rmp/versalida/{fecha}", 'SalidaMateriaPrimaController@versalida')->name('versalidas');
+    Route::post("/rmp/versalidaexcel", 'SalidaMateriaPrimaController@excelversalida')->name('excelversalidas');
+    Route::get("/rmp/versalidaexcel", 'SalidaMateriaPrimaController@excelversalida')->name('excelversalidas');
+    Route::get("/rmp/salidamanual", 'SalidaMateriaPrimaController@salidaMP')->name('salidaMP');
+    Route::post("/rmp/storesalidamanual", 'SalidaMateriaPrimaController@salidaMPStore')->name('salidaMPstoremanual');
+    Route::put("/rmp/updatesalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('salidaMPupdatemanual');
+    Route::post("/rmp/aplicarsalidamanual", 'SalidaMateriaPrimaController@procesardet')->name('aplicarMPmanual');
+    Route::put("/rmp/desaplicarsalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('desaplicarMPmanual');
+
+
+
+
     //KARDEX    
     Route::get("/rmp/kardex/{codigo}", 'Kardex@index')->name('kardexparametro');
 
@@ -334,9 +360,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::get("/detallecombinacionver/{comb}", 'CombinacionesController@verdetalle')->name('vercombinaciones');
     Route::get("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
     Route::post("/detalledelete/{id}", 'CombinacionesController@destroydetalle')->name('daletedetalle');
-    Route::post("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
-    Route::get("/detallecombinacion/{id}", 'CombinacionesController@destroy')->name('daletecombinaciones');
-
+    Route::delete("/detallecombinaciondestroy", 'CombinacionesController@destroy')->name('daletecombinaciones');
     //--------------------------------------------mildaware Admin------------------------------------------------------
     //--------------------------------------------mildaware Admin------------------------------------------------------
 

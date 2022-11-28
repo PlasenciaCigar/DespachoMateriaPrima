@@ -1,7 +1,8 @@
 @extends("layouts.MenuRMP")
 @section("content")
     <div class="container-fluid">
-        <h1 class="mt-4">Entrada De Materia Prima
+
+        <h1 class="mt-4">Salida De Materia Prima
             <div class="btn-group" role="group">
             @if($validacionproceso==false)
                 <button class="btn btn-sm btn-success"
@@ -12,17 +13,20 @@
                 @endif
             </div>
 
-            @if(Session::has('flash_message'))
-        <div class="alert alert-danger" role="alert">
-            {{Session::get('flash_message')}}
-          </div>
+        </h1>
+        @if(Session::has('flash_message'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{Session::get('flash_message')}}</strong> 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
         @endif
 
-        </h1>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item" aria-current="page" ><a href="/">Inicio</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Entrada De Materia Prima</li>
+                <li class="breadcrumb-item active" aria-current="page">Salida De Materia Prima</li>
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
@@ -75,15 +79,6 @@
                 @endisset
             </div>
          </nav>
-
-        @if(session("exito"))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{session("exito")}}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
         @if(session("error"))
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <span class="fa fa-save"></span> {{session("error")}}
@@ -104,31 +99,29 @@
                 <th>Nombre</th>
                 <th>Observacion</th>
                 <th>Libras</th>
-                <th>Procedencia</th>
                 <th>Fecha</th>
 
                 <th><span class="fas fa-info-circle"></span></th>
             </tr>
             </thead>
             <tbody>
-            @if($entrada->count()<= 0)
+            @if($data->count()<= 0)
                 <tr>
                     <td colspan="4" style="align-items: center">No hay productos</td>
                 </tr>
             @endif
-            @foreach($entrada as $productos)
+            @foreach($data as $productos)
                 <tr>
                     <td>{{$noPagina++}}</td>
                     <td>{{$productos->codigo_materia_prima}}</td>
-                    <td>{{$productos->nombre}}</td>
+                    <td>{{$productos->Descripcion}}</td>
                     <td>{{$productos->observacion}}</td>
-                    <td>{{$productos->Libras}}</td>
-                    <td>{{$productos->procedencia}}</td>
+                    <td>{{$productos->peso}}</td>
                     <td>{{$productos->created_at}}</td>
                     <td>
-                        @if($validacionproceso==false && $productos->desdeinventario!=1)
-                        <button onclick="send('{{$productos->id}}','{{$productos->observacion}}','{{$productos->procedencia}}',
-                        '{{$productos->codigo_materia_prima}}', '{{$productos->Libras}}')" class="btn btn-sm btn-success"
+                        @if($validacionproceso==false)
+                        <button onclick="send('{{$productos->id}}','{{$productos->observacion}}',
+                        '{{$productos->codigo_materia_prima}}', '{{$productos->peso}}')" class="btn btn-sm btn-success"
                                 data-toggle="modal"
                                 data-target="#modalEditarCapaEntrega"
                                 title="Editar">
@@ -153,11 +146,10 @@
 
     <script>
         
-        function send(id, observacion, procedencia, codigo, libras){
+        function send(id, observacion, codigo, libras){
             $('#observacion1').val(observacion);
-            $('#procedencia1').val(procedencia);
-            $('#procedencia1').trigger('change');
-            $('#id_entrada').val(id);
+            $('#observacion1').trigger('change');
+            $('#id_update').val(id);
             $('#codigo1').val(codigo);
             $('#codigo1').trigger('change');
             $('#libras1').val(libras);
@@ -169,13 +161,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Agregar Entrada  De Bulto
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Agregar Salida  De Materia Prima
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("storeentradarmp")}}" enctype="multipart/form-data">
+                <form id="nuevoP" method="POST" action="{{route("salidaMPstoremanual")}}" enctype="multipart/form-data">
 
                     @csrf
                     <div class="modal-body">
@@ -196,22 +188,15 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="nombreNuevoProducto">Observacion</label>
-                            <textarea name="observacion" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="procedencia">Procedencia</label>
+                            <label for="procedencia">Tipo de Salida</label>
                             <br>
-                            <select name="procedencia"
+                            <select name="tipo"
                                     style="width: 100%" required="required"
                                     class="marca form-control @error('id_vitolas') is-invalid @enderror" id="procedencia">
                                 <option disabled selected value="">Seleccione</option>
-                                <option value="Terminado">Terminado</option>
-                                <option value="Rezago">Rezago</option>
-                                <option value="Escogida">Escogida</option>
-                                <option value="Proceso">Proceso</option>
-                                <option value="Despacho">Despacho</option>
+                                <option value="Ajuste">Ajuste</option>
+                                <option value="Traslado">Traslado</option>
+                                <option value="Traslado a Otra Sucursal">Traslado a Otra sucursal</option>
                                 <option value="Otro">Otro</option>
                             </select>
                         </div>
@@ -237,7 +222,7 @@
                         <div class="form-group">
                             <label for="nombreNuevoProducto">Libras</label>
                             <input class=" form-control @error('name') is-invalid @enderror" name="libras" id="nombreNuevoProducto" maxlength="100"
-                                   value="{{ old('total')}}" required="required" type="number">
+                                   required="required" type="number">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -267,28 +252,22 @@
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("updateentradarmp")}}" >
+                <form id="nuevoP" method="POST" action="{{route("salidaMPupdatemanual")}}" >
                     @method("PUT")
 
                     @csrf
                     <div class="modal-body">
-                    <div class="form-group">
-                            <label for="observacion1">Observacion</label>
-                            <textarea id="observacion1" name="observacion" 
-                            class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
 
                         <div class="form-group">
-                            <label for="procedencia1">Procedencia</label>
+                            <label for="observacion1">Tipo de Salida</label>
                             <br>
-                            <select name="procedencia"
-                                    style="width: 100%"
-                                    class="disponible form-control" id="procedencia1" required="required">
+                            <select name="tipo"
+                                    style="width: 100%" required="required"
+                                    class="marca form-control @error('id_vitolas') is-invalid @enderror" id="observacion1">
                                 <option disabled selected value="">Seleccione</option>
-                                <option value="Terminado">Terminado</option>
-                                <option value="Rezago">Rezago</option>
-                                <option value="Escogida">Escogida</option>
-                                <option value="Proceso">Proceso</option>
+                                <option value="Ajuste">Ajuste</option>
+                                <option value="Traslado">Traslado</option>
+                                <option value="Traslado a Otra Sucursal">Traslado a Otra Sucursal</option>
                                 <option value="Otro">Otro</option>
                             </select>
                         </div>
@@ -321,7 +300,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input id="id_entrada" name="id" type="hidden">
+                        <input id="id_update" name="id" type="hidden">
                         <button type="submit" class="btn btn-success" id="id_producto" onclick="f()">Editar</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                     </div>
@@ -330,6 +309,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!------------------MODAL BORRAR PRODUCTO---------------------------->
     <div class="modal fade" id="modalBorrarCapaEntrega" tabindex="-1" role="dialog">
@@ -366,7 +347,7 @@
     <div class="modal fade" id="modalprocesar" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <form method="post" action="{{route("procesarentrada")}}" >
+                <form method="post" action="{{route("aplicarMPmanual")}}" >
                     @csrf
                     <div class="modal-header" style="background: #2a2a35">
                         <h5 class="modal-title" style="color: white"><span class=""></span> Aplicar Inventario
@@ -463,6 +444,19 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function save(){
+        $.jAlert({
+          title: "jAlert simple sample",
+          content: "Simple jAlert based on jQuery!",
+          theme: theme,
+          closeOnClick: true,
+          backgroundColor: "white",
+          btns: [{ text: "Good", theme: theme }],
+        });
+        }
+    </script>
 
 
 
