@@ -344,8 +344,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::put("/rmp/desaplicarsalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('desaplicarMPmanual');
 
 
-
-
+    Route::get("/rmp/diferencias", 'ExistenciaDiarioController@diferencias')->name('rmpdiff');
     //KARDEX    
     Route::get("/rmp/kardex/{codigo}", 'Kardex@index')->name('kardexparametro');
 

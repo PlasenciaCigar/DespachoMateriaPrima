@@ -69,7 +69,8 @@
 
                 <a class="btn btn-dark hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
-                   data-toggle="modal" data-target="#modalfechacvs">CVS</a>
+                   data-toggle="modal" onclick="peticion('{{$fecha}}')" 
+                   >DIFERENCIAS</a>
 
                 <a class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
@@ -357,9 +358,6 @@
                                     </span>
                             @enderror
                         </div>
-                        <script>
-
-                        </script>
 
                         <div class="form-group">
                             <label for="id_semillas">Seleccione la Semilla</label>
@@ -678,8 +676,6 @@
         </div>
     </div>
 
-
-
     <!------------------MODAL BORRAR PRODUCTO---------------------------->
     <div class="modal fade" id="modalBorrarReBulDiario" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -858,38 +854,37 @@
         </div>
     </div>
     <!----------------------------------------------------MODAL fecha Exportar CVS------------------------------------------------------->
-    <div class="modal fade" id="modalfechacvs" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="modalfechacvs" tabindex="-1" 
+    role="dialog" aria-labelledby="myLargeModalLabel" >
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar CVS
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Diferencias.
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("exportarExistenciaDiariocvs")}}" enctype="multipart/form-data">
-
-                    @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="fecha1">Fecha</label>
-                            <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
-                                   type="datetime-local"
-                                   value="{{ old('fecha1')}}">
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
-                        </div>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                <th>Semilla</th>
+                                <th>Calidad</th>
+                                <th>Inv. Consumo</th>
+                                <th>Desp. Consumo</th>
+                                <th>Diferencia</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tablediff">
+                                    
+                                </tbody>
+                            </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
                     </div>
-                </form>
-
             </div>
         </div>
     </div>
@@ -975,8 +970,9 @@
 
              </div>
          </div>
-     </div>
 
+        
+     </div>
 
 
 
@@ -1023,6 +1019,38 @@
          }
 
      </style>
+
+<script>
+        function peticion(fecha){
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/rmp/diferencias',
+            data: {
+                _token: _token,
+                fecha: fecha
+            },
+            success: function(data) {
+                $("#modalfechacvs").modal();
+               table(data);
+            }
+        });
+        }
+
+        function table(data){
+            $("#tablediff").empty();
+            for (let i = 0; i < data.length; i++) {
+                $("#tablediff").append(
+                "<tr> <td>"+data[i].semilla+"</td> <td>"
+                    + data[i].calida + "</td><td>" 
+                    + data[i].totalDespacho + "</td> <td>"
+                    + data[i].totalInventario + "</td> <td>"
+                    + data[i].diferencia + "</td> </tr> "
+            )
+            }
+        }
+     </script>
+     
 
 
 

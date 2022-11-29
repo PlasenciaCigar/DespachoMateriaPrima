@@ -38,8 +38,7 @@ class ExistenciaDiarioController extends Controller
         }
             if ($fecha == null) {
                 $fecha = Carbon::now()->format('l');
-                   $fecha = Carbon::now()->format('Y-m-d');
-               // }
+                $fecha = Carbon::now()->format('Y-m-d');
             } else{
 
                 $fecha = $request->get("fecha");
@@ -599,5 +598,41 @@ return redirect()->route("ExistenciaDiario")->with('errores','errores')->with('i
 
         }
         return (new ExistenciaDiarioExports($fecha))->download('Listado Inventario de Capa '.$fecha.'.csv', \Maatwebsite\Excel\Excel::CSV);
+    }
+
+    public function diferencias(Request $request){
+        $capa_entregas = DB::table('capa_entregas')
+        ->join('semillas', 'semillas.id', 'capa_entregas.id_semilla')
+        ->join('calidads', 'calidads.id', 'capa_entregas.id_calidad')
+        ->selectRaw('calidads.name as calida')
+        ->selectRaw('semillas.name as semilla')
+        ->selectRaw('SUM(capa_entregas.total) as totalDesp')
+    ->where('capa_entregas.created_at', '=', $request->fecha)
+    ->groupByRaw('semillas.name, calidads.name')
+    ->orderByRaw('semillas.name, calidads.name')
+    ->get();
+
+    $other = DB::table('existencia_diarios')
+    ->join('semillas', 'semillas.id', 'existencia_diarios.id_semillas')
+    ->join('calidads', 'calidads.id', 'existencia_diarios.id_calidad')
+    ->selectRaw('calidads.name as calida')
+    ->selectRaw('semillas.name as semilla')
+    ->selectRaw('SUM(existencia_diarios.totalconsumo) as totalDesp')
+    ->where('existencia_diarios.created_at', '=', $request->fecha)
+    ->groupByRaw('semillas.name, calidads.name')
+    ->orderByRaw('semillas.name, calidads.name')
+    ->get();
+    $existencia= [];
+    #Se buscan las similitudes de semilla y calidad
+    foreach($capa_entregas as $c){
+        foreach($other as $o){
+            if($o->calida == $c->calida && $o->semilla == $c->semilla){
+                $existencia[] = ['semilla'=>$o->semilla, 'calida'=>$o->calida,
+                'totalDespacho'=>$o->totalDesp, 'totalInventario'=>$c->totalDesp,
+            'diferencia'=>$o->totalDesp-$c->totalDesp];
+            }
+        }
+        }
+        return response()->json($existencia);
     }
 }
