@@ -45,7 +45,9 @@ class EntregaCapaExport implements  FromCollection , ShouldAutoSize ,WithHeading
                 ,"capa_entregas.botada"
                 ,"capa_entregas.rota"
                 ,"capa_entregas.picada"
-                ,"capa_entregas.pequenas") ->whereDate('capa_entregas.created_at', '=', $this->fecha)
+                ,"capa_entregas.pequenas")
+                ->orderby("empleados.codigo")
+                ->whereDate('capa_entregas.created_at', '=', $this->fecha)
 
 
             ->get();

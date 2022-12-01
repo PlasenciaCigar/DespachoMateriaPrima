@@ -347,7 +347,7 @@ table, th, td {
                 alert('No existe historial de bulto.')
             } else {
                 clean();
-                $("#combinacion").val(data[0].id);
+                $("#combinacion").val(data[0]);
                 agregartabledetalle(data[1]);
             }
         },

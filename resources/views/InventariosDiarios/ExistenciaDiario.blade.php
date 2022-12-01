@@ -878,8 +878,9 @@
                                 </thead>
 
                                 <tbody id="tablediff">
-                                    
+                                
                                 </tbody>
+
                             </table>
                     </div>
                     <div class="modal-footer">

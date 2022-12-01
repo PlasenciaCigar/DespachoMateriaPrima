@@ -8,15 +8,12 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Session;
 use App\Exports\MateriaPrimaExport;
+use App\Imports\MateriaPrimaImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MateriaPrimaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $fecha = $request->get("fecha");
@@ -32,27 +29,11 @@ class MateriaPrimaController extends Controller
         ->with('total',$total)->withNoPagina(1)->with('fecha', $fecha);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     public function validacionCodigo($codigo){
         $validar = MateriaPrima::where($codigo);
         return $codigo!=null ? true : false;
         }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         if($this->validacionCodigo($request->codigo)){
@@ -70,35 +51,6 @@ class MateriaPrimaController extends Controller
     }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\MateriaPrima  $materiaPrima
-     * @return \Illuminate\Http\Response
-     */
-    public function show(MateriaPrima $materiaPrima)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\MateriaPrima  $materiaPrima
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(MateriaPrima $materiaPrima)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\MateriaPrima  $materiaPrima
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request)
     {
         $materiaprima = MateriaPrima::FindOrFail($request->codigo);
@@ -108,21 +60,15 @@ class MateriaPrimaController extends Controller
         return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\MateriaPrima  $materiaPrima
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(MateriaPrima $materiaPrima)
-    {
-        //
-    }
-
-
     public function export(MateriaPrima $materiaPrima)
     {
         return Excel::download(new MateriaPrimaExport, 'materiaprima.xlsx');
 
+    }
+
+    public function importMP() 
+    {
+        Excel::import(new MateriaPrimaImport,'C:\wamp64\www\DespachoMateriaPrima\public\mp.xlsx');
+        return redirect('/rmp/ligas')->with('success', 'All good!');
     }
 }

@@ -300,8 +300,6 @@ Route::group(["middleware" => "auth"], function () {
         Route::post("/variedad/nuevo","VariedadController@storeMarca")->name("nuevavariedad");
         Route::put("/variedad/editar","VariedadController@editarMarca")->name("editarvariedad");
         Route::delete("/variedad/borrar","VariedadController@borrarMarca")->name("borrarvariedad");
-
-
     });
 
     //INVENTARIO MATERIA PRIMA.
@@ -310,6 +308,8 @@ Route::group(["middleware" => "auth"], function () {
     Route::put("/rmp/ligasupdate", 'MateriaPrimaController@update')->name('ligasupdate');
     Route::delete("/rmp/ligasdelete", 'MateriaPrimaController@destroy')->name('ligasdelete');
     Route::post("/rmp/exportarligas", 'MateriaPrimaController@export')->name('ligasexport');
+    Route::get("/rmp/importarmateriaprima", 'MateriaPrimaController@importMP')->name('importmp');
+
 
     //ENTRADA DE MATERIA PRIMA RMP.
     Route::get("/rmp/entrada", 'EntradaMateriaPrimaController@index')->name('entradarmp');

@@ -32,12 +32,14 @@ class VerSalidaExport implements FromView, ShouldAutoSize
     {
         $data = DB::table('salida_det_mp')
             ->where('salida_det_mp.created_at', '=', $this->fecha)
+            ->where('salida_det_mp.observacion', '=', 'A Despacho')
             ->join('materia_primas', 'materia_primas.Codigo',
             'salida_det_mp.codigo_materia_prima')
             ->select('salida_det_mp.*', 'materia_primas.Descripcion')->get();
             
         $total= DB::table('salida_det_mp')
         ->where('created_at', '=', $this->fecha)
+        ->where('salida_det_mp.observacion', '=', 'A Despacho')
         ->sum('peso');
 
         return view('ReportesExcel.ReporteSalidaMP', [

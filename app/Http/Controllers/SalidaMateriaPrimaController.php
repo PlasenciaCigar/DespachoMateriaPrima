@@ -17,11 +17,7 @@ use App\Exports\VerSalidaExport;
 use Maatwebsite\Excel\Facades\Excel;
 class SalidaMateriaPrimaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index(Request $request)
     {
         $fecha = $request->fecha;
@@ -106,11 +102,6 @@ class SalidaMateriaPrimaController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function ver($comb)
     {
         $combinaciones= DB::table('detalle_combinaciones')
@@ -123,13 +114,6 @@ class SalidaMateriaPrimaController extends Controller
         ->get();
         return response()->json($combinaciones);
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     public function validarfecha($fecha){
         $procesado= DB::table('salidasprocesadas')
@@ -196,32 +180,37 @@ class SalidaMateriaPrimaController extends Controller
                 $acum[] = ['codigo'=>$codigoMP->mp, 'peso'=> $pesoreal];
               }
         }
-        if($this->validar($acum)){
+        $validar= $this->validar($acum);
+        if($validar==null){
         foreach ($acum as $value) {
             $materiaprima = MateriaPrima::FindOrFail($value['codigo']);
             DB::table('salida_det_mp')
             ->insert(['codigo_materia_prima'=>$value['codigo'],
             'peso'=>$value['peso'],'created_at'=>$fecha,
-             'observacion'=>'A Despacho']);
+             'observacion'=>'A Despacho', 'estado'=>1]);
             $materiaprima->Libras= $materiaprima->Libras - $value['peso'];
             $materiaprima->save();
         }
         DB::table('salidasprocesadas')->insert(['created_at'=>$fecha]);
         return back();
     }else{
-        Session::flash('flash_message', 'No hay suficiente existencia');
-        return back();
+
+        $errores=collect($validar);
+        Session::flash('flash_message', $errores);
+        return back()->with('errores', $errores);
+
     }
 
     } 
 
     function validar($data){
-        $value = true;
+        $value = [];
         foreach ($data as $codigoMP) {
             $materiaprima = MateriaPrima::FindOrFail($codigoMP['codigo']);
             $existencia= $materiaprima->Libras-$codigoMP['peso'];
             if($existencia<0){
-                $value=false;
+                $value[]=['codigo'=>$codigoMP['codigo'],
+                'falta'=>$existencia];
             }
         }
         return $value;
@@ -268,9 +257,9 @@ class SalidaMateriaPrimaController extends Controller
             $materiaprima->Libras= $materiaprima->Libras + $value['peso'];
             $materiaprima->save();
         }
-
-
-        DB::table('salida_det_mp')->where('created_at', '=', $fecha)->delete();
+        DB::table('salida_det_mp')->where('created_at', '=', $fecha)
+        ->where('salida_det_mp.observacion', '=', 'A Despacho')
+        ->delete();
         DB::table('salidasprocesadas')->where('created_at', '=', $fecha)->delete();
         return back();
         }
@@ -278,6 +267,7 @@ class SalidaMateriaPrimaController extends Controller
         public function versalida($fecha){
             $data = DB::table('salida_det_mp')
             ->where('salida_det_mp.created_at', '=', $fecha)
+            ->where('salida_det_mp.observacion', '=', 'A Despacho')
             ->join('materia_primas', 'materia_primas.Codigo',
             'salida_det_mp.codigo_materia_prima')
             ->select('salida_det_mp.*', 'materia_primas.Descripcion')->get();
@@ -299,15 +289,27 @@ class SalidaMateriaPrimaController extends Controller
                 $fecha = Carbon::now()->format('Y-m-d');
             }
             $fecha=Carbon::parse($fecha)->format('Y-m-d');
-            $validacionproceso=false;
             $materiaprima = MateriaPrima::all();
             $data = DB::table('salida_det_mp')
             ->where('salida_det_mp.created_at', '=', $fecha)
             ->where('estado', '=', '0')
+            ->where('salida_det_mp.observacion', '!=', 'A Despacho')
             ->join('materia_primas', 'materia_primas.Codigo',
             'salida_det_mp.codigo_materia_prima')
             ->select('salida_det_mp.*', 'materia_primas.Descripcion')
             ->get();
+            $data ==null ? $validacionproceso=true 
+            : $validacionproceso = false;
+            if($validacionproceso){
+                $data = DB::table('salida_det_mp')
+            ->where('salida_det_mp.created_at', '=', $fecha)
+            ->where('estado', '=', '1')
+            ->where('salida_det_mp.observacion', '!=', 'A Despacho')
+            ->join('materia_primas', 'materia_primas.Codigo',
+            'salida_det_mp.codigo_materia_prima')
+            ->select('salida_det_mp.*', 'materia_primas.Descripcion')
+            ->get();
+            }
             return view('rmp.Salidas.salidamateriaprima')
             ->with('fecha', $fecha)->with('data',$data)
             ->with('validacionproceso',$validacionproceso)
@@ -345,11 +347,12 @@ class SalidaMateriaPrimaController extends Controller
                 $materiaprima = MateriaPrima::FindOrFail($value->codigo_materia_prima);
                 $materiaprima->Libras = $materiaprima->Libras - $value->peso;
                 $materiaprima->save();
-                DB::table('salida_det_mp')
-                ->where('id', '=', $value->id)
-                ->update(['estado'=>1]);
-                return back();
             }
+            DB::table('salida_det_mp')
+                ->where('created_at', '=', $request->fecha)
+                ->where('salida_det_mp.observacion', '!=', 'A Despacho')
+                ->update(['estado'=>1]);
+            return back();
         }else{
             $errores=collect($array);
             Session::flash('flash_message', $errores);

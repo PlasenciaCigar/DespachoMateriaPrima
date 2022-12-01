@@ -199,28 +199,6 @@
                     <td>{{$productos->pesoconsumo}}</td>
                     <td>
 
-
-
-                        <button class="btn btn-sm btn-info"
-                                title="Ver"
-                                data-toggle="modal"
-                                data-target="#modalVerCapaEntrega"
-                                data-semilla="{{$productos->nombre_semillas}}"
-                                data-id_tamano="{{$productos->nombre_tamano}}"
-                                data-inicial="{{$productos->totalinicial}}"
-                                data-pesoinicial="{{round(($productos->pesoinicial),2)}}"
-                                data-totalentrada="{{$productos->totalentrada}}"
-                                data-pesoentrada="{{round(($productos->pesoentrada),2)}}"
-                                data-totalfinal="{{$productos->totalfinal}}"
-                                data-pesofinal="{{round(($productos->pesofinal),2)}}"
-                                data-totalconsumo="{{$productos->totalconsumo}}"
-                                data-pesoconsumo="{{round(($productos->pesoconsumo),2) }}"
-                                data-id_variedad="{{$productos->id_variedad}}"
-                                data-id_procedencia="{{$productos->id_procedencia}}"
-
-                               >
-                            <span class="fas fa-eye"></span>
-                        </button>
                         <button class="btn btn-sm btn-success"
                                 id="editarCapaEntrega{{$productos->id}}"
                                 data-toggle="modal"

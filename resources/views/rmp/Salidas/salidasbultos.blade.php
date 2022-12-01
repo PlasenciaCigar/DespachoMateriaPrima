@@ -12,13 +12,15 @@
                 @endif
             </div>
 
-            @if(Session::has('flash_message'))
-        <div class="alert alert-danger" role="alert">
-            {{Session::get('flash_message')}}
-          </div>
-        @endif
-
         </h1>
+        @if(Session::has('flash_message'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>{{Session::get('flash_message')}}</strong> 
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        @endif
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item" aria-current="page" ><a href="/">Inicio</a></li>
@@ -35,18 +37,17 @@
                                @endisset>
                         <div class="input-group-append">
                             <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("EntradaBultos")}}">&times;</a>
+                               href="{{route("salidarmp")}}">&times;</a>
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
                     <input id="fechahidden" type="hidden" value="{{$fecha}}">
-
                     <div class="input-group" style="width: 300px">
                         <input class="form-control" name="marca" type="search" placeholder="Buscar Por Marca"
                                aria-label="Search">
                         <div class="input-group-append">
                             <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("EntradaBultos")}}">&times;</a>
+                               href="{{route("salidarmp")}}">&times;</a>
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </div>

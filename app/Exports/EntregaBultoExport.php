@@ -41,7 +41,8 @@ class EntregaBultoExport implements FromCollection  , ShouldAutoSize ,WithHeadin
                 ,"bultos_salidas.total",
                 "bultos_salidas.id_marca",
                 "bultos_salidas.id_vitolas", "bultos_salidas.created_at as fechas")
-                ->orderby("salon")
+                ->orderby("empleados_bandas.codigo")
+                ->orderby("marcas.name")
             ->whereDate("bultos_salidas.created_at","=" ,$this->fecha)->get();
         $tkm = [];
         foreach($bultoentrega as $bultosConOnzas){

@@ -38,7 +38,7 @@
                                @endisset>
                         <div class="input-group-append">
                             <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("EntradaBultos")}}">&times;</a>
+                               href="{{route("salidaMP")}}">&times;</a>
                             <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
                         </div>
                     </div>
@@ -94,7 +94,6 @@
             <thead class="thead-dark">
             <tr>
                 <th>#</th>
-
                 <th>Codigo</th>
                 <th>Nombre</th>
                 <th>Observacion</th>
@@ -172,7 +171,6 @@
                     @csrf
                     <div class="modal-body">
 
-
                         <div class="form-group">
                             <label for="fecha">Fecha</label>
                             <input class="form-control @error('onzas') is-invalid @enderror" name="fecha" id="fecha"  @isset($fecha)
@@ -214,7 +212,7 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <!---- Boton para crear un nuevo tipo de categoria- -->
+                            <!---- Boton para crear un nuevo tipo de categoria  --->
                         </div>
 
 

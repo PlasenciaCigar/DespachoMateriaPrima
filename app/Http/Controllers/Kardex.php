@@ -41,7 +41,8 @@ class Kardex extends Controller
         ->select('materia_primas.Descripcion as nombre','salida_det_mp.peso as Libras',
         'salida_det_mp.codigo_materia_prima', 'salida_det_mp.created_at',
         'salida_det_mp.observacion')
-        ->where('salida_det_mp.codigo_materia_prima', '=', $codigo)->get();
+        ->where('salida_det_mp.codigo_materia_prima', '=', $codigo)
+        ->where('estado', '=', 1)->get();
         $union = [];
         foreach ($entrada as $value) {
             $union[] = ['codigo_materia_prima'=>$value->codigo_materia_prima,
