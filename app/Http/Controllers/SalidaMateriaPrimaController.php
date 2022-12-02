@@ -298,9 +298,16 @@ class SalidaMateriaPrimaController extends Controller
             'salida_det_mp.codigo_materia_prima')
             ->select('salida_det_mp.*', 'materia_primas.Descripcion')
             ->get();
-            $data ==null ? $validacionproceso=true 
-            : $validacionproceso = false;
-            if($validacionproceso){
+            $validacionproceso = false;
+            $yes = DB::table('salida_det_mp')
+            ->where('salida_det_mp.created_at', '=', $fecha)
+            ->where('estado', '=', '1')
+            ->where('salida_det_mp.observacion', '!=', 'A Despacho')
+            ->join('materia_primas', 'materia_primas.Codigo',
+            'salida_det_mp.codigo_materia_prima')
+            ->select('salida_det_mp.*', 'materia_primas.Descripcion')
+            ->get();
+            if(count($yes)>0){
                 $data = DB::table('salida_det_mp')
             ->where('salida_det_mp.created_at', '=', $fecha)
             ->where('estado', '=', '1')
@@ -309,6 +316,7 @@ class SalidaMateriaPrimaController extends Controller
             'salida_det_mp.codigo_materia_prima')
             ->select('salida_det_mp.*', 'materia_primas.Descripcion')
             ->get();
+            $validacionproceso=true;
             }
             return view('rmp.Salidas.salidamateriaprima')
             ->with('fecha', $fecha)->with('data',$data)
@@ -358,6 +366,28 @@ class SalidaMateriaPrimaController extends Controller
             Session::flash('flash_message', $errores);
             return back()->with('errores', $errores);
         }
+        }
+
+        public function desaplicardet(Request $request){
+            $consulta = DB::table('salida_det_mp')
+            ->select('codigo_materia_prima', DB::raw('sum(peso) as peso'))
+            ->where('created_at', '=', $request->fecha)
+            ->where('estado', '=', '1')
+            ->where('salida_det_mp.observacion', '!=', 'A Despacho')
+            ->groupBy('codigo_materia_prima')
+            ->get();
+
+            foreach ($consulta as  $value){
+                $materiaprima = MateriaPrima::FindOrFail($value->codigo_materia_prima);
+                $materiaprima->Libras = $materiaprima->Libras + $value->peso;
+                $materiaprima->save();
+            }
+
+            DB::table('salida_det_mp')
+                ->where('created_at', '=', $request->fecha)
+                ->where('salida_det_mp.observacion', '!=', 'A Despacho')
+                ->update(['estado'=>0]);
+            return back();
         }
 
 }

@@ -220,7 +220,7 @@
                         <div class="form-group">
                             <label for="nombreNuevoProducto">Libras</label>
                             <input class=" form-control @error('name') is-invalid @enderror" name="libras" id="nombreNuevoProducto" maxlength="100"
-                                   required="required" type="number">
+                                   required="required" type="">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -376,7 +376,7 @@
     <div class="modal fade" id="modaldesaplicar" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <form method="post" action="{{route("desaplicarentrada")}}" >
+                <form method="post" action="{{route("desaplicarsaldet")}}" >
                     @csrf
                     <div class="modal-header" style="background: #2a2a35">
                         <h5 class="modal-title" style="color: white"><span class=""></span> Desaplicar del Inventario
@@ -386,7 +386,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p>¿Estas seguro que desea desaplicar las entradas del dia: 
+                        <p>¿Estas seguro que desea desaplicar las salidas del dia: 
                             @isset($fecha) {{$fecha}} @endisset <label
                                 id="nombreProducto"></label>?</p>
 
