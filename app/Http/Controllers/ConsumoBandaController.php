@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BandaInvInicial;
 use App\ConsumoBanda;
 use App\Exports\ConsumoBandaExport;
+use App\Exports\ConsumoBandarExport;
 use App\Marca;
 use App\Procedencia;
 use App\Semilla;
@@ -288,6 +289,15 @@ class ConsumoBandaController extends Controller
 
         }
         return (new ConsumoBandaExport($fecha))->download('Listado Consumo De Banda '.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
+    }
+
+    public function exportbandas(Request $request)
+    {
+        $fecha = Carbon::parse($request->fecha1)->format('Y-m-d');
+        return (new ConsumoBandarExport($fecha))
+        ->download('Listado Consumo De Banda '.$fecha.'.xlsx',
+        \Maatwebsite\Excel\Excel::XLSX);
 
     }
 

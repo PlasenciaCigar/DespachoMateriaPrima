@@ -169,17 +169,18 @@ class SalidaMateriaPrimaController extends Controller
         'detalle_combinaciones.peso as pesos', 'salidas_materia_primas.cantidad')
         ->where('salidas_materia_primas.created_at', '=',$fecha)
         ->get();
-        $acum= [];
         $order  = array_column($consulta->toArray(), 'mp');
+        $acum= [];
         foreach ($consulta as $codigoMP) {
             $pesoreal = ($codigoMP->cantidad * $codigoMP->pesos)/16;
-            if(array_search($codigoMP->mp, array_column($acum, 'codigo'))){
-                $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
+            $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
+            if($index!==false){
                 $acum[$index]['peso']+= $pesoreal;
               } else {
                 $acum[] = ['codigo'=>$codigoMP->mp, 'peso'=> $pesoreal];
               }
         }
+        
         $validar= $this->validar($acum);
         if($validar==null){
         foreach ($acum as $value) {
@@ -234,6 +235,7 @@ class SalidaMateriaPrimaController extends Controller
         public function desaplicar(Request $request)
         {
         $fecha = $request->fecha;
+        /*
         $consulta= DB::table('salidas_materia_primas')
         ->join('combinaciones', 'combinaciones.id', 'salidas_materia_primas.id_combinacion')
         ->join('detalle_combinaciones', 'detalle_combinaciones.id_combinaciones', 'combinaciones.id')
@@ -244,17 +246,18 @@ class SalidaMateriaPrimaController extends Controller
         $acum= [];
         foreach ($consulta as $codigoMP) {
             $pesoreal = ($codigoMP->cantidad * $codigoMP->pesos)/16;
-            if(array_search($codigoMP->mp, array_column($acum, 'codigo'))){
-                $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
+            $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
+            if($index!==false){
                 $acum[$index]['peso']+= $pesoreal;
               } else {
                 $acum[] = ['codigo'=>$codigoMP->mp, 'peso'=> $pesoreal];
               }
-        }
-
+        } */
+        $acum = DB::table('salida_det_mp')->select('codigo_materia_prima', 'peso')
+        ->where('created_at', '=', $fecha)->where('observacion', '=', 'A Despacho')->get();
         foreach ($acum as $value) {
-            $materiaprima = MateriaPrima::FindOrFail($value['codigo']);
-            $materiaprima->Libras= $materiaprima->Libras + $value['peso'];
+            $materiaprima = MateriaPrima::FindOrFail($value->codigo_materia_prima);
+            $materiaprima->Libras= $materiaprima->Libras + $value->peso;
             $materiaprima->save();
         }
         DB::table('salida_det_mp')->where('created_at', '=', $fecha)

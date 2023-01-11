@@ -30,7 +30,7 @@ class CombinacionesController extends Controller
         ->join('vitolas', 'vitolas.id', '=', 'b_inv_inicials.id_vitolas')
         ->select('combinaciones.id','vitolas.name', 'marcas.name as marca', 'b_inv_inicials.id_vitolas',
         'b_inv_inicials.id_marca')
-        ->GroupBy('combinaciones.id')->orderBy('combinaciones.id')
+        ->GroupBy('combinaciones.id')->orderBy('marcas.name')
         ->get();
 
         return view('rmp.Salidas.combinaciones')->with('combinaciones',$combinaciones)->withNoPagina(1)

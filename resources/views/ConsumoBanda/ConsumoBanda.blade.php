@@ -43,9 +43,13 @@
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfecha">Excel</a>
 
-                   <a class="btn btn-dark hideClearSearch" style="color: white"
+                <a class="btn btn-dark hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#recalcular">Calcular</a>
+
+                <a class="btn btn-info hideClearSearch" style="color: white"
+                   id="EMarcas"
+                   data-toggle="modal" data-target="#modalfechamarca">E. Marcas</a>
 
                 @foreach($total as $producto)
                     <label  class="d-none d-md-inline-block form-inline
@@ -754,6 +758,45 @@
 
         </div>
     </div>
+
+        <!-- Modal para exportar pesos por marcas, reporte para Paolo -->
+        <div class="modal fade" id="modalfechamarca" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar Peso Por Marca
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                <form id="nuevoP" method="POST" action="{{route("exportbandas")}}" enctype="multipart/form-data">
+
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="fecha1">Fecha</label>
+                            <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
+                                   type="datetime-local"
+                                   value="{{ old('fecha1')}}" >
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
 
     <!-------------------MODAL sumar  50------------------------------>
     <div class="modal fade" id="modalSumar" tabindex="-1" role="dialog">

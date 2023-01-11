@@ -467,7 +467,7 @@
 
 
     <div class="modal fade" id="salidamateriaprima" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog " role="document">
             <div class="modal-content">
                 <form method="post" action="{{route("excelversalidas")}}" >
                     @csrf
@@ -489,6 +489,9 @@
 
                         </tr>
                         </thead>
+                        <tbody id="tblInyect">
+
+                        </tbody>
                        </table>
 
                     </div>
@@ -639,9 +642,9 @@
                 _token: _token
             },
             success: function(data) {
-                $('#tblsal').empty();
+                $('#tblInyect').empty();
                 for (let i = 0; i < data.length; i++) {
-                $('#tblsal').append(
+                $('#tblInyect').append(
                     "<tr> <td>"+data[i].codigo_materia_prima+"</td> <td>"
                     + data[i].Descripcion + "</td> <td>"+ data[i].peso+"</td> </tr> "
                     

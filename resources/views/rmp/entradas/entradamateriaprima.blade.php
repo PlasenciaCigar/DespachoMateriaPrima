@@ -237,7 +237,7 @@
                         <div class="form-group">
                             <label for="nombreNuevoProducto">Libras</label>
                             <input class=" form-control @error('name') is-invalid @enderror" name="libras" id="nombreNuevoProducto" maxlength="100"
-                                   value="{{ old('total')}}" required="required" type="number">
+                                   value="{{ old('total')}}" required="required" type="">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -312,7 +312,7 @@
                         <div class="form-group">
                             <label for="libras1">Libras</label>
                             <input class=" form-control @error('name') is-invalid @enderror" name="libras" id="libras1" maxlength="100"
-                                   value="{{ old('total')}}" required="required" type="number">
+                                   value="{{ old('total')}}" required="required" type="">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
