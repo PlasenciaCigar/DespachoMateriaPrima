@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <th colspan="6" style="text-align:center;"><b>Informe de capa Entregada</b></th>
+            <th colspan="6" style="text-align:center;"><b>Informe de Banda Entregada</b></th>
         </tr>
         <tr>
         <th><b>Fecha: {{$fecha}}</b></th>

@@ -64,8 +64,8 @@ class BultosSalidaController extends Controller
                     "bultos_salidas.id_empleado",
                     "bultos_salidas.id_vitolas",
                     "bultos_salidas.adicional",
-                    "bultos_salidas.id_marca","marcas.name as nombre_marca"
-                    ,"bultos_salidas.total")
+                    "bultos_salidas.id_marca","marcas.name as nombre_marca",
+                    "bultos_salidas.combinacion","bultos_salidas.total")
                 ->where("empleados_bandas.codigo","Like","%".$query."%")
                 ->where("empleados_bandas.salon","Like","%".$modulos."%")
                 ->whereDate("bultos_salidas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
@@ -246,6 +246,7 @@ class BultosSalidaController extends Controller
         $nuevoBultoEntrega->id_procedencia=$request->input("id_procedencia");
         $nuevoBultoEntrega->total=('1');
         $nuevoBultoEntrega->adicional=0;
+        $nuevoBultoEntrega->combinacion=$request->combinaciones;
         $nuevoBultoEntrega->created_at=$fechaa;
         $nuevoBultoEntrega->save();
 

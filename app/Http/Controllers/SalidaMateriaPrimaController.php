@@ -177,10 +177,11 @@ class SalidaMateriaPrimaController extends Controller
             if($index!==false){
                 $acum[$index]['peso']+= $pesoreal;
               } else {
+
                 $acum[] = ['codigo'=>$codigoMP->mp, 'peso'=> $pesoreal];
+                
               }
         }
-        
         $validar= $this->validar($acum);
         if($validar==null){
         foreach ($acum as $value) {
