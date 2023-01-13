@@ -30,6 +30,8 @@ class CombinacionesController extends Controller
         ->join('vitolas', 'vitolas.id', '=', 'b_inv_inicials.id_vitolas')
         ->select('combinaciones.id','vitolas.name', 'marcas.name as marca', 'b_inv_inicials.id_vitolas',
         'b_inv_inicials.id_marca')
+        ->where('marcas.name', 'like', '%'.$request->marca.'%')
+        ->where('vitolas.name', 'like', '%'.$request->vitola.'%')
         ->GroupBy('combinaciones.id')->orderBy('marcas.name')
         ->get();
 

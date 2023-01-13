@@ -26,6 +26,24 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item" aria-current="page" ><a href="/">Inicio</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Combinaciones segun Bultos</li>
+
+                <form  class="d-none d-md-inline-block form-inline
+                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
+                    <div class="input-group" style="width: 700px">
+
+                    <input class="form-control col-md-4" name="marca" type="search" placeholder="Marca"
+                            aria-label="Search">
+
+                    <input class="form-control col-md-4" name="vitola" type="search" placeholder="Vitola"
+                            aria-label="Search">
+
+                        <div class="input-group-append">
+                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
+                               href="{{route("combinaciones")}}">&times;</a>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </form>
             </ol>
 
          </nav>

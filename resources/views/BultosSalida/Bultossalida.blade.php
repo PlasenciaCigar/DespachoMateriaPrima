@@ -19,7 +19,7 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 700px">
+                    <div class="input-group" style="width: 900px">
 
                             <select name="modulos"
                                     required
@@ -33,6 +33,8 @@
                                aria-label="Search" @isset($fecha)
                                    value="{{$fecha}}"
                                @endisset >
+                               <input class="form-control" name="marca" type="search" placeholder="Marca"
+                               aria-label="Search">
                                <input class="form-control" name="search" type="search" placeholder="Codigo Empleado"
                                aria-label="Search">
 
@@ -58,6 +60,10 @@
                 <a class="btn btn-danger hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfechapdf">PDF</a>
+
+                <a class="btn btn-info hideClearSearch" style="color: white"
+                id="EMarcas"
+                data-toggle="modal" data-target="#modalfechamarca">S. MP</a>
 
                 @foreach($total as $producto)
                     <label  class="d-none d-md-inline-block form-inline
@@ -119,7 +125,7 @@
                 <th>Variedad</th>
                 <th>Tamaño</th>
                 <th>Procedencia</th>
-                <th>total</th>
+                <th>Total</th>
 
 
                 <th><span class="fas fa-info-circle"></span></th>
@@ -190,9 +196,13 @@
                                 data-id_empleado="{{$productos->adicional}}"
                                 data-id_marca="{{$productos->nombre_marca}}"
                                 data-id_vitolas="{{$productos->nombre_vitolas}}"
-                                data-total="{{$productos->total}}">
+                                data-total="{{$productos->total}}"
+                                data-combinacion="{{$productos->combinacion}}"
+                                onclick="mandar({{$productos->combinacion}});">
                             <span class="fas fa-eye"></span>
                         </button>
+
+
                         <button class="btn btn-sm btn-success" hidden
                                 id="editarCapaEntrega{{$productos->id}}"
                                 data-toggle="modal"
@@ -222,6 +232,9 @@
             <script>
                 function envioauto(id){
                     $('#id_capa_entregass').val(id);
+                }
+                function mandar(combi){
+                        $('#combix').text(combi);
                 }
             </script>
             <tr>
@@ -294,11 +307,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="id_marca">Seleccione la marca</label>
+                            <label for="marca1">Seleccione la marca</label>
                             <br>
-                            <select name="id_marca"
+                            <select name="id_marca" onchange="peticion()";
                                     style="width: 100%"  required="required"
-                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="marca">
+                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="marca1"
+                                    >
                                 <option disabled selected value="">Seleccione</option>
                                 @foreach($marca as $marcas)
                                     <option value="{{$marcas->id}}" @if(Request::old('id_marca')==$marcas->id){{'selected'}}@endif
@@ -310,11 +324,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="vitolacapaentrega">Seleccione la Vitola</label>
+                            <label for="vitolacapaentrega1">Seleccione la Vitola</label>
                             <br>
                             <select name="id_vitolas"
                                     style="width: 100%"  required="required"
-                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="vitolacapaentrega">
+                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="vitolacapaentrega1"
+                                    onchange="peticion();">
                                 <option disabled selected value="">Seleccione</option>
                                 @foreach($vitola as $vitolas)
                                     <option value="{{$vitolas->id}}" @if(Request::old('id_vitolas')==$vitolas->id){{'selected'}}@endif
@@ -325,6 +340,16 @@
                                 @endforeach
                             </select>
                         </div>
+
+                        <div class="form-group">
+                            <label for="combinaciones">Seleccione la Combinacion</label>
+                            <br>
+                            <select name="combinaciones"
+                                    style="width: 100%"
+                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="combinaciones">
+                            </select>
+                        </div>
+
 
 
                         <div class="form-group">
@@ -629,6 +654,11 @@
                             <div class="form-group row">
                                 <div class="col-sm-6"><label for="empleadoNuevocapaentrega"><strong>Banda Adicional</strong></label></div>
                                 <div class="col-sm-2"><label for="marca" id="empleadoNuevocapaentrega"></label></div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6"><label for="combi"><strong>Combinacion</strong></label></div>
+                                <div class="col-sm-2"><label for="marca" id="combix"></label></div>
                             </div>
 
 
@@ -1010,9 +1040,56 @@
      </div>
 
 
-
-
 --}}
+
+<script>
+
+function peticion(){
+            let vitola= $('#vitolacapaentrega1').val();
+            let marca= $('#marca1').val();
+            let _token= "{{ csrf_token() }}";
+            if (marca!=null && vitola!=null){
+            $.ajax({
+            type: 'post',
+            url: '/rmp/peticion',
+            data: {
+                _token: _token,
+                marca: marca,
+                vitola: vitola
+            },
+            success: function(data) {
+                if (data.ok) {
+                    alert('No existe bulto registrado para el producto seleccionado');
+                    reset();
+                }else{
+                FiltrarSelect(data);
+                }
+            }
+        }); }
+        }
+
+        function FiltrarSelect(data){
+            let combinacion = $("#combinaciones");
+            combinacion.attr('disabled', false);
+            combinacion.empty();
+            for (let i = 0; i < data.length; i++) {
+                combinacion.append
+                ("<option class='item" + data[i].Id + "' value='"+data[i].Id+"'>"
+                +
+                data[i].Id
+                +
+                " </option>");
+            }            
+        }
+
+        function reset(){
+            let combinacion = $("#combinaciones");
+            combinacion.attr('disabled', true);
+            combinacion.empty();            
+        }
+
+
+     </script>
 
 
      <style>
