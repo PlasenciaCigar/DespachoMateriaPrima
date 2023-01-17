@@ -23,7 +23,9 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
+                    <div class="input-group" style="width: 500px">
+                    <input class="form-control" name="search" type="text" placeholder="Semilla"
+                               aria-label="Search">
                         <input class="form-control" name="fecha" type="date" placeholder="fecha"
                         @isset($fecha)
                                  value="{{$fecha}}"
@@ -75,19 +77,6 @@
                 <a class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfecha">Excel</a>
-
-                <form  class="d-none d-md-inline-block form-inline
-                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
-                        <input class="form-control" name="search" type="search" placeholder="Search"
-                               aria-label="Search">
-                        <div class="input-group-append">
-                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("ExistenciaDiario")}}">&times;</a>
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
             </div>
          </nav>
 

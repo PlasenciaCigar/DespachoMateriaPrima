@@ -61,9 +61,15 @@
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfechapdf">PDF</a>
 
+                   @if($generado)
+                   <a class="btn btn-info hideClearSearch" style="color: white"
+                id="EMarcas"
+                data-toggle="modal" data-target="#modalfechamarca">Ver. MP</a>
+                @else
                 <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
-                data-toggle="modal" data-target="#modalfechamarca">S. MP</a>
+                data-toggle="modal" data-target="#modalconfirmar">Gen. MP</a>
+                 @endif
 
                 @foreach($total as $producto)
                     <label  class="d-none d-md-inline-block form-inline
@@ -151,8 +157,20 @@
                     <td>{{$productos->total}}</td>
 
                     <td>
-
-
+                    @if($generado)
+                    <button class="btn btn-sm btn-info"
+                                title="Ver"
+                                data-toggle="modal"
+                                data-target="#modalVerCapaEntrega"
+                                data-id_empleado="{{$productos->adicional}}"
+                                data-id_marca="{{$productos->nombre_marca}}"
+                                data-id_vitolas="{{$productos->nombre_vitolas}}"
+                                data-total="{{$productos->total}}"
+                                data-combinacion="{{$productos->combinacion}}"
+                                onclick="mandar({{$productos->combinacion}});">
+                            <span class="fas fa-eye"></span>
+                        </button>
+                        @else
                         <button
                             class="btn btn-sm btn-info"
                             data-toggle="modal"
@@ -226,6 +244,8 @@
                                 data-id="{{$productos->id}}">
                             <span class="fas fa-trash"></span>
                         </button>
+
+                        @endif
                     </td>
                 </tr>
             @endforeach
@@ -957,6 +977,83 @@
 
         </div>
     </div>
+
+    <!-- Modal para exportar pesos por marcas, reporte para Paolo -->
+    <div class="modal fade" id="modalfechamarca" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar Peso Por Marca
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                <form id="nuevoP" method="POST" action="{{route("exportarbultoentregamp")}}" enctype="multipart/form-data">
+
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="fecha1">Fecha</label>
+                            <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
+                                   type="date"
+                                   value="{{ old('fecha1')}}" >
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalconfirmar" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Generar Salida de Materia Prima
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                <form id="nuevoP" method="POST" action="{{route("generarbultosmp")}}" enctype="multipart/form-data">
+
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="fecha1">Esta seguro que desea generar la salida de Materia Prima
+                             </label>
+                            <label for="">para la fecha {{$fecha}} ?</label>
+                            <input class="form-control" name="fecha1" id="fecha1" type="hidden"
+                                   value="{{$fecha}}" >
+                            @error('name')
+                            <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
 
 
     <!-------------------MODAL NUEVO CATEGORIA------------------------------>

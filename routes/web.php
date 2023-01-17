@@ -190,6 +190,15 @@ Route::group(["middleware" => "auth"], function () {
         Route::get('/BultoEntrega/exportCVS', 'BultosSalidaController@exportcvs')->name("exportarbultoentregacvs");
         Route::put('/EntradaBandas/50', 'BultosSalidaController@Suma100')->name("sumar100BandaBulto");
         Route::put('/EntradaBandas/500', 'BultosSalidaController@Resta100')->name("restar100BandaBulto");
+
+        //Exportar materia prima en salida despacho a Salon.
+
+        Route::post('/BultoEntrega/generar', 'BultosSalidaController@GenerarSalidaMP')->name("generarbultosmp");
+        Route::get('/BultoEntrega/generar', 'BultosSalidaController@GenerarSalidaMP')->name("generarbultosmp");
+
+        Route::post('/BultoEntrega/mp', 'BultosSalidaController@ExcelBultosMP')->name("exportarbultoentregamp");
+        Route::get('/BultoEntrega/mp', 'BultosSalidaController@ExcelBultosMP')->name("exportarbultoentregamp");
+
         //--------------------------------------------Bulto  Tripa  Devueltos ROUTES-------------------------------------------------------->
         Route::get("/BultoDevuelto", "BultosDevueltoController@index")->name("BultoDevuelto");
         Route::post("/BultoDevuelto/nuevo", "BultosDevueltoController@store")->name("BultoDevueltonueva");

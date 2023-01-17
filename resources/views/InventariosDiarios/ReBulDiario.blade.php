@@ -19,7 +19,9 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
+                    <div class="input-group" style="width: 600px">
+                    <input class="form-control" name="search" type="text" placeholder="Marca"
+                               aria-label="Search" value="">
                         @isset($fecha)
                         <input class="form-control" name="fecha" type="date" placeholder="fecha"
                                aria-label="Search" value="{{$fecha}}"
@@ -140,19 +142,6 @@
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#recalcular">Calcular</a>
 
-
-                <form  class="d-none d-md-inline-block form-inline
-                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
-                        <input class="form-control" name="search" type="search" placeholder="Search"
-                               aria-label="Search">
-                        <div class="input-group-append">
-                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("InventarioDiario")}}">&times;</a>
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
             </div>
          </nav>
 

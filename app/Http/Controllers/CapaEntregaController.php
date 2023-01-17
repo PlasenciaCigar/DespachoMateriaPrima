@@ -42,6 +42,8 @@ class CapaEntregaController extends Controller
                 $fecha = $request->get("fecha");
 
             }
+            $mar = $request->marca;
+            $sem = $request->semilla;
 
 
             $entregaCapa=DB::table("capa_entregas")
@@ -69,6 +71,8 @@ class CapaEntregaController extends Controller
                     ,"capa_entregas.total")
                 ->whereDate("capa_entregas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
                 ->where('empleados.codigo', 'like', '%'. $codigoemp. '%')
+                ->where("marcas.name","Like","%".$mar."%")
+                ->where("semillas.name","Like","%".$sem."%")
                 ->orderBy("empleados.codigo")
                 ->paginate(1000);
             $empleados = Empleado::all();

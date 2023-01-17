@@ -25,7 +25,12 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
+                    <div class="input-group" style="width: 500px">
+                    <input class="form-control" name="search" type="text" placeholder="Semilla"
+                               aria-label="Search" @isset($fecha)
+                               value=""
+
+                               @endisset>
                         <input class="form-control" name="fecha" type="date" placeholder="fecha"
                                aria-label="Search" @isset($fecha)
                                value="{{$fecha}}"
@@ -59,18 +64,6 @@
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2"
                             style="align-content: center">Total Entrada: {{$producto->total_capa}}</label>
                 @endforeach
-                <form  class="d-none d-md-inline-block form-inline
-                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
-                        <input class="form-control" name="search" type="search" placeholder="Search"
-                               aria-label="Search">
-                        <div class="input-group-append">
-                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("EntradaBanda")}}">&times;</a>
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
             </div>
          </nav>
 

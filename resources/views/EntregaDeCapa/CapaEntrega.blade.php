@@ -19,13 +19,17 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 500px">
-                        <input class="form-control" name="fecha" type="date" placeholder="fecha"
+                    <div class="input-group" style="width: 800px">
+                    <input class="form-control" name="marca" type="text" placeholder="Marca"
+                               aria-label="Search">
+                    <input class="form-control" name="semilla" type="text" placeholder="Semilla"
+                               aria-label="Search">
+                    <input class="form-control" name="codigoemp" type="text" placeholder="Codigo"
+                               aria-label="Search">
+                    <input class="form-control" name="fecha" type="date" placeholder="fecha"
                                aria-label="Search" @isset($fecha)
                                    value="{{$fecha}}"
                                @endisset>
-                               <input class="form-control" name="codigoemp" type="text" placeholder="Codigo"
-                               aria-label="Search">
                         <div class="input-group-append">
                             <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
                                href="{{route("CapaEntrega")}}">&times;</a>

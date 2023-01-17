@@ -9,6 +9,7 @@ use App\EntradaBultos;
 use App\Empleado;
 use App\EmpleadosBanda;
 use App\Exports\EntregaBultoExport;
+use App\Exports\BultosSalidasMPExport;
 use App\Exports\EntregaCapaExport;
 use App\Marca;
 use App\Vitola;
@@ -45,6 +46,7 @@ class BultosSalidaController extends Controller
                 $fecha = $request->get("fecha");
 
             }
+
             $bultoentrega=DB::table("bultos_salidas")
                 ->leftJoin("empleados_bandas","bultos_salidas.id_empleado","=","empleados_bandas.id")
                 ->leftJoin("vitolas","bultos_salidas.id_vitolas","=","vitolas.id")
@@ -91,11 +93,14 @@ class BultosSalidaController extends Controller
 
                 $fechamostrar = Carbon::now()->format('d/m/Y H:i:A');
                $lmao = Carbon::now()->format('Y-m-d');
-              // return $fechamostrar;
+
+               $generado = DB::table('salida_despacho_mp')
+               ->where('created_at', '=', $fecha)->first();
 
             return view("BultosSalida.Bultossalida")
                 ->withNoPagina(1)
                 ->with('lmao', $lmao)
+                ->with('generado', $generado)
                 ->with('fecha', $fecha)
                 ->withEntregaBulto($bultoentrega)
                 ->withFechamostrar($fechamostrar)
@@ -718,6 +723,44 @@ foreach ($banda as $bandas)
         //redirect()->route("BultoSalida")->withExito("Se editó Correctamente");
 
     }
+
+
+    public function GenerarSalidaMP(Request $request){
+        $fecha = $request->fecha1;
+        $bultoentrega=DB::table("bultos_salidas")
+        ->join("vitolas","bultos_salidas.id_vitolas","=","vitolas.id")
+        ->join("marcas","bultos_salidas.id_marca","=","marcas.id")
+        ->join("detalle_combinaciones","detalle_combinaciones.id_combinaciones",
+        "=","bultos_salidas.combinacion")
+        ->select(
+            "bultos_salidas.id_marca as marca","vitolas.id as vitola",
+            "detalle_combinaciones.codigo_materia_prima", DB::raw("sum(total) as total"),
+            "detalle_combinaciones.peso")
+        ->whereDate("bultos_salidas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
+        ->distinct()->groupByRaw("bultos_salidas.id_marca, bultos_salidas.id_vitolas
+        , detalle_combinaciones.codigo_materia_prima, detalle_combinaciones.peso")->get();
+
+        foreach($bultoentrega as $value){
+            $pesoReal = ($value->total * $value->peso)/16;
+            DB::table('salida_despacho_mp')
+                    ->insert(['codigo_mp'=>$value->codigo_materia_prima,
+                    'marca'=>$value->marca, 'vitola'=>$value->vitola,
+                    'bultos'=>$value->total,'peso'=>$pesoReal,
+                    'created_at'=>$fecha]);
+            }
+
+            return back();
+    }
+
+
+    public function ExcelBultosMP(Request $request){
+        $fecha = $request->fecha1;
+
+        return (new BultosSalidasMPExport($fecha))
+        ->download('Entrega de Materia Prima a Salon'.$fecha.'.xlsx',
+         \Maatwebsite\Excel\Excel::XLSX);
+    }
+
 }
 
 
