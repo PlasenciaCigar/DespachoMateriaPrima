@@ -19,8 +19,12 @@
 
                 <form  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
-                        <input class="form-control" name="fecha" type="date" placeholder="fecha"
+                    <div class="input-group" style="width: 600px">
+                    <input class="form-control" name="search" type="search" placeholder="Marca"
+                               aria-label="Search" value="">
+                    <input class="form-control" name="semilla" type="search" placeholder="Semilla"
+                               aria-label="Search" value="">
+                    <input class="form-control" name="fecha" type="date" placeholder="fecha"
                                aria-label="Search" @isset($fecha)
                                    value="{{$fecha}}"
                                @endisset>
@@ -56,19 +60,6 @@
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2"
                             style="align-content: center">Total Entregado: {{$producto->total_capa}}</label>
                 @endforeach
-
-                <form  class="d-none d-md-inline-block form-inline
-                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2">
-                    <div class="input-group" style="width: 300px">
-                        <input class="form-control" name="search" type="search" placeholder="Search"
-                               aria-label="Search">
-                        <div class="input-group-append">
-                            <a id="borrarBusqueda" class="btn btn-danger hideClearSearch" style="color: white"
-                               href="{{route("ConsumoBanda")}}">&times;</a>
-                            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
             </div>
          </nav>
 

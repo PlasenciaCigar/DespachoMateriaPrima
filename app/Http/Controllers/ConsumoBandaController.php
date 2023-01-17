@@ -38,6 +38,7 @@ class ConsumoBandaController extends Controller
                 $fecha = $request->get("fecha");
 
             }
+            $sem = $request->semilla;
 
             $consumobanda=DB::table("consumo_bandas")
                 ->leftJoin("vitolas","consumo_bandas.id_vitolas","=","vitolas.id")
@@ -61,6 +62,7 @@ class ConsumoBandaController extends Controller
                     ,"consumo_bandas.libras"
                 , "consumo_bandas.variedad" ,"consumo_bandas.procedencia")
                 ->where("marcas.name","Like","%".$query."%")
+                ->where("semillas.name","Like","%".$sem."%")
                 ->whereDate("consumo_bandas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
                 ->orderBy("nombre_marca")
                 ->paginate(1000);
@@ -80,6 +82,7 @@ class ConsumoBandaController extends Controller
             ->leftJoin("procedencias", "consumo_bandas.procedencia", "=", "procedencias.id")
             ->selectRaw("SUM(total) as total_capa")
             ->where("marcas.name","Like","%".$query."%")
+            ->where("semillas.name","Like","%".$sem."%")
             ->whereDate("consumo_bandas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
             ->get();
 
