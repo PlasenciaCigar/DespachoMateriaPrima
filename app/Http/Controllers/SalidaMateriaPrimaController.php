@@ -45,12 +45,14 @@ class SalidaMateriaPrimaController extends Controller
         ->join('b_inv_inicials', 'b_inv_inicials.id', 'combinaciones.bulto')
         ->join('vitolas', 'vitolas.id', 'b_inv_inicials.id_vitolas')
         ->join('marcas', 'marcas.id', 'b_inv_inicials.id_marca')
+        ->join('detalle_combinaciones', 'salidas_materia_primas.id_combinacion', '=', 'detalle_combinaciones.id_combinaciones')
         ->select('salidas_materia_primas.*', 'salidas_materia_primas.id as salida',
          'vitolas.name as vitola', 'marcas.name as marca',
           'vitolas.id as v_id','marcas.id as m_id',
-          'combinaciones.id as combinacion')
+          'combinaciones.id as combinacion', DB::raw('sum(detalle_combinaciones.peso) as totalpeso'))
         ->where('marcas.name', 'LIKE', '%'.$marcas.'%')
         ->where('salidas_materia_primas.created_at', 'LIKE', '%'.$fecha.'%')
+        ->groupby('salidas_materia_primas.id')
         ->get();
         $arre= [];
         foreach ($combinacion as $combinaciones) {
@@ -151,8 +153,17 @@ class SalidaMateriaPrimaController extends Controller
         return back();
     }
 
+    public function destroymanual(Request $request)
+    {
+        $delete = DB::table('salida_det_mp')->where('id', '=', $request->id)->delete();
+        return back();
+    }
+
     public function sumar(Request $salidaMateriaPrima)
     {
+        if($salidaMateriaPrima->suma==null){
+            $salidaMateriaPrima->suma=1;
+        }
         $query = DB::table('salidas_materia_primas')
         ->where('id', '=', $salidaMateriaPrima->id)
         ->increment('cantidad', $salidaMateriaPrima->suma);

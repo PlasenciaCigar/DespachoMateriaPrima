@@ -18,7 +18,7 @@ class MateriaPrimaImport implements ToModel
             'Codigo' => $row[0],
             'Descripcion' => $row[1],
             'Libras' => $row[2],
-            'created_at' => Carbon::now()->format('Y-m-d'),
+            'created_at' => Carbon::parse($row[3])->format('Y-m-d'),
         ]);
     }
 }

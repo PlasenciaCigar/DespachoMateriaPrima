@@ -73,7 +73,7 @@
 
             <div class="pagination pagination-sm">
 
-                <a class="btn btn-success hideClearSearch" style="color: white"
+                <a hidden class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalExcel"
                    data-toggle="modal" data-target="#modalfecha">Excel
                 </a>

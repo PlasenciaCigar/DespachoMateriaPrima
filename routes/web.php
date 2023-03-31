@@ -336,6 +336,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/rmp/salidastore", 'SalidaMateriaPrimaController@store')->name('storesalidarmp');
     Route::put("/rmp/salidaupdate", 'SalidaMateriaPrimaController@update')->name('updatesalidarmp');
     Route::delete("/rmp/salidadelete", 'SalidaMateriaPrimaController@destroy')->name('deletesalidarmp');
+    Route::delete("/rmp/salidadeletemanual", 'SalidaMateriaPrimaController@destroymanual')->name('deletesalidarmpmanual');
     Route::post("/rmp/excelsalida", 'SalidaMateriaPrimaController@export')->name('exportsalidarmp');
     Route::post("/rmp/procesarsalida", 'SalidaMateriaPrimaController@procesar')->name('procesarsalida');
     Route::post("/rmp/desaplicarsalida", 'SalidaMateriaPrimaController@desaplicar')->name('desaplicarsalida');

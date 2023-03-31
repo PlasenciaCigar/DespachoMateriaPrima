@@ -94,6 +94,13 @@
                             style="align-content: center">Total Salida: {{$total}}
                     </label>
                 @endisset
+
+                @isset($salidapesototal)
+                    <label  class="d-none d-md-inline-block form-inline
+                           ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2"
+                            style="align-content: center">Total Salida Peso: {{$salidapesototal}}
+                    </label>
+                @endisset
             </div>
          </nav>
 
@@ -124,12 +131,19 @@
                 <th>Vitola</th>
                 <th>Combinacion</th>
                 <th>Cantidad</th>
+                <th>Onzas</th>
+                <th>Libras</th>
                 <th>Fecha</th>
                 <th><span class="fas fa-info-circle"></span></th>
                 <th><span class="fas fa-info-circle"></span></th>
             </tr>
             </thead>
             <tbody>
+                @php
+                $tCantidad=0;
+                $tOnzas=0;
+                $tLibras=0;
+                @endphp
             @if($salida->count()<= 0)
                 <tr>
                     <td colspan="4" style="align-items: center">No hay productos</td>
@@ -137,11 +151,18 @@
             @endif
             @foreach($salida as $productos)
                 <tr>
+                @php
+                $tCantidad+=$productos->cantidad;
+                $tOnzas+=$productos->totalpeso;
+                $tLibras+=$productos->cantidad*$productos->totalpeso/16;
+                @endphp
                     <td>{{$noPagina++}}</td>
                     <td>{{$productos->marca}}</td>
                     <td>{{$productos->vitola}}</td>
                     <td>{{$productos->combinacion}}</td>
-                    <td>{{$productos->cantidad}}</td>
+                    <td class="table-info">{{$productos->cantidad}}</td>
+                    <td>{{$productos->totalpeso}}</td>
+                    <td class="table-info">{{$productos->cantidad*$productos->totalpeso/16}}</td>
                     <td>{{$productos->created_at}}</td>
                     <td>
                     <button class="btn btn-sm btn-info"
@@ -181,6 +202,12 @@
                     </td>
                 </tr>
             @endforeach
+            <tr>
+                <td colspan="4" style="text-align:center"><b> TOTALES</b></td>
+                <td>{{$tCantidad}}</td>
+                <td>{{$tOnzas}}</td>
+                <td>{{$tLibras}}</td>
+            </tr>
 
             </tbody>
         </table>
@@ -526,7 +553,7 @@
                         <div class="form-group">
                             <label for="suma">Total a Sumar</label>
                             <input class="form-control @error('name') is-invalid @enderror" name="suma" id="suma" maxlength="100"
-                                   value="{{ old('suma')}}" required="required">
+                                   value="{{ old('suma')}}">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>

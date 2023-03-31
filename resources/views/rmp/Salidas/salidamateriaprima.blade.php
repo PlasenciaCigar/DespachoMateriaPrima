@@ -74,7 +74,7 @@
                 @isset($total)
                     <label  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2"
-                            style="align-content: center">Total Entrada: {{$total}}
+                            style="align-content: center">Total Salida: {{$total}}
                     </label>
                 @endisset
             </div>
@@ -289,7 +289,7 @@
                         <div class="form-group">
                             <label for="libras1">Libras</label>
                             <input class=" form-control @error('name') is-invalid @enderror" name="libras" id="libras1" maxlength="100"
-                                   value="{{ old('total')}}" required="required" type="number">
+                                   value="{{ old('total')}}" required="required" type="text">
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -314,7 +314,7 @@
     <div class="modal fade" id="modalBorrarCapaEntrega" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <form method="post" action="{{route("deleteentradarmp")}}" >
+                <form method="post" action="{{route("deletesalidarmpmanual")}}" >
                     @method("DELETE")
                     @csrf
                     <div class="modal-header" style="background: #2a2a35">
