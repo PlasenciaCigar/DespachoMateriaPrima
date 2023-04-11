@@ -725,8 +725,8 @@
                 $("#tablediff").append(
                 "<tr> <td>"+data[i].marca+"</td> <td>"
                     + data[i].vitola + "</td><td>" 
-                    + data[i].totalDespacho + "</td> <td>"
                     + data[i].totalInventario + "</td> <td>"
+                    + data[i].totalDespacho + "</td> <td>"
                     + data[i].diferencia + "</td> </tr> "
             )
             }
