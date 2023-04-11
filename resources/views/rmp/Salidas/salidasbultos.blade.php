@@ -452,7 +452,7 @@
                             @isset($fecha) {{$fecha}} @endisset <label
                                 id="nombreProducto"></label>?</p>
 
-                    </div>
+                    
 
             <table id="tblsalprevio" class="table">
                        <thead class="thead-dark">
@@ -467,6 +467,7 @@
 
                         </tbody>
                        </table>
+                       </div>
                 <form method="post" action="{{route("procesarsalida")}}" >
                     @csrf
                     
