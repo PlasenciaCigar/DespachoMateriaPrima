@@ -32,7 +32,6 @@
 
         <div class="wrap-login100 p-t-30 p-b-50"><br><br>
 
-
             <div class="col-xl-10">
                 <div class="cat__pages__login__block__promo text-white text-center">
                     <h2 class="mb-3">
@@ -41,6 +40,24 @@
                 </div>
             </div>
             <div class="row">
+
+            @if(Auth::user()->is_rmp ==1 || Auth::user()->is_admin==1)
+            <div class="col">
+                    <div class="col-lg-10 hero_box_col">
+                        <a href="{{route('ligas')}}">
+                            <div class="hero_box d-flex flex-row align-items-center">
+                                <img src="images/books.svg" class="svg" alt="">
+                                <div class="hero_box_content">
+                                    <h2 class="hero_box_title">Reacondicionamiento de Materia Prima</h2>
+                                </div>
+                            </div>
+                        </a>
+
+                    </div>
+                    </div>
+                    @endif
+
+
                 <div class="col">
                         <div class="col-lg-10 hero_box_col">
                             <a href="{{route('BultoSalida')}}" >
@@ -91,24 +108,8 @@
             </div>
 
 
-            @if(Auth::user()->is_rmp ==1 || Auth::user()->is_admin==1)
-                    <div class="col-lg-10 hero_box_col">
-
-                        <a href="{{route('ligas')}}">
-                            <div class="hero_box d-flex flex-row align-items-center">
-                                <img src="images/books.svg" class="svg" alt="">
-                                <div class="hero_box_content">
-                                    <h2 class="hero_box_title">Reacondicionamiento de Materia Prima</h2>
-                                </div>
-                            </div>
-                        </a>
-
-                    </div>
-
-
 
                 </div>
-                @endif
 
 
         </div>

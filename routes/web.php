@@ -355,6 +355,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::put("/rmp/updatesalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('salidaMPupdatemanual');
     Route::post("/rmp/aplicarsalidamanual", 'SalidaMateriaPrimaController@procesardet')->name('aplicarMPmanual');
     Route::put("/rmp/desaplicarsalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('desaplicarMPmanual');
+    Route::get("/rmp/mostrardiferencias", 'SalidaMateriaPrimaController@diferencias')->name('diferenciasrmp');
 
 
     Route::get("/rmp/diferencias", 'ExistenciaDiarioController@diferencias')->name('rmpdiff');

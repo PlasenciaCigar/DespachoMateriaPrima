@@ -72,9 +72,16 @@
                 @endif
 
                 <a class="btn btn-success hideClearSearch" style="color: white"
-                   id="botonAbrirModalExcel"
+                   id="botonAbrirModalExcel" hidden
                    data-toggle="modal" data-target="#modalfecha">Excel
                 </a>
+
+                <a class="btn btn-primary hideClearSearch" style="color: white"
+                   id="botonAbrirModalExcel"
+                   data-toggle="modal"
+                   onclick="mostrarDiferencias('{{$fecha}}')">Diferencias
+                </a>
+
                 @if(Auth::user()->is_admin=1 && $validacionproceso)
                 <a class="btn btn-warning hideClearSearch" style="color: white"
                    id="botonDesaplicar"
@@ -336,7 +343,7 @@
                             <select name="marca"
                                     style="width: 100%"
                                     class="disponible form-control" id="marca1"
-                                    onchange="peticion1();" required="required">
+                                    onchange="peticion1();" required="required" disabled>
                                 <option disabled selected value="">Seleccione</option>
                                 @foreach($marca as $marcas)
                                     <option value="{{$marcas->id}}">
@@ -349,7 +356,7 @@
                         <div class="form-group">
                             <label for="vitola1">Vitola</label>
                             <br>
-                            <select name="vitola"
+                            <select name="vitola" disabled
                                     style="width: 100%"
                                     class="disponible form-control" id="vitola1"
                                     onchange="peticion1();" required="required">
@@ -655,9 +662,75 @@
     </div>
 
 
+    <div class="modal fade" id="modalfechacvs" tabindex="-1" 
+    role="dialog" aria-labelledby="myLargeModalLabel" >
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Diferencias.
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                <th>Marca</th>
+                                <th>Vitola</th>
+                                <th>Sal. RMP</th>
+                                <th>Ent. Despacho</th>
+                                <th>Diferencias</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tablediff">
+                                
+                                </tbody>
+
+                            </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+
     <script>
 
         let status = false;
+
+        function mostrarDiferencias(fecha){
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/rmp/mostrardiferencias',
+            data: {
+                _token: _token,
+                fecha: fecha
+            },
+            success: function(data) {
+                $("#modalfechacvs").modal();
+                mostrartablediff(data);
+            }
+        });
+        }
+
+        function mostrartablediff(data){
+            $("#tablediff").empty();
+            for (let i = 0; i < data.length; i++) {
+                $("#tablediff").append(
+                "<tr> <td>"+data[i].marca+"</td> <td>"
+                    + data[i].vitola + "</td><td>" 
+                    + data[i].totalDespacho + "</td> <td>"
+                    + data[i].totalInventario + "</td> <td>"
+                    + data[i].diferencia + "</td> </tr> "
+            )
+            }
+        }
 
         function versalida(){
             let fecha = $("#fechahidden").val();
