@@ -55,9 +55,11 @@
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfecha">Excel</a>
 
-                <a class="btn btn-danger hideClearSearch" style="color: white"
-                   id="botonAbrirModalNuevoRecepcionCapa"
-                   data-toggle="modal" data-target="#modalfechapdf">PDF</a>
+                   <a class="btn btn-primary hideClearSearch" style="color: white"
+                   id="botonAbrirModalExcel"
+                   data-toggle="modal"
+                   onclick="mostrarDiferencias('{{$fecha}}')">Diferencias
+                </a>
 
                 @foreach($total as $producto)
                     <label  class="d-none d-md-inline-block form-inline
@@ -598,6 +600,73 @@
 
         </div>
     </div>
+
+    <div class="modal fade" id="diferenciasmodal" tabindex="-1" 
+    role="dialog" aria-labelledby="myLargeModalLabel" >
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Diferencias.
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                <th>Marca</th>
+                                <th>Vitola</th>
+                                <th>Sal. RMP</th>
+                                <th>Ent. Despacho</th>
+                                <th>Diferencias</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tablediff">
+                                
+                                </tbody>
+
+                            </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarDiferencias(fecha){
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/EntradaBultos/diferencias',
+            data: {
+                _token: _token,
+                fecha: fecha
+            },
+            success: function(data) {
+                $("#diferenciasmodal").modal();
+                mostrartablediff(data);
+            }
+        });
+        }
+
+        function mostrartablediff(data){
+            $("#tablediff").empty();
+            for (let i = 0; i < data.length; i++) {
+                $("#tablediff").append(
+                "<tr> <td>"+data[i].marca+"</td> <td>"
+                    + data[i].vitola + "</td><td>" 
+                    + data[i].totalDespacho + "</td> <td>"
+                    + data[i].totalInventario + "</td> <td>"
+                    + data[i].diferencia + "</td> </tr> "
+            )
+            }
+        }
+    </script>
 
 
 

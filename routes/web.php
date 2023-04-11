@@ -285,6 +285,7 @@ Route::group(["middleware" => "auth"], function () {
                 Route::get('/EntradaBultos/exportPDF', 'EntradaBultosController@exportpdf')->name("exportarEntradaBultospdf");
                 Route::post('/EntradaBultos/exportCVS', 'EntradaBultosController@exportcvs')->name("exportarEntradaBultoscvs");
                 Route::get('/EntradaBultos/exportCVS', 'EntradaBultosController@exportcvs')->name("exportarEntradaBultoscvs");
+                Route::get('/EntradaBultos/diferencias', 'EntradaBultosController@diferencias')->name("EntradaBDiff");
 
 
 

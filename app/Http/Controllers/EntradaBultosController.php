@@ -264,4 +264,63 @@ class EntradaBultosController extends Controller
         //redirect()->route("EntradaBanda")->withExito("Se editó Correctamente");
 
     }
+
+    public function diferencias(Request $request){
+
+        $salida = DB::table('salidas_materia_primas')
+    ->join('combinaciones', 'combinaciones.id', '=', 'salidas_materia_primas.id_combinacion')
+    ->join('b_inv_inicials', 'b_inv_inicials.id', 'combinaciones.bulto')
+    ->join('vitolas', 'vitolas.id', 'b_inv_inicials.id_vitolas')
+    ->join('marcas', 'marcas.id', 'b_inv_inicials.id_marca')
+    ->select(
+     'vitolas.name as vitola', 'marcas.name as marca',
+     DB::raw('sum(salidas_materia_primas.cantidad) as totalDesp'))
+     ->addSelect(DB::raw('(select sum(peso) from detalle_combinaciones where
+     detalle_combinaciones.id_combinaciones = combinaciones.id) as totalpeso'))
+    ->where('salidas_materia_primas.created_at', 'LIKE', '%'.$request->fecha.'%')
+    ->groupbyraw('marcas.name, vitolas.name, combinaciones.id')
+    ->orderByRaw('marcas.name, vitolas.name')
+    ->get();
+
+
+        $entrada_bultos = DB::table('entrada_bultos')
+        ->join('marcas', 'marcas.id', 'entrada_bultos.marca')
+        ->join('vitolas', 'vitolas.id', 'entrada_bultos.vitola')
+        ->selectRaw('marcas.name as marca')
+        ->selectRaw('vitolas.name as vitola')
+        ->selectRaw('SUM(entrada_bultos.bultos) as totalDesp')
+    ->where('entrada_bultos.created_at', '=', $request->fecha)
+    ->groupByRaw('marcas.name, vitolas.name')
+    ->orderByRaw('marcas.name, vitolas.name')
+    ->get();
+
+    $concatenacion1  = [];
+    $concatenacion2  = [];
+    foreach ($salida as $value) {
+        $concatenacion1[] = ['marca'=>$value->marca.' '.$value->vitola];
+    }
+    foreach ($entrada_bultos as $value) {
+        $concatenacion2[] = ['marca'=>$value->marca.' '.$value->vitola];
+    }
+    $sal  = array_column($concatenacion1, 'marca');
+    $ent  = array_column($concatenacion2, 'marca');
+
+    $diff = array_values(array_diff($sal, $ent));
+
+    $existencia= [];
+    #Se buscan las similitudes de semilla y calidad
+    foreach($salida as $c){
+        foreach($entrada_bultos as $o){
+            if($o->marca == $c->marca && $o->vitola == $c->vitola){
+                $existencia[] = ['marca'=>$o->marca, 'vitola'=>$o->vitola,
+                'totalDespacho'=>$o->totalDesp, 'totalInventario'=>$c->totalDesp,
+            'diferencia'=>$o->totalDesp-$c->totalDesp];
+            }
+        }
+        }
+        foreach ($diff as $value) {
+            $existencia[] = ['marca'=>$value];
+        }
+        return response()->json($existencia);
+    }
 }
