@@ -445,7 +445,7 @@ class SalidaMateriaPrimaController extends Controller
         $sal  = array_column($concatenacion1, 'marca');
         $ent  = array_column($concatenacion2, 'marca');
 
-        $diff = array_values(array_diff($sal, $ent));
+        $diff = array_values(array_diff($ent, $sal));
     
         $existencia= [];
         #Se buscan las similitudes de semilla y calidad
