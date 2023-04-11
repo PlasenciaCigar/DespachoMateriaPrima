@@ -65,7 +65,7 @@
             <div class="pagination pagination-sm">
 
             @if($validacionproceso==false)
-                <a class="btn btn-dark hideClearSearch" style="color: white"
+                <a onclick="versalidaprevia()" class="btn btn-dark hideClearSearch" style="color: white"
                    id="botonAbrirModal"
                    data-toggle="modal" data-target="#modalprocesar">Aplicar
                 </a>
@@ -439,21 +439,37 @@
     <div class="modal fade" id="modalprocesar" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
             <div class="modal-content">
-                <form method="post" action="{{route("procesarsalida")}}" >
-                    @csrf
-                    <div class="modal-header" style="background: #2a2a35">
+            <div class="modal-header" style="background: #2a2a35">
                         <h5 class="modal-title" style="color: white"><span class=""></span> Aplicar Inventario
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span style="color: white" aria-hidden="true">&times;</span>
                         </button>
                     </div>
+
                     <div class="modal-body">
                         <p>¿Esta seguro que desea aplicar las salidas del dia: 
                             @isset($fecha) {{$fecha}} @endisset <label
                                 id="nombreProducto"></label>?</p>
 
                     </div>
+
+            <table id="tblsalprevio" class="table">
+                       <thead class="thead-dark">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Descripcion</th>
+                            <th>Peso</th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="previo">
+
+                        </tbody>
+                       </table>
+                <form method="post" action="{{route("procesarsalida")}}" >
+                    @csrf
+                    
                     <div class="modal-footer">
                         <input id="id_capa_entrega" name="fecha" type="hidden" @isset($fecha) value="{{$fecha}}" @endisset>
                         <button type="submit" class="btn btn-dark">Aplicar</button>
@@ -747,6 +763,28 @@
                 $('#tblInyect').append(
                     "<tr> <td>"+data[i].codigo_materia_prima+"</td> <td>"
                     + data[i].Descripcion + "</td> <td>"+ data[i].peso+"</td> </tr> "
+                    
+                ); 
+            } 
+            }
+        });
+        }
+
+        function versalidaprevia(){
+            let fecha = $("#fechahidden").val();
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/rmp/versalidaprevio/'+fecha,
+            data: {
+                _token: _token
+            },
+            success: function(data) {
+                $('#previo').empty();
+                for (let i = 0; i < data.length; i++) {
+                $('#previo').append(
+                    "<tr> <td>"+data[i].codigo+"</td> <td>"
+                    + data[i].descripcion + "</td> <td>"+ data[i].peso+"</td> </tr> "
                     
                 ); 
             } 

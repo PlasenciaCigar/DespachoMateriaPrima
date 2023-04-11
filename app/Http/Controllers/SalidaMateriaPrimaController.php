@@ -214,7 +214,34 @@ class SalidaMateriaPrimaController extends Controller
 
     }
 
-    } 
+    }
+    
+    public function versalidadpreviamp(Request $request){
+        $fecha = $request->fecha;
+        $consulta= DB::table('salidas_materia_primas')
+        ->join('combinaciones', 'combinaciones.id', 'salidas_materia_primas.id_combinacion')
+        ->join('detalle_combinaciones', 'detalle_combinaciones.id_combinaciones', 'combinaciones.id')
+        ->join('materia_primas', 'detalle_combinaciones.codigo_materia_prima', 'materia_primas.Codigo')
+        ->select('detalle_combinaciones.codigo_materia_prima as mp',
+        'detalle_combinaciones.peso as pesos','materia_primas.Descripcion as descripcion',
+         'salidas_materia_primas.cantidad')
+        ->where('salidas_materia_primas.created_at', '=',$fecha)
+        ->get();
+        $order  = array_column($consulta->toArray(), 'mp');
+        $acum= [];
+        foreach ($consulta as $codigoMP) {
+            $pesoreal = ($codigoMP->cantidad * $codigoMP->pesos)/16;
+            $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
+            if($index!==false){
+                $acum[$index]['peso']+= $pesoreal;
+              } else {
+
+                $acum[] = ['codigo'=>$codigoMP->mp, 'descripcion'=>$codigoMP->descripcion, 'peso'=> $pesoreal];
+                
+              }
+        }
+        return response()->json($acum);
+    }
 
     function validar($data){
         $value = [];
