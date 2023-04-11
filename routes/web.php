@@ -358,7 +358,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/rmp/aplicarsalidamanual", 'SalidaMateriaPrimaController@procesardet')->name('aplicarMPmanual');
     Route::put("/rmp/desaplicarsalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('desaplicarMPmanual');
     Route::get("/rmp/mostrardiferencias", 'SalidaMateriaPrimaController@diferencias')->name('diferenciasrmp');
-
+    Route::post("/rmp/generarMarcasaut", 'SalidaMateriaPrimaController@generarRegistros')->name('generarMarcasAut');
 
     Route::get("/rmp/diferencias", 'ExistenciaDiarioController@diferencias')->name('rmpdiff');
     //KARDEX    

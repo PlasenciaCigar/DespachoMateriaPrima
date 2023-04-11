@@ -491,6 +491,19 @@ class SalidaMateriaPrimaController extends Controller
             return response()->json($existencia);
         }
 
+        public function generarRegistros(Request $request){
+            $ult = DB::table('salidas_materia_primas')->max('created_at');
+            $data = DB::table('salidas_materia_primas')->where('created_at', '=', $ult)->get();
+            foreach($data as $val){
+                $sal = new SalidaMateriaPrima;
+                $sal->id_combinacion = $val->id_combinacion;
+                $sal->cantidad = 0;
+                $sal->created_at = $request->fecha1;
+                $sal->save();
+            }
+            return back();
+        }
+
         
 
 }
