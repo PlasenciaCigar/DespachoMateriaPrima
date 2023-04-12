@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Exports\DevolucionesMateriaPrima;
+use Maatwebsite\Excel\Facades\Excel;
 use Session;
 
 class EntradaMateriaPrimaController extends Controller
@@ -157,5 +159,13 @@ class EntradaMateriaPrimaController extends Controller
         }
         DB::table('entradasprocesadas')->where('created_at', '=', $fecha)->delete();
         return back();
+    }
+
+    public function export(Request $request){
+        $fecha = Carbon::parse(  $request->get("fecha1"))->format('Y-m-d');
+        return (new DevolucionesMateriaPrima($fecha))
+        ->download('Devoluciones Despacho.'.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+
+
     }
 }

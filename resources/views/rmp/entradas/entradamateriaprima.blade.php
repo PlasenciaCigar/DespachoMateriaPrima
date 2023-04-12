@@ -289,6 +289,7 @@
                                 <option value="Rezago">Rezago</option>
                                 <option value="Escogida">Escogida</option>
                                 <option value="Proceso">Proceso</option>
+                                <option value="Despacho">Despacho</option>
                                 <option value="Otro">Otro</option>
                             </select>
                         </div>
@@ -432,13 +433,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar EXCEL
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar Devoluciones
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("exportarEntradaBultos")}}" enctype="multipart/form-data">
+                <form id="nuevoP" method="POST" action="{{route("exportentradarmp")}}" enctype="multipart/form-data">
 
                     @csrf
                     <div class="modal-body">

@@ -504,6 +504,14 @@ class SalidaMateriaPrimaController extends Controller
             return back();
         }
 
+        public function Verify(Request $request, $id){
+                $sal = SalidaMateriaPrima::Find($id);
+                $sal->verify = $request->verify;
+                $sal->save();
+                return back();
+              
+        }
+
         
 
 }
