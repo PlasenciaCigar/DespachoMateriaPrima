@@ -278,6 +278,7 @@ class EntradaBultosController extends Controller
      ->addSelect(DB::raw('(select sum(peso) from detalle_combinaciones where
      detalle_combinaciones.id_combinaciones = combinaciones.id) as totalpeso'))
     ->where('salidas_materia_primas.created_at', 'LIKE', '%'.$request->fecha.'%')
+    ->where('salidas_materia_primas.cantidad', '>', 0)
     ->groupbyraw('marcas.name, vitolas.name, combinaciones.id')
     ->orderByRaw('marcas.name, vitolas.name')
     ->get();
