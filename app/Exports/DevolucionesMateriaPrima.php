@@ -41,7 +41,7 @@ class DevolucionesMateriaPrima implements FromCollection , ShouldAutoSize , With
     {
         return [
             [
-                'Devolución de Materia Prima, Depacho a RMP. ',
+                'Devolución de Materia Prima, DESPACHO a RMP. ',
 
             ],
             [
