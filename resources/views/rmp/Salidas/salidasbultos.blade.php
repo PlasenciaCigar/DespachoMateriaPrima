@@ -88,7 +88,7 @@
                    onclick="mostrarDiferencias('{{$fecha}}')">Diferencias
                 </a>
 
-                @if(Auth::user()->is_admin=1 && $validacionproceso)
+                @if(Auth::user()->is_admin==1 && $validacionproceso)
                 <a class="btn btn-warning hideClearSearch" style="color: white"
                    id="botonDesaplicar"
                    data-toggle="modal" data-target="#modaldesaplicar">Desaplicar
