@@ -661,4 +661,61 @@ class ReBulDiarioController extends Controller
             return back();
 
     }
+
+    public function diferencias(Request $request){
+        $salida = DB::table('salidas_materia_primas')
+        ->join('combinaciones', 'combinaciones.id', '=', 'salidas_materia_primas.id_combinacion')
+        ->join('b_inv_inicials', 'b_inv_inicials.id', 'combinaciones.bulto')
+        ->join('vitolas', 'vitolas.id', 'b_inv_inicials.id_vitolas')
+        ->join('marcas', 'marcas.id', 'b_inv_inicials.id_marca')
+        ->select(
+         'vitolas.name as vitola', 'marcas.name as marca')
+         ->addSelect(DB::raw('(select sum(peso) from detalle_combinaciones where
+         detalle_combinaciones.id_combinaciones = combinaciones.id) as totalDesp'))
+        ->where('salidas_materia_primas.created_at', 'LIKE', '%'.$request->fecha.'%')
+        ->groupbyraw('marcas.name, vitolas.name, combinaciones.id')
+        ->orderByRaw('marcas.name, vitolas.name')
+        ->get();
+
+
+            $entrada_bultos = DB::table('re_bul_diarios')
+            ->join('marcas', 'marcas.id', 're_bul_diarios.id_marca')
+            ->join('vitolas', 'vitolas.id', 're_bul_diarios.id_vitolas')
+            ->selectRaw('marcas.name as marca')
+            ->selectRaw('vitolas.name as vitola')
+            ->selectRaw('SUM(re_bul_diarios.onzas) as totalDesp')
+        ->where('re_bul_diarios.created_at', 'LIKE', '%'.$request->fecha.'%')
+        ->groupByRaw('marcas.name, vitolas.name')
+        ->orderByRaw('marcas.name, vitolas.name')
+        ->get();
+
+        $concatenacion1  = [];
+        $concatenacion2  = [];
+        foreach ($salida as $value) {
+            $concatenacion1[] = ['marca'=>$value->marca.' '.$value->vitola];
+        }
+        foreach ($entrada_bultos as $value) {
+            $concatenacion2[] = ['marca'=>$value->marca.' '.$value->vitola];
+        }
+        $sal  = array_column($concatenacion1, 'marca');
+        $ent  = array_column($concatenacion2, 'marca');
+
+        $diff = array_values(array_diff($ent, $sal));
+    
+        $existencia= [];
+        #Se buscan las similitudes de semilla y calidad
+        foreach($salida as $c){
+            foreach($entrada_bultos as $o){
+                if($o->marca == $c->marca && $o->vitola == $c->vitola){
+                    $existencia[] = ['marca'=>$o->marca, 'vitola'=>$o->vitola,
+                    'totalDespacho'=>$o->totalDesp, 'totalInventario'=>$c->totalDesp,
+                'diferencia'=>$o->totalDesp-$c->totalDesp];
+                }
+            }
+            }
+            foreach ($diff as $value) {
+                $existencia[] = ['marca'=>$value];
+            }
+            return response()->json($existencia);
+    }
 }

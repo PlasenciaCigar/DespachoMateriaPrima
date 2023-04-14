@@ -131,8 +131,7 @@
             <div class="pagination pagination-sm">
 
                 <a class="btn btn-dark hideClearSearch" style="color: white"
-                   id="botonAbrirModalNuevoRecepcionCapa"
-                   data-toggle="modal" data-target="#modalfechacvs">CVS</a>
+                   data-toggle="modal" onclick="mostrarDiferencias('{{$fecha}}')">Dif. Norma</a>
 
                 <a class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
@@ -696,35 +695,37 @@
         </div>
     </div>
     <!----------------------------------------------------MODAL fecha Exportar CVS------------------------------------------------------->
-    <div class="modal fade" id="modalfechacvs" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade bd-example-modal-lg" id="modalfechacvs" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar CVS
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Diferencias con RMP
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("exportarbultoentregaacvsdiario")}}" enctype="multipart/form-data">
-
-                    @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="fecha1">Fecha</label>
-                            <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
-                                   type="datetime-local"
-                                   value="{{ old('fecha1')}}">
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
-                        </div>
+                    <table class="table">
+                                <thead class="thead-dark">
+                                <tr>
+                                <th>Marca</th>
+                                <th>Vitola</th>
+                                <th>Sal. RMP</th>
+                                <th>Ent. Despacho</th>
+                                <th>Diferencias</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tablediff">
+                                
+                                </tbody>
+
+                            </table>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
                     </div>
                 </form>
 
@@ -770,93 +771,37 @@
         </div>
     </div>
 
-    <!-------------------MODAL sumar 75------------------------------>
+     <script>
+         function mostrarDiferencias(fecha){
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/InventarioDiario/diferencias/rmp',
+            data: {
+                _token: _token,
+                fecha: fecha
+            },
+            success: function(data) {
+                $("#modalfechacvs").modal();
+                mostrartablediff(data);
+            }
+        });
+        }
 
+        function mostrartablediff(data){
+            $("#tablediff").empty();
+            for (let i = 0; i < data.length; i++) {
+                $("#tablediff").append(
+                "<tr> <td>"+data[i].marca+"</td> <td>"
+                    + data[i].vitola + "</td><td>" 
+                    + data[i].totalInventario + "</td> <td>"
+                    + data[i].totalDespacho + "</td> <td>"
+                    + data[i].diferencia + "</td> </tr> "
+            )
+            }
+        }
+     </script>
 
-    <!-------------------MODAL NUEVO CATEGORIA------------------------------>
-
-    {{-- <div class="modal fade" id="modalNuevaCategoria" tabindex="-1" role="dialog">
-         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-                 <div class="modal-header" style="background: #2a2a35">
-                     <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Agregar Categoría
-                     </h5>
-                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true" style="color: white">&times;</span>
-                     </button>
-                 </div>
-                 <form method="POST" action="{{route("CapaEntrega")}}" enctype="multipart/form-data">
-
-                     @csrf
-                     <div class="modal-body">
-                         <div class="form-group">
-                             <label for="nombreNuevaCategoria">Nombre de categoria</label>
-                             <input required class="form-control" name="name"
-                                    id="nombreNuevaCategoria" maxlength="100">
-                         </div>
-                         <div class="form-group">
-                             <label for="tipoNuevaCategoria">Seleccione el tipo de Categoria
-
-                             </label>
-                             <br>
-                             <select name="id_categoria"
-                                     required
-                                     style="width: 85%"
-                                     class="empresa2 form-control" id="tipoNuevaCategoria">
-                                 <option disabled selected value="">Seleccione</option>
-                                 @foreach($calidad as $calidad)
-                                     <option value="{{$calidad->id}}" @if(session("idNuevaCategoria"))
-                                         {{session("idNuevaCategoria") == $tipoCategoria->id ? 'selected="selected"':''}}
-                                         @endif>{{$calidad->name}}</option>
-                                 @endforeach
-                             </select>
-                             <!---- Boton para crear un nuevo tipo de categoria- -->
-
-                         </div>
-                         <div class="form-group">
-                             <label for="descripcionNuevaCategoria">Descripción de nueva categoria (Opcional):</label>
-                             <textarea class="form-control"
-                                       name="descripcion"
-                                       id="descripcionNuevaCategoria"
-                                       maxlength="192"></textarea>
-                         </div>
-                         <label for="imagenCategoria">Seleccione una imagen (opcional): </label>
-                         <div class="input-group image-preview">
-
-                             <input type="text" name="imagen_url" class="form-control image-preview-filename"
-                                    disabled="disabled">
-                             <!-- don't give a name === doesn't send on POST/GET -->
-                             <span class="input-group-btn">
-                                 <!-- image-preview-clear button -->
-                                 <button type="button" class="btn btn-outline-danger image-preview-clear"
-                                         style="display:none;">
-                                     <span class="fas fa-times"></span> Clear
-                                 </button>
-                                 <!-- image-preview-input -->
-                                 <div class="btn btn-default image-preview-input">
-                                     <span class="fas fa-folder-open"></span>
-                                     <span class="image-preview-input-title">Seleccionar</span>
-                                     <input type="file" accept="image/png, image/jpeg, image/gif"
-                                            name="imagen_url"/>
-                                     <!-- rename it -->
-                                 </div>
-                             </span>
-                         </div><!-- /input-group image-preview [TO HERE]-->
-                     </div>
-                     <div class="modal-footer">
-                         <button type="submit" class="btn btn-success" >Crear</button>
-                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                     </div>
-                 </form>
-
-             </div>
-         </div>
-     </div>
-
-
-
-
---}}
 
 
      <style>

@@ -234,6 +234,7 @@ Route::group(["middleware" => "auth"], function () {
         Route::delete("/InventarioDiario/borrarall", "ReBulDiarioController@destroyall")->name("InventarioDiarioborrarall");
         Route::delete("/InventarioDiario/limpiarall", "ReBulDiarioController@limpiarnulos")->name("InventarioDiariolimpiarall");
         Route::post("/InventarioDiario/recalcularinventario", "ReBulDiarioController@calcular")->name("calcularinventario");
+        Route::get("/InventarioDiario/diferencias/rmp", "ReBulDiarioController@diferencias")->name("diferenciaspesosrmp");
 
         //--------------------------------------------Registro Diario Bultos Exportar ROUTES-------------------------------------------------------->
         Route::post('/InventarioDiario/export', 'ReBulDiarioController@export')->name("exportarbultoentregadiario");
