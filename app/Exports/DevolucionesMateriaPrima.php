@@ -28,12 +28,11 @@ class DevolucionesMateriaPrima implements FromCollection , ShouldAutoSize , With
     {
         $recibirCapa = DB::table("entrada_materia_primas")
             ->join("materia_primas", "materia_primas.Codigo", "=", "entrada_materia_primas.codigo_materia_prima")
-            ->select(
-               "Codigo"
-                , "Descripcion",
-                "entrada_materia_primas.Libras")
-                ->where('procedencia', '=', 'Despacho')
+            ->selectRaw("Descripcion")
+            ->selectRaw("SUM(entrada_materia_primas.Libras) AS li")
+            ->where('procedencia', '=', 'Despacho')
             ->whereDate('entrada_materia_primas.created_at', '=', $this->fecha)
+            ->groupbyraw('Descripcion')
             ->get();
         return $recibirCapa;
     }
@@ -50,8 +49,6 @@ class DevolucionesMateriaPrima implements FromCollection , ShouldAutoSize , With
                 'Planta : TAOSA'
             ],
             [
-
-                'Codigo',
                 'Descripcion',
                 'Libras'
             ]];

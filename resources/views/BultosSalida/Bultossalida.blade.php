@@ -221,7 +221,7 @@
                         </button>
 
 
-                        <button class="btn btn-sm btn-success" hidden
+                        <button class="btn btn-sm btn-success" 
                                 id="editarCapaEntrega{{$productos->id}}"
                                 data-toggle="modal"
                                 data-target="#modalEditarCapaEntrega"
@@ -234,7 +234,8 @@
                                 data-id_tamano="{{$productos->id_tamano}}"
                                 data-id_procedencia="{{$productos->id_procedencia}}"
                                 data-total="{{$productos->total}}"
-                                title="Editar">
+                                title="Editar"
+                                onclick="normaenviar({{$productos->combinacion}})">
                             <span class="fas fa-pencil-alt"></span>
                         </button>
                         <button class="btn btn-sm btn-danger"
@@ -464,7 +465,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Editar Salida De Bulto
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Editar Norma
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
@@ -475,6 +476,9 @@
 
                     @csrf
                     <div class="modal-body">
+                        <div hidden>
+
+                        
                         <div class="form-group">
                             <label for="totalcapaentrega">Total</label>
                             <input readonly class="form-control @error('name') is-invalid @enderror"
@@ -622,7 +626,21 @@
                                     </span>
                             @enderror
                         </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="procedenciacapaentrega">Seleccione la Combinacion</label>
+                            <br>
+                            <select name="norma"
+                                    style="width: 100%"
+                                    class="empresa form-control"
+                                    id="normaenviar" required="required">
+                                @foreach($norma as $val)
+                                    <option value="{{$val->id}}">{{$val->id}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
 
                     </div>
                     <div class="modal-footer">
@@ -1183,6 +1201,11 @@ function peticion(){
             let combinacion = $("#combinaciones");
             combinacion.attr('disabled', true);
             combinacion.empty();            
+        }
+
+        function normaenviar(id){
+            $("#normaenviar").val(id);
+            $('#normaenviar').trigger('change');
         }
 
 

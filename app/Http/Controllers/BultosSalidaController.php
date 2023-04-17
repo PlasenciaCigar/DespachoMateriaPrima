@@ -6,6 +6,7 @@ use App\BInvInicial;
 use App\BultosSalida;
 use App\ConsumoBanda;
 use App\EntradaBultos;
+use App\combinaciones;
 use App\Empleado;
 use App\EmpleadosBanda;
 use App\Exports\EntregaBultoExport;
@@ -82,6 +83,7 @@ class BultosSalidaController extends Controller
             $variedad = Variedad::all();
             $tamano = Tamano::all();
             $procedencia= Procedencia::all();
+            $norma= combinaciones::all();
             $entregaCapass=DB::table("bultos_salidas")
                 ->leftJoin("empleados_bandas","bultos_salidas.id_empleado","=","empleados_bandas.id")
                 ->leftJoin("vitolas","bultos_salidas.id_vitolas","=","vitolas.id")
@@ -111,6 +113,7 @@ class BultosSalidaController extends Controller
                 ->withSemilla($semilla)
                 ->withVariedad($variedad)
                 ->withTamano($tamano)
+                ->withNorma($norma)
                 ->withProcedencia($procedencia);
         }
 
@@ -305,29 +308,8 @@ class BultosSalidaController extends Controller
      */
     public function edit(Request $request)
     {
-
-        try{
-            $this->validate($request, [
-                'id_empleado'=>'required',
-                'id_vitolas'=>'required',
-                'id_marca'=>'required',
-                'total'=>'required'
-            ]);
-            /**,$messages = [
-            'id_empleado.required' => 'El nombre del producto es requerido.',
-
-            'description.max:192' => 'La descripción  no debe de tener más de 192 caracteres.',
-            'unit_price.numeric' => 'El precio debe ser un valor numérico.',
-            'unit_price.max:9999' =>'El precio unitario no debe de exceder de 9 caracteres',
-            'lote_price.max:99999' =>'El precio de lote no debe de exceder de 9 caracteres',
-            'lote_price.numeric' =>'El precio lote debe ser un valor numericos',
-            'id_empresa.required' => 'Se requiere una empresa para este producto.',
-            'id_categoria.required' => 'Se requiere una categoria para este producto.',
-            'id_marca.required'=>'Se requiere una marca para este producto'
-
-            ]);  */
             $editarBultoEntrega=BultosSalida::findOrFail($request->id);
-
+            /*
             $editarBultoEntrega->id_empleado=$request->input('id_empleado');
             $editarBultoEntrega->id_vitolas=$request->input('id_vitolas');
             $editarBultoEntrega->id_marca=$request->input("id_marca");
@@ -337,16 +319,11 @@ class BultosSalidaController extends Controller
             $editarBultoEntrega->id_procedencia=$request->input("id_procedencia");
             $editarBultoEntrega->id_marca=$request->input("id_marca");
             $editarBultoEntrega->total=$request->input('total');
-
+            */
+            $editarBultoEntrega->combinacion=$request->input('norma');
 
             $editarBultoEntrega->save();
             return back()->withExito("Se edito la salida Correctamente ");
-            //return redirect()->route("BultoSalida")->withExito("Se editó La Salida  Correctamente");
-
-        }catch (ValidationException $exception){
-            return redirect()->route("BultoSalida")->with('errores','errores')->with('id_capa_entregas',$request->input("id"))->withErrors($exception->errors());
-        }
-        //
     }
 
     /**
