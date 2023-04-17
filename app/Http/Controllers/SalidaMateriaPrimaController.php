@@ -14,6 +14,7 @@ use App\BInvInicial;
 use App\Vitola;
 use App\Marca;
 use App\Exports\VerSalidaExport;
+use App\Exports\SalidaDetallaMateriaPrima;
 use Maatwebsite\Excel\Facades\Excel;
 class SalidaMateriaPrimaController extends Controller
 {
@@ -511,6 +512,13 @@ class SalidaMateriaPrimaController extends Controller
                 return back();
               
         }
+
+        public function Salidadetallada(Request $request){
+            $fecha = $request->fecha;
+            return (new SalidaDetallaMateriaPrima($fecha))
+            ->download('Listado Detallado de Bultos Salida'
+            .$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);          
+    }
 
         
 

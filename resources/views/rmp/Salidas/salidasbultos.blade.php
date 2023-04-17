@@ -82,6 +82,14 @@
                    >G. Marcas
                 </a>
 
+                <form id="" method="POST" action="{{route("reportesalidabultodetalladoexport")}}" enctype="multipart/form-data">
+                    @csrf 
+                    <input type="hidden" name="fecha" value="{{$fecha}}">
+                    <button type="submit" class="btn btn-success hideClearSearch" style="color: white">
+                        Detallado
+                    </button>
+                </form>
+
                 <a class="btn btn-primary hideClearSearch" style="color: white"
                    id="botonAbrirModalExcel"
                    data-toggle="modal"

@@ -360,7 +360,10 @@ Route::group(["middleware" => "auth"], function () {
     Route::put("/rmp/desaplicarsalidamanual", 'SalidaMateriaPrimaController@salidaMPUpdate')->name('desaplicarMPmanual');
     Route::get("/rmp/mostrardiferencias", 'SalidaMateriaPrimaController@diferencias')->name('diferenciasrmp');
     Route::post("/rmp/generarMarcasaut", 'SalidaMateriaPrimaController@generarRegistros')->name('generarMarcasAut');
+    Route::post("/rmp/salida/detallada/export", 'SalidaMateriaPrimaController@Salidadetallada')->name('reportesalidabultodetalladoexport');
     Route::post("/rmp/verify/{id}", 'SalidaMateriaPrimaController@Verify')->name('rmpverify');
+
+
     Route::get("/rmp/diferencias", 'ExistenciaDiarioController@diferencias')->name('rmpdiff');
     //KARDEX    
     Route::get("/rmp/kardex/{codigo}", 'Kardex@index')->name('kardexparametro');
