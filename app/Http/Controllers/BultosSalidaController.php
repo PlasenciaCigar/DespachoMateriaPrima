@@ -58,7 +58,7 @@ class BultosSalidaController extends Controller
                 ->leftJoin("procedencias","bultos_salidas.id_procedencia","=","procedencias.id")
                 ->select("bultos_salidas.id", "semillas.id as id_semilla",
                 "variedads.id as id_variedad", "tamanos.id as id_tamano",
-                "procedencias.id as id_procedencia",
+                "procedencias.id as id_procedencia", "bultos_salidas.verificar",
                     "empleados_bandas.nombre AS nombre_empleado",
                     "semillas.name as semilla","variedads.name as variedad",
                     "tamanos.name as tamano","procedencias.name as procedencia",
@@ -736,6 +736,13 @@ foreach ($banda as $bandas)
         return (new BultosSalidasMPExport($fecha))
         ->download('Entrega de Materia Prima a Salon'.$fecha.'.xlsx',
          \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+    public function Verify(Request $request, $id){
+        $sal = BultosSalida::Find($id);
+        $sal->verificar = $request->verify;
+        $sal->save();
+        return back();
     }
 
 }

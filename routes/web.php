@@ -177,6 +177,8 @@ Route::group(["middleware" => "auth"], function () {
         Route::post("/BultoSalida/nuevo", "BultosSalidaController@store")->name("BultoSalidanueva");
         Route::put("/BultoSalida/editar", "BultosSalidaController@edit")->name("BultoSalidaeditar");
         Route::delete("/BultoSalida/borrar", "BultosSalidaController@destroy")->name("BultoSalidaborrar");
+
+        Route::post("/BultoSalida/verify/{id}", 'BultosSalidaController@Verify')->name('bultossalidaverify');
         //--------------------------------------------Sumar Bultos ROUTES-------------------------------------------------------->
         Route::put('/BultosSalida/1', 'BultosSalidaController@Suma')->name("sumarBulto");
         Route::put('/BultosSalida/2', 'BultosSalidaController@Resta')->name("restarBulto");
