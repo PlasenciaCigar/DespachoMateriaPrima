@@ -127,17 +127,27 @@ class BultosSalidaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+        public function Peticion(Request $request){
+            $frecuente = DB::select('select id_semilla, id_tamano, id_procedencia, id_variedad, count(*) as mayor 
+            from bultos_salidas where id_marca= ? and id_vitolas= ? 
+            group by id_semilla, id_tamano, id_procedencia, id_variedad order by mayor desc limit 1',
+        [$request->marca, $request->vitola]);
+            if ($frecuente!=null) {
+                $arre= [];
+                foreach ($frecuente as $val) {
+                    $arre[] = ['semilla'=>$val->id_semilla, 'tamano'=>$val->id_tamano,
+                    'procedencia'=>$val->id_procedencia, 'variedad'=>$val->id_variedad
+                    ];
+                }
+                $dato= collect($arre)->all();
+                return response()->json($dato);
+            }
+            else{
+                return response()->json(["ok"=>true]);
+            }
+    
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 

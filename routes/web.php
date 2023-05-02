@@ -201,6 +201,9 @@ Route::group(["middleware" => "auth"], function () {
         Route::post('/BultoEntrega/mp', 'BultosSalidaController@ExcelBultosMP')->name("exportarbultoentregamp");
         Route::get('/BultoEntrega/mp', 'BultosSalidaController@ExcelBultosMP')->name("exportarbultoentregamp");
 
+        Route::post('/BultoEntrega/peticion', 'BultosSalidaController@Peticion')->name("peticionbultossalida");
+        Route::get('/BultoEntrega/peticion', 'BultosSalidaController@Peticion')->name("peticionbultossalida");
+
         //--------------------------------------------Bulto  Tripa  Devueltos ROUTES-------------------------------------------------------->
         Route::get("/BultoDevuelto", "BultosDevueltoController@index")->name("BultoDevuelto");
         Route::post("/BultoDevuelto/nuevo", "BultosDevueltoController@store")->name("BultoDevueltonueva");

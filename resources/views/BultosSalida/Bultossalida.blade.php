@@ -383,16 +383,6 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="combinaciones">Seleccione la Combinacion</label>
-                            <br>
-                            <select name="combinaciones"
-                                    style="width: 100%"
-                                    class="marca form-control @error('id_marca') is-invalid @enderror" id="combinaciones">
-                            </select>
-                        </div>
-
-
 
                         <div class="form-group">
                             <label for="id_semilla">Seleccione la semilla</label>
@@ -1187,7 +1177,7 @@ function peticion(){
             if (marca!=null && vitola!=null){
             $.ajax({
             type: 'post',
-            url: '/rmp/peticion',
+            url: '/BultoEntrega/peticion',
             data: {
                 _token: _token,
                 marca: marca,
@@ -1196,7 +1186,6 @@ function peticion(){
             success: function(data) {
                 if (data.ok) {
                     alert('No existe bulto registrado para el producto seleccionado');
-                    reset();
                 }else{
                 FiltrarSelect(data);
                 }
@@ -1205,6 +1194,19 @@ function peticion(){
         }
 
         function FiltrarSelect(data){
+            for (let i = 0; i < data.length; i++) {
+                $("#id_semilla").val(data[i].semilla);
+                $('#id_semilla').trigger('change');
+                $("#id_variedad").val(data[i].variedad);
+                $('#id_variedad').trigger('change'); 
+                $("#id_tamano").val(data[i].tamano);
+                $('#id_tamano').trigger('change'); 
+                $("#id_procedencia").val(data[i].procedencia);
+                $('#id_procedencia').trigger('change');                 
+            }            
+        }
+
+        /*function FiltrarSelect(data){
             let combinacion = $("#combinaciones");
             combinacion.attr('disabled', false);
             combinacion.empty();
@@ -1216,7 +1218,7 @@ function peticion(){
                 +
                 " </option>");
             }            
-        }
+        }*/
 
         function reset(){
             let combinacion = $("#combinaciones");
