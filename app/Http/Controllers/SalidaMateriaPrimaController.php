@@ -173,6 +173,8 @@ class SalidaMateriaPrimaController extends Controller
 
     public function procesar(Request $request)
     {
+        try {
+            DB::beginTransaction();
         $fecha = $request->fecha;
         $consulta= DB::table('salidas_materia_primas')
         ->join('combinaciones', 'combinaciones.id', 'salidas_materia_primas.id_combinacion')
@@ -206,13 +208,25 @@ class SalidaMateriaPrimaController extends Controller
             $materiaprima->save();
         }
         DB::table('salidasprocesadas')->insert(['created_at'=>$fecha]);
+
+        $insertdespacho = DB::table('salidas_materia_primas')
+        ->where('created_at', '=', $fecha)->where('cantidad', '>', 0)->get();
+        foreach($insertdespacho as $v){
+            DB::table('inventariobultosnorma')->insert(['fecha'=>$v->created_at,
+        'combinacion'=>$v->id_combinacion, 'cantidad'=>$v->cantidad]);
+        }
+        DB::commit();
         return back();
     }else{
-
         $errores=collect($validar);
         Session::flash('flash_message', $errores);
         return back()->with('errores', $errores);
-
+    }
+        } catch (\Throwable $th) {
+    DB::rollback();
+    $errores='Algo salio Mal';
+    Session::flash('flash_message', $errores);
+    return back()->with('errores', $errores);
     }
 
     }
@@ -304,6 +318,7 @@ class SalidaMateriaPrimaController extends Controller
         ->where('salida_det_mp.observacion', '=', 'A Despacho')
         ->delete();
         DB::table('salidasprocesadas')->where('created_at', '=', $fecha)->delete();
+        DB::table('inventariobultosnorma')->where('fecha', '=', $fecha)->delete();
         return back();
         }
 
@@ -482,7 +497,7 @@ class SalidaMateriaPrimaController extends Controller
                 if($o->marca == $c->marca && $o->vitola == $c->vitola){
                     $existencia[] = ['marca'=>$o->marca, 'vitola'=>$o->vitola,
                     'totalDespacho'=>$o->totalDesp, 'totalInventario'=>$c->totalDesp,
-                'diferencia'=>$o->totalDesp-$c->totalDesp];
+                'diferencia'=>$o->totalDesp - $c->totalDesp];
                 }
             }
             }

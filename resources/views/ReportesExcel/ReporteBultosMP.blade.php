@@ -30,7 +30,7 @@
             <td style="text-align:center;" colspan="2">...</td>
             <td>{{ $datos->Codigo }}</td>
             <td>{{ $datos->Descripcion }}</td>
-            <td>{{$datos->bultos}}</td>
+            <td>{{ $datos->bultos }}</td>
             <td>{{ $datos->peso }}</td>
         </tr>
         @else
@@ -51,5 +51,11 @@
         $acum2 = $datos->name;
         ?>
     @endforeach
+    <tr>
+    <td style="text-align:center;" colspan="5">
+    <b>Total Materia Prima</b>
+    </td>
+    <td><b>{{collect($dato)->sum('peso')}}</b></td>
+    </tr>
     </tbody>
 </table>

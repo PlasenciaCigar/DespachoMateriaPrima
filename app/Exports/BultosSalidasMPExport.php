@@ -30,19 +30,16 @@ class BultosSalidasMPExport implements FromView, ShouldAutoSize
     */
     public function view(): View
     {
-        $data = DB::select('SELECT m.name as marcas, v.name, peso, codigo_mp,
-        marca as mar, vitola as vit,
-        (select count(*) from salida_despacho_mp where 
-        marca = mar and vitola = vit 
-        and created_at = (:fechax)) as num, codigo_mp as Codigo,
-        Descripcion, bultos, peso
-
+        $data = DB::select('SELECT m.name as marcas, v.name, sum(peso) as peso,
+        codigo_mp as Codigo,
+        Descripcion, sum(bultos) as bultos
         from salida_despacho_mp as sal
         inner join marcas as m on m.id = sal.marca
         inner join vitolas as v on v.id = sal.vitola
         inner join materia_primas as mp on mp.Codigo = sal.codigo_mp
-        where sal.created_at = (:fecha)', ['fecha'=>$this->fecha,
-         'fechax'=>$this->fecha]);
+        where sal.created_at = (:fecha) group by codigo_mp, marcas, vitola,
+        Descripcion order by marcas, vitola',
+         ['fecha'=>$this->fecha]);
 
 
         return view('ReportesExcel.ReporteBultosMP', [

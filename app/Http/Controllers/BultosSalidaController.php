@@ -16,6 +16,7 @@ use App\Marca;
 use App\Vitola;
 use App\Semilla;
 use App\Variedad;
+USE App\Inventariobultosnorma;
 use App\BandaInvInicial;
 use App\Tamano;
 use App\Procedencia;
@@ -713,30 +714,66 @@ foreach ($banda as $bandas)
 
 
     public function GenerarSalidaMP(Request $request){
+        try {
+            DB::beginTransaction();
         $fecha = $request->fecha1;
         $bultoentrega=DB::table("bultos_salidas")
-        ->join("vitolas","bultos_salidas.id_vitolas","=","vitolas.id")
-        ->join("marcas","bultos_salidas.id_marca","=","marcas.id")
-        ->join("detalle_combinaciones","detalle_combinaciones.id_combinaciones",
-        "=","bultos_salidas.combinacion")
         ->select(
-            "bultos_salidas.id_marca as marca","vitolas.id as vitola",
-            "detalle_combinaciones.codigo_materia_prima", DB::raw("sum(total) as total"),
-            "detalle_combinaciones.peso")
+            "bultos_salidas.id_marca as marca","bultos_salidas.id_vitolas as vitola",
+            DB::raw("sum(total) as total"))
         ->whereDate("bultos_salidas.created_at","=" ,Carbon::parse($fecha)->format('Y-m-d'))
-        ->distinct()->groupByRaw("bultos_salidas.id_marca, bultos_salidas.id_vitolas
-        , detalle_combinaciones.codigo_materia_prima, detalle_combinaciones.peso")->get();
+        ->distinct()->groupByRaw("bultos_salidas.id_marca, bultos_salidas.id_vitolas")->get();
 
         foreach($bultoentrega as $value){
-            $pesoReal = ($value->total * $value->peso)/16;
-            DB::table('salida_despacho_mp')
-                    ->insert(['codigo_mp'=>$value->codigo_materia_prima,
-                    'marca'=>$value->marca, 'vitola'=>$value->vitola,
-                    'bultos'=>$value->total,'peso'=>$pesoReal,
-                    'created_at'=>$fecha]);
-            }
+            $marca =$value->marca;
+            $vitola = $value->vitola;
 
+            $obtenerbulto = DB::table('b_inv_inicials')->where('id_marca', '=', $marca)
+            ->where('id_vitolas', '=', $vitola)->first();
+            $valor = $value->total;
+            $bulto = $obtenerbulto->id;
+            while ($valor > 0) {
+                $reb = DB::select('select fecha, inventariobultosnorma.id, combinacion, cantidad from inventariobultosnorma 
+                inner join combinaciones on combinaciones.id = inventariobultosnorma.combinacion
+                where combinaciones.bulto = ? and cantidad>0 order by fecha asc, id asc limit 1',[$bulto]);
+                $operacion = $valor-$reb[0]->cantidad;
+                if($operacion==0){
+                    $this->ConsultarMP($reb[0]->combinacion, $reb[0]->cantidad, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = 0;
+                }
+                if($operacion>0){
+                    $this->ConsultarMP($reb[0]->combinacion, $valor-$operacion, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = $operacion;
+                }
+                if($operacion<0){
+                    $this->ConsultarMP($reb[0]->combinacion, $valor, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = 0;
+                }
+            }
+            }
+            DB::commit();
             return back();
+            }catch (\Throwable $th) {
+                DB::rollback();
+                return back()->withExito('No tiene existencias que descargar');
+            }
+    }
+
+    function ConsultarMP($combinacion, $cantidad, $id, $marca, $vitola, $fecha){
+        $detalle = DB::table('detalle_combinaciones')
+        ->where('id_combinaciones', '=', $combinacion)->get();
+
+        foreach($detalle as $val){
+            $pesoReal = ($cantidad * $val->peso)/16;
+            DB::table('salida_despacho_mp')
+                    ->insert(['codigo_mp'=>$val->codigo_materia_prima,
+                    'marca'=>$marca, 'vitola'=>$vitola,
+                    'bultos'=>$cantidad,'peso'=>$pesoReal,
+                    'created_at'=>$fecha]);
+                }
+                $update = Inventariobultosnorma::find($id);
+                $update->cantidad = $update->cantidad - $cantidad;
+                $update->save();
     }
 
 
