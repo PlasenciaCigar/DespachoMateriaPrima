@@ -66,7 +66,7 @@
                 id="EMarcas"
                 data-toggle="modal" data-target="#modalfechamarca">Ver. MP</a>
                 @endif
-                @if($generado1)
+                @if($generado1 && $generado==null)
                 <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
                 data-toggle="modal" data-target="#modalconfirmar">Gen. MP</a>
