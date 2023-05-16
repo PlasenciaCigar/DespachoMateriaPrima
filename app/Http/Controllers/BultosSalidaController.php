@@ -99,11 +99,14 @@ class BultosSalidaController extends Controller
 
                $generado = DB::table('salida_despacho_mp')
                ->where('created_at', '=', $fecha)->first();
+               $generado1 = DB::table('salidasprocesadas')
+               ->where('created_at', '=', $fecha)->first();
 
             return view("BultosSalida.Bultossalida")
                 ->withNoPagina(1)
                 ->with('lmao', $lmao)
                 ->with('generado', $generado)
+                ->with('generado1', $generado1)
                 ->with('fecha', $fecha)
                 ->withEntregaBulto($bultoentrega)
                 ->withFechamostrar($fechamostrar)

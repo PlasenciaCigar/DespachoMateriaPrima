@@ -23,6 +23,7 @@
         $cant = 0;
         $peso = 0;
         $else = 1;
+        $totaltotal = 0;
         ?>
     @foreach($dato as $datos)
     @if($acum==$datos->marcas && $acum2==$datos->name)
@@ -31,7 +32,10 @@
             <td>{{ $datos->Codigo }}</td>
             <td>{{ $datos->Descripcion }}</td>
             <td>{{ $datos->bultos }}</td>
-            <td>{{ $datos->peso }}</td>
+            <td>{{ round($datos->peso,2) }}</td>
+            @php
+            $totaltotal += round($datos->peso,2);
+            @endphp
         </tr>
         @else
         <tr>
@@ -43,7 +47,10 @@
             <td>{{ $datos->Codigo }}</td>
             <td>{{ $datos->Descripcion }}</td>
             <td>{{ $datos->bultos }}</td>
-            <td>{{ $datos->peso }}</td>
+            <td>{{ round($datos->peso,2) }}</td>
+            @php
+            $totaltotal += round($datos->peso,2);
+            @endphp
         </tr>
         @endif
         <?php 
@@ -55,7 +62,7 @@
     <td style="text-align:center;" colspan="5">
     <b>Total Materia Prima</b>
     </td>
-    <td><b>{{collect($dato)->sum('peso')}}</b></td>
+    <td><b>{{round($totaltotal,2)}}</b></td>
     </tr>
     </tbody>
 </table>

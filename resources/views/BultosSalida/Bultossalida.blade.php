@@ -65,11 +65,13 @@
                    <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
                 data-toggle="modal" data-target="#modalfechamarca">Ver. MP</a>
-                @else
+                @endif
+                @if($generado1)
                 <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
                 data-toggle="modal" data-target="#modalconfirmar">Gen. MP</a>
-                 @endif
+                @endif
+                 
 
                 @foreach($total as $producto)
                     <label  class="d-none d-md-inline-block form-inline

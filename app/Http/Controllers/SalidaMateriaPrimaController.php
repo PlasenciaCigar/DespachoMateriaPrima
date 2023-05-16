@@ -63,11 +63,15 @@ class SalidaMateriaPrimaController extends Controller
             ];
         }
         $total = SalidaMateriaPrima::where('created_at','LIKE', '%'.$fecha.'%')->sum('cantidad');
+        $generado = DB::table('salida_despacho_mp')
+               ->where('created_at', '=', $fecha)->first();
+        $validacionproceso1= $generado == null? true: false;
         $dato= collect($arre)->all();
         //return $dato;
         return view('rmp.Salidas.salidasbultos')->with('salida',$salida)->with('total',$total)
         ->with('fecha',$fecha)->with('materiaprima',$materiaprima)->with('validacionproceso',$validacionproceso)
-        ->withNoPagina(1)->with('marca',$marca)->with('vitola',$vitola)->with('dato',$dato);
+        ->withNoPagina(1)->with('marca',$marca)->with('vitola',$vitola)->with('dato',$dato)
+        ->with('validacionproceso1', $validacionproceso1);
     }
 
     public function Peticion(Request $request){
