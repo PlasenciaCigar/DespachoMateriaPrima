@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\EntradaMateriaPrima;
 use App\MateriaPrima;
+use App\Vitola;
+use App\Marca;
+use App\Inventariobultosnorma;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +25,8 @@ class EntradaMateriaPrimaController extends Controller
     public function index(Request $request)
     {
         $fecha = $request->fecha;
+        $vitolas = Vitola::all();
+        $marcas = Marca::all();
         if($fecha != null){
             $fecha=Carbon::parse($fecha)->format('Y-m-d');
             
@@ -39,17 +44,8 @@ class EntradaMateriaPrimaController extends Controller
 
         $total = EntradaMateriaPrima::where('created_at','LIKE', '%'.$fecha.'%')->sum('Libras');
         return view('rmp.entradas.entradamateriaprima')->with('entrada',$entrada)->with('total',$total)
-        ->with('fecha',$fecha)->with('materiaprima',$materiaprima)->with('validacionproceso',$validacionproceso)->withNoPagina(1);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        ->with('fecha',$fecha)->with('materiaprima',$materiaprima)->with('validacionproceso',$validacionproceso)
+        ->with('marcas', $marcas)->with('vitolas', $vitolas)->withNoPagina(1);
     }
 
     public function validarfecha($fecha){
@@ -76,35 +72,7 @@ class EntradaMateriaPrimaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\EntradaMateriaPrima  $entradaMateriaPrima
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EntradaMateriaPrima $entradaMateriaPrima)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\EntradaMateriaPrima  $entradaMateriaPrima
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(EntradaMateriaPrima $entradaMateriaPrima)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EntradaMateriaPrima  $entradaMateriaPrima
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, EntradaMateriaPrima $entradaMateriaPrima)
     {
         $materiaprima = EntradaMateriaPrima::FindOrFail($request->id);
@@ -116,12 +84,6 @@ class EntradaMateriaPrimaController extends Controller
         return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\EntradaMateriaPrima  $entradaMateriaPrima
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Request $request)
     {
         $borrar = EntradaMateriaPrima::FindOrFail($request->id);
@@ -167,5 +129,68 @@ class EntradaMateriaPrimaController extends Controller
         ->download('Devoluciones Despacho.'.$fecha.'.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 
 
+    }
+
+    public function EntradaBultos(Request $request){
+        //try {
+            //DB::beginTransaction();
+        $fecha = $request->fecha;
+        $marca = $request->marca;
+        $vitola = $request->vitola;
+        $obtenerbulto = DB::table('b_inv_inicials')->where('id_marca', '=', $marca)
+            ->where('id_vitolas', '=', $vitola)->first();
+            $valor = $request->total;
+            $bulto = $obtenerbulto->id;
+            while ($valor > 0) {
+                $reb = DB::select('select fecha, inventariobultosnorma.id, combinacion, cantidad from inventariobultosnorma 
+                inner join combinaciones on combinaciones.id = inventariobultosnorma.combinacion
+                where combinaciones.bulto = ? and cantidad>0 order by fecha asc, id asc limit 1',[$bulto]);
+                $operacion = $valor-$reb[0]->cantidad;
+                if($operacion==0){
+                    $this->ConsultarMP($reb[0]->combinacion, $reb[0]->cantidad, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = 0;
+                }
+                if($operacion>0){
+                    $this->ConsultarMP($reb[0]->combinacion, $valor-$operacion, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = $operacion;
+                }
+                if($operacion<0){
+                    $this->ConsultarMP($reb[0]->combinacion, $valor, $reb[0]->id, $marca, $vitola, $fecha);
+                    $valor = 0;
+                }
+            }
+            DB::commit();
+            return back();
+            /*}catch (\Throwable $th) {
+                DB::rollback();
+                return back()->withExito('No tiene existencias que descargar');
+            }*/
+    }
+
+    function ConsultarMP($combinacion, $cantidad, $id, $marca, $vitola, $fecha){
+        $detalle = DB::table('detalle_combinaciones')
+        ->where('id_combinaciones', '=', $combinacion)->get();
+
+        $nmarca = DB::table('marcas')
+        ->where('id', '=', $marca)->first();
+
+        $nvitola = DB::table('vitolas')
+        ->where('id', '=', $vitola)->first();
+
+        foreach($detalle as $val){
+            $pesoReal = ($cantidad * $val->peso)/16;
+            $descripcion = $cantidad .' Bultos devueltos De: '. 
+            $nmarca->name.' '. $nvitola->name;
+            DB::table('entrada_materia_primas')
+                    ->insert(['codigo_materia_prima'=>$val->codigo_materia_prima,
+                    'observacion'=>$descripcion,
+                    'Libras'=>$pesoReal,'procedencia'=>'Despacho',
+                    'created_at'=>$fecha]);
+                }
+                $update = Inventariobultosnorma::find($id);
+                $update->cantidad = $update->cantidad - $cantidad;
+                $update->fecha_salida = $fecha;
+                $update->cant_sali = $cantidad;
+                $update->save();
     }
 }

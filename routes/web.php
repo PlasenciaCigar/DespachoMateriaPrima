@@ -337,6 +337,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::post("/rmp/excelligas", 'EntradaMateriaPrimaController@export')->name('exportentradarmp');
     Route::post("/rmp/procesarentrada", 'EntradaMateriaPrimaController@procesar')->name('procesarentrada');
     Route::post("/rmp/desaplicarentrada", 'EntradaMateriaPrimaController@desaplicar')->name('desaplicarentrada');
+    Route::post("/rmp/entradagenerarmp", 'EntradaMateriaPrimaController@EntradaBultos')->name('generarentradamp');
 
     //SALIDA DE MATERIA PRIMA RMP.
     Route::get("/rmp/salida", 'SalidaMateriaPrimaController@index')->name('salidarmp');

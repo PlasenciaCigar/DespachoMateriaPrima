@@ -67,6 +67,13 @@
                 </a>
                 @endif
 
+                @if($validacionproceso==false)
+                <a class="btn btn-primary hideClearSearch" style="color: white"
+                   id="botonAbrir"
+                   data-toggle="modal" data-target="#Modaldev">Dev. Bultos
+                </a>
+                @endif
+
                 @isset($total)
                     <label  class="d-none d-md-inline-block form-inline
                            ml-auto mr-0 mr-md-2 my-0 my-md-0 mb-md-2"
@@ -126,6 +133,7 @@
                     <td>{{$productos->procedencia}}</td>
                     <td>{{$productos->created_at}}</td>
                     <td>
+                        @if($productos->procedencia != 'Despacho')
                         @if($validacionproceso==false && $productos->desdeinventario!=1)
                         <button onclick="send('{{$productos->id}}','{{$productos->observacion}}','{{$productos->procedencia}}',
                         '{{$productos->codigo_materia_prima}}', '{{$productos->Libras}}')" class="btn btn-sm btn-success"
@@ -141,6 +149,7 @@
                                 data-id="{{$productos->id}}">
                             <span class="fas fa-trash"></span>
                         </button>
+                        @endif
                         @endif
                     </td>
                 </tr>
@@ -385,6 +394,69 @@
                     <div class="modal-footer">
                         <input id="id_capa_entrega" name="fecha" type="hidden" @isset($fecha) value="{{$fecha}}" @endisset>
                         <button type="submit" class="btn btn-dark">Aplicar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    
+    <div class="modal fade" id="Modaldev" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <form method="post" action="{{route("generarentradamp")}}" >
+                    @csrf
+                    <div class="modal-header" style="background: #2a2a35">
+                        <h5 class="modal-title" style="color: white"><span class=""></span> Registrar Devolucion
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span style="color: white" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                    <div class="form-group">
+                            <label for="marca">Seleccione la Marca</label>
+                            <br>
+                            <select name="marca"
+                                    style="width: 100%" required="required"
+                                    class=" marca form-control @error('id_vitolas') is-invalid @enderror" id="marca">
+                                <option disabled selected value="">Seleccione</option>
+                                @foreach($marcas as $marcas)
+                                    <option value="{{$marcas->id}}">
+                                        {{$marcas->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vitola">Seleccione la Vitola</label>
+                            <br>
+                            <select name="vitola"
+                                    style="width: 100%" required="required"
+                                    class=" marca form-control @error('id_vitolas') is-invalid @enderror" id="vitola">
+                                <option disabled selected value="">Seleccione</option>
+                                @foreach($vitolas as $vitolas)
+                                    <option value="{{$vitolas->id}}">
+                                        {{$vitolas->name}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="vitola">Cantidad de bultos devueltos</label>
+                            <br>
+                            <input class="form-control" name="total" type="number">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <input id="" name="fecha" type="hidden" @isset($fecha) value="{{$fecha}}" @endisset>
+                        <button type="submit" class="btn btn-dark">Generar MP</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>

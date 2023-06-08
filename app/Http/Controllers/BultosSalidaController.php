@@ -777,6 +777,7 @@ foreach ($banda as $bandas)
                 $update = Inventariobultosnorma::find($id);
                 $update->cantidad = $update->cantidad - $cantidad;
                 $update->fecha_salida = $fecha;
+                $update->cant_sali = $cantidad;
                 $update->save();
     }
 
