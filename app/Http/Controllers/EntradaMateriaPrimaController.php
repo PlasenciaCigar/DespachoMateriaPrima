@@ -132,8 +132,8 @@ class EntradaMateriaPrimaController extends Controller
     }
 
     public function EntradaBultos(Request $request){
-        //try {
-            //DB::beginTransaction();
+        try {
+            DB::beginTransaction();
         $fecha = $request->fecha;
         $marca = $request->marca;
         $vitola = $request->vitola;
@@ -161,10 +161,10 @@ class EntradaMateriaPrimaController extends Controller
             }
             DB::commit();
             return back();
-            /*}catch (\Throwable $th) {
+            }catch (\Throwable $th) {
                 DB::rollback();
-                return back()->withExito('No tiene existencias que descargar');
-            }*/
+                return back()->withExito('No cuenta con este producto en Stock Despacho.');
+            }
     }
 
     function ConsultarMP($combinacion, $cantidad, $id, $marca, $vitola, $fecha){
