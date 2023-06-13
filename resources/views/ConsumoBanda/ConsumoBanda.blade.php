@@ -41,7 +41,8 @@
 
                 <a class="btn btn-dark hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
-                   data-toggle="modal" data-target="#modalfechacvs">CVS</a>
+                   onclick="mostrarDiferencias('{{$fecha}}')"
+                   data-toggle="modal" >Comparativo</a>
 
                 <a class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
@@ -655,40 +656,37 @@
     </div>
     <!----------------------------------------------------MODAL fecha Exportar CVS------------------------------------------------------->
     <div class="modal fade" id="modalfechacvs" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar CVS
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Comparativo
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
                     </button>
                 </div>
-                <form id="nuevoP" method="POST" action="{{route("exportarconsumobandacvs")}}" enctype="multipart/form-data">
-
-                    @csrf
                     <div class="modal-body">
-                        <div class="form-group">
-                            <label for="fecha1">Fecha</label>
-                            <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
-                                   type="datetime-local"
-                                   value="{{ old('fecha1')}}">
-                            @error('name')
-                            <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                            @enderror
+                        <table class="table">
+                            <tr>
+                            <th>Descripcion</th>
+                            <th>Inventario</th>
+                            <th>Consumo</th>
+                            <th>Diferencias</th>
+                            </tr>
+
+                            <tr>
+                                <tbody id="comparativo">
+                                </tbody>
+                            </tr>
+                        </table>
                         </div>
-                    </div>
                     <div class="modal-footer">
-                        <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
                     </div>
-                </form>
+                    </div>
 
             </div>
         </div>
-    </div>
 
 
     <!--MODAL CALCULAR PESOS  !-->
@@ -825,7 +823,34 @@
         </div>
     </div>
 
-
+    <script>
+        function mostrarDiferencias(fecha){
+            let _token= "{{ csrf_token() }}";
+            $.ajax({
+            type: 'get',
+            url: '/ConsumoBanda/comparativo',
+            data: {
+                _token: _token,
+                fecha: fecha
+            },
+            success: function(data) {
+                $("#modalfechacvs").modal();
+                mostrartablediff(data);
+            }
+        });
+        }
+        function mostrartablediff(data){
+            $("#comparativo").empty();
+            for (let i = 0; i < data.length; i++) {
+                $("#comparativo").append(
+                "<tr> <td>"+data[i].nombre+"</td> <td>"
+                    + data[i].inv + "</td><td>" 
+                    + data[i].con + "</td> <td>"
+                    + data[i].diferencia + "</td> </tr> "
+            )
+            }
+        }
+    </script>
      <style>
 
          .image-preview-input {

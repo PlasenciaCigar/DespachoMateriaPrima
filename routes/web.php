@@ -231,6 +231,7 @@ Route::group(["middleware" => "auth"], function () {
         Route::get('/ConsumoBanda/exportCVS', 'ConsumoBandaController@exportcvs')->name("exportarconsumobandacvs");
         Route::post('/ConsumoBanda/exportmarcabanda', 'ConsumoBandaController@exportbandas')->name("exportbandas");
         Route::get('/ConsumoBanda/exportmarcabanda', 'ConsumoBandaController@exportbandas')->name("exportbandas");
+        Route::get('/ConsumoBanda/comparativo', 'ConsumoBandaController@comparativo')->name("comparativoconsumobanda");
         //--------------------------------------------Inventario Diario  ROUTES-------------------------------------------------------->
         Route::get('/InventarioDiario', 'ReBulDiarioController@index')->name("InventarioDiario");
         Route::post("/InventarioDiario/nuevo", "ReBulDiarioController@store")->name("InventarioDiarionuevo");

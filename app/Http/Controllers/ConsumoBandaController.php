@@ -391,4 +391,54 @@ class ConsumoBandaController extends Controller
         return back();
 
     }
+
+    function comparativo(Request $request){
+        $consumo = DB::table('consumo_bandas')
+        ->select(DB::raw('concat(id_semillas, id_tamano, procedencia, variedad) as conca'),
+        DB::raw('concat(semillas.name, " ", variedads.name, tamanos.name, procedencias.name) as name_conca'),
+         DB::raw('sum(total) as cantidad'))
+         ->join('semillas', 'semillas.id', 'consumo_bandas.id_semillas')
+         ->join('tamanos', 'tamanos.id', 'consumo_bandas.id_tamano')
+         ->join('procedencias', 'procedencias.id', 'consumo_bandas.procedencia')
+         ->join('variedads', 'variedads.id', 'consumo_bandas.variedad')
+         ->where('consumo_bandas.created_at', 'LIKE', '%'.$request->fecha.'%')
+        ->groupByRaw('id_semillas, id_tamano, procedencia, variedad')->get();
+
+        $inventario = DB::table('inventario_bandas')->select(DB::raw('sum(totalconsumo) as cantidad'),
+        DB::raw('concat(id_semillas, id_tamano, id_procedencia, id_variedad) as conca'),
+        DB::raw('concat(semillas.name, " ", variedads.name, tamanos.name, procedencias.name) as name_conca'))
+        ->join('semillas', 'semillas.id', 'inventario_bandas.id_semillas')
+        ->join('tamanos', 'tamanos.id', 'inventario_bandas.id_tamano')
+        ->join('procedencias', 'procedencias.id', 'inventario_bandas.id_procedencia')
+        ->join('variedads', 'variedads.id', 'inventario_bandas.id_variedad')
+        ->where('inventario_bandas.created_at', 'LIKE', '%'.$request->fecha.'%')
+        ->groupByRaw('id_semillas, id_tamano, id_procedencia, id_variedad')
+        ->get();
+       
+        foreach($consumo as $o){
+            $arreglo = array_column($inventario->toArray(), 'conca');
+            $res = array_search($o->conca, $arreglo);
+            if($res!==false){
+                $existencia[] = ['nombre'=>$o->name_conca,
+                'inv'=>$inventario[$res]->cantidad, 'con'=>$o->cantidad,
+                'diferencia'=>$o->cantidad-$inventario[$res]->cantidad];
+            }else{
+                $existencia[] = ['nombre'=>$o->name_conca,
+                'inv'=>0, 'con'=>$o->cantidad,
+                'diferencia'=>$o->cantidad];
+            }
+        }
+        foreach($inventario as $o){
+            $res = array_search($o->conca, array_column($consumo->toArray(), 'conca'));
+            if($res!==false){
+                
+            }else{
+                $existencia[] = ['nombre'=>$o->name_conca,
+                'inv'=>$o->cantidad, 'con'=>0,
+                'diferencia'=>$o->cantidad];
+            }
+        }
+        return response()->json($existencia);
+
+    }
 }
