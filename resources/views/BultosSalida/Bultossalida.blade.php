@@ -48,11 +48,6 @@
             </ol>
 
             <div class="pagination pagination-sm">
-
-                <a class="btn btn-dark hideClearSearch" style="color: white"
-                   id="botonAbrirModalNuevoRecepcionCapa"
-                   data-toggle="modal" data-target="#modalfechacvs">CVS</a>
-
                 <a class="btn btn-success hideClearSearch" style="color: white"
                    id="botonAbrirModalNuevoRecepcionCapa"
                    data-toggle="modal" data-target="#modalfecha">Excel</a>
@@ -65,11 +60,15 @@
                    <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
                 data-toggle="modal" data-target="#modalfechamarca">Ver. MP</a>
+
+                <a class="btn btn-warning hideClearSearch" style="color: white"
+                id="Desaplicar"
+                data-toggle="modal" data-target="#modalDesaplicar">Desaplicar</a>
                 @endif
                 @if($generado1 && $generado==null)
                 <a class="btn btn-info hideClearSearch" style="color: white"
                 id="EMarcas"
-                data-toggle="modal" data-target="#modalconfirmar">Gen. MP</a>
+                data-toggle="modal" data-target="#modalconfirmar">Procesar</a>
                 @endif
                  
 
@@ -1014,7 +1013,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: #2a2a35">
-                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar Peso Por Marca
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Exportar Materia Prima por Marca
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true" style="color: white">&times;</span>
@@ -1028,7 +1027,7 @@
                             <label for="fecha1">Fecha</label>
                             <input class="form-control @error('name') is-invalid @enderror" name="fecha1" id="fecha1"
                                    type="date"
-                                   value="{{ old('fecha1')}}" >
+                                   value="{{ $fecha }}" >
                             @error('name')
                             <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -1039,6 +1038,38 @@
                     <div class="modal-footer">
                         <button type="submit" id="nuevoP" class="btn btn-success">Exportar</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para exportar pesos por marcas, reporte para Paolo -->
+    <div class="modal fade" id="modalDesaplicar" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #2a2a35">
+                    <h5 class="modal-title" style="color: white"><span class="fas fa-plus"></span> Desaplicar Fecha
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white">&times;</span>
+                    </button>
+                </div>
+                <form id="nuevoP" method="POST" action="{{route("desaplicarbultosalidas")}}" enctype="multipart/form-data">
+
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="fecha1">Esta seguro que desea desaplicar la fecha: {{$fecha}}</label>
+                            <input class="form-control" name="fechadesaplicar" id="fechadesaplicar"
+                                   type="hidden"
+                                   value="{{$fecha}}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="nuevoP" class="btn btn-warning">Desaplicar</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
 

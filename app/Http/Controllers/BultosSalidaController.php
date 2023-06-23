@@ -7,6 +7,7 @@ use App\BultosSalida;
 use App\ConsumoBanda;
 use App\EntradaBultos;
 use App\combinaciones;
+use App\Historial;
 use App\Empleado;
 use App\EmpleadosBanda;
 use App\Exports\EntregaBultoExport;
@@ -779,6 +780,31 @@ foreach ($banda as $bandas)
                 $update->fecha_salida = $fecha;
                 $update->cant_sali = $cantidad;
                 $update->save();
+                $historial = new Historial();
+                $historial->fk_inventario_norma=$update->id;
+                $historial->fecha_salida=$fecha;
+                $historial->cantidad=$cantidad;
+                $historial->save();
+    }
+
+    public function Desaplicar(Request $request){
+        /*try {
+            DB::beginTransaction();*/
+        $fecha = $request->fechadesaplicar;
+        $historial = DB::table('historial')->where('fecha_salida', '=', $fecha)->get();
+        foreach ($historial as $value) {
+            $update = Inventariobultosnorma::find($value->fk_inventario_norma);
+                $update->cantidad = $update->cantidad + $value->cantidad;
+                $update->save();
+        }
+        DB::table('salida_despacho_mp')->where('created_at', '=', $fecha)->delete();
+        DB::table('historial')->where('fecha_salida', '=', $fecha)->delete();
+       /* DB::commit();
+            return back();
+            }catch (\Throwable $th) {
+                DB::rollback();
+                return back()->withExito('Algo salio Mal');
+            }*/
     }
 
 

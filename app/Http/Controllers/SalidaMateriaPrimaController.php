@@ -293,24 +293,8 @@ class SalidaMateriaPrimaController extends Controller
         public function desaplicar(Request $request)
         {
         $fecha = $request->fecha;
-        /*
-        $consulta= DB::table('salidas_materia_primas')
-        ->join('combinaciones', 'combinaciones.id', 'salidas_materia_primas.id_combinacion')
-        ->join('detalle_combinaciones', 'detalle_combinaciones.id_combinaciones', 'combinaciones.id')
-        ->select('detalle_combinaciones.codigo_materia_prima as mp',
-        'detalle_combinaciones.peso as pesos', 'salidas_materia_primas.cantidad')
-        ->where('salidas_materia_primas.created_at', '=',$fecha)
-        ->get();
-        $acum= [];
-        foreach ($consulta as $codigoMP) {
-            $pesoreal = ($codigoMP->cantidad * $codigoMP->pesos)/16;
-            $index= array_search($codigoMP->mp, array_column($acum, 'codigo'));
-            if($index!==false){
-                $acum[$index]['peso']+= $pesoreal;
-              } else {
-                $acum[] = ['codigo'=>$codigoMP->mp, 'peso'=> $pesoreal];
-              }
-        } */
+        try {
+            DB::beginTransaction();
         $acum = DB::table('salida_det_mp')->select('codigo_materia_prima', 'peso')
         ->where('created_at', '=', $fecha)->where('observacion', '=', 'A Despacho')->get();
         foreach ($acum as $value) {
@@ -323,7 +307,12 @@ class SalidaMateriaPrimaController extends Controller
         ->delete();
         DB::table('salidasprocesadas')->where('created_at', '=', $fecha)->delete();
         DB::table('inventariobultosnorma')->where('fecha', '=', $fecha)->delete();
+        DB::commit();
         return back();
+        }catch (\Throwable $th) {
+        DB::rollback();
+        return back()->withExito('Algo salio Mal');
+        }
         }
 
         public function versalida($fecha){
